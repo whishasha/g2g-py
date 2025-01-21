@@ -1,0 +1,43 @@
+/* Stylesheet for the G2G Landing Pages */
+
+
+
+/* handles top sticky navbar in the landing page */
+nav {
+    background-color: white;
+    /* to prevent content from peeking through when scrolling down */
+
+    position: sticky; 
+    top: 0px;
+    /* makes a sticky navbar */
+
+    overflow: hidden;
+    display:block; 
+    /* already displays as block, but just as redundancy and for sake of example */
+}
+nav a {
+    margin: 10px;
+    float:left;
+    
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
+    padding: 12px 20px;
+
+}
+nav .important {
+    /* Creates circular buttons for each thing there */
+    background-color: #2bacff;
+    border-radius: 25px;
+    border: 1px solid #2bacff; 
+    float: right;
+}
+nav .line {
+    margin-bottom: 0;
+}
+
+hr {
+    width:100%;
+
+    border: 1px solid black;
+}

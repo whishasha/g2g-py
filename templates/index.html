@@ -2,8 +2,24 @@
 <html>
 <head>
     <title>G2G</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/landingstylesheet.css')}}">
+    <!-- empty stylesheet, to be added to -->
 </head>
 <body>
+    
+    <nav>
+        <a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"></a>
+        <a>yo</a>
+        <a>bananan</a>
+        <a class="important">LOGIN</a>
+        <a class="important">INQUIRE</a>   
+        <hr class="line">  
+    </nav>
+
+    <h1></h1>
+
+
     <img src="{{url_for('static', filename='assets/fumo.svg')}}">
     <p>Hello. Fumo. Fumo.</p>
 </body>

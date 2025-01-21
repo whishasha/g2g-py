@@ -7,7 +7,7 @@ app = Flask(__name__)
 def hello_world():
     return render_template('index.html')
 
-mode = "prod"
+mode = "dev"
 if mode == "prod":
     serve(app, port=10000)
 elif mode == "dev":
