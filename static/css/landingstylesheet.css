@@ -1,20 +1,30 @@
 /* Stylesheet for the G2G Landing Pages */
 
 
-
 /* handles top sticky navbar in the landing page */
 nav {
+    border: 1px solid black;
     background-color: white;
     /* to prevent content from peeking through when scrolling down */
 
     position: sticky; 
     top: 0px;
+
+    width:100lvw;
     /* makes a sticky navbar */
 
     overflow: hidden;
     display:block; 
     /* already displays as block, but just as redundancy and for sake of example */
 }
+nav ul {
+
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: white;
+  }
 nav a {
     margin: 10px;
     float:left;
@@ -23,7 +33,6 @@ nav a {
     font-weight: bold;
     text-align: center;
     padding: 12px 20px;
-
 }
 nav .important {
     /* Creates circular buttons for each thing there */
@@ -36,8 +45,20 @@ nav .line {
     margin-bottom: 0;
 }
 
-hr {
-    width:100%;
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: fit-content;
+    z-index: 999;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
 
+hr {
+    width:100vw;
     border: 1px solid black;
 }

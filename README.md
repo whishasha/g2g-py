@@ -13,3 +13,6 @@ Once the virtual environment has been activated,
 pip install -r requirements.txt
 '''
 
+https://fonts.google.com/icons
+
+nice icons
