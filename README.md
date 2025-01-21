@@ -13,6 +13,14 @@ Once the virtual environment has been activated,
 pip install -r requirements.txt
 '''
 
+and because my app likes to act up, please run this from the command line using
+
+'''
+python main.py
+'''
+
+because VSCode is hallucinating into thinking I don't have these modules downloaded.
+
 https://fonts.google.com/icons
 
 nice icons

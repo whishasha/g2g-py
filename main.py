@@ -7,6 +7,10 @@ app = Flask(__name__)
 def hello_world():
     return render_template('index.html')
 
+@app.route("/test")
+def test():
+    return render_template('renamethis.html')
+
 mode = "dev"
 if mode == "prod":
     serve(app, port=10000)
