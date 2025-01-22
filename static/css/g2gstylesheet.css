@@ -7,7 +7,8 @@ body {
     font-family: sans-serif;
 }
 div {
-    width:85vw;
+    margin-left: 15vw;
+    overflow: scroll;
     
 }
 nav {
@@ -15,8 +16,12 @@ nav {
     color: #d9d9d9;
 
     border: 0.5px solid #737373;
+    
+    position: fixed;
+    left:0;
+    top:0;
     width:15vw;
-    height:100vw;
+    height:100vh;
     display: flex;
 }
 ul {
