@@ -23,7 +23,7 @@ python main.py
 helpful links:
 
 https://stackoverflow.com/questions/14510899/white-space-after-the-footer-only-in-firefox-and-ie/68367701#68367701
-
+<!-- Helped fix a Firefox-only issue -->
 
 
 https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp 
