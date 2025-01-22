@@ -19,7 +19,19 @@ and because my app likes to act up, please run this from the command line using
 python main.py
 `
 
+
+helpful links:
+
+https://stackoverflow.com/questions/14510899/white-space-after-the-footer-only-in-firefox-and-ie/68367701#68367701
+
+
+
+https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp 
+<!-- This one taught me how to move content to the right! -->
+
 because VSCode is hallucinating into thinking I don't have these modules downloaded.
+
+
 
 https://fonts.google.com/icons
 
