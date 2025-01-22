@@ -16,41 +16,112 @@
     
     <nav>
         <ul class="sidebar">
-            <li onclick="hideSidebar()">
-            <a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"></a>
-            </li>
-            <a>yo</a>
-            <li>
-            <a>bananan</a>
-            </li>
-            <a class="important">LOGIN</a>
-            <li>
-            <a class="important">INQUIRE</a>   
-            </li>
-            <li><hr class="line"></li>
+            <li onclick="hideSidebar()"><a href="/"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"></a></li>
+            <li><a>yo</a></li>
+            <li><a>bananan</a></li>   
+            <li><a href="/inquire" class="important">INQUIRE</a></li>   
+            <li><a href="/login" class="important">LOGIN</a></li>
         </ul>
         <ul class="topbar">
             <li>
-            <a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"></a>
+            <a href="/"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"></a>
             </li>
             <li><a>yo</a></li>
-            <li><a>bananan</a></li>            
-            <li><a href="/login" class="important">LOGIN</a></li>
+            <li><a>bananan</a></li>   
             <li><a href="/inquire" class="important">INQUIRE</a></li>   
-
-            <li><a class="important"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"></a></li> 
-
+            <li><a href="/login" class="important">LOGIN</a></li>
+              
             <li><hr class="line"></li>
 
         </ul>
     </nav>
 
-    <div id="main">
-        <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
-        <p>Hello. Fumo. Fumo.</p>
-        <button onclick="showSidebar()">hi</button>
-    </div>
+    <div id="wrapper">
+        <div id="banner">
+            <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
+        </div>
+        <div id="main">
+            <h1>Log In</h1>
+            <hr>
 
+            <button>Login with Google</button>
+            <hr class="linesmall">
+
+            <form>
+                <input type="text" placeholder="Username">
+                <br>
+                <input type="text" placeholder="Password">
+                <br>
+                <button>Login</button>
+            </form>
+            <p style="margin-top:20px;">Having trouble? Send an <a href="/inquiry" style="font-weight: 600;">inquiry</a></p>
+            <hr>
+            <button onclick="showSidebar()">hi</button>
+            <p>Hello. Fumo. Fumo.</p>
+        </div>        
+    </div>
+    <style>
+        div {
+            display: block;
+            overflow: hidden;
+            height:100vh;
+        }
+        #banner {
+            float:left;
+            width: 55vw;
+        }
+        #main {
+            padding-right: 10px;
+            float:right;
+            margin-right:5vw;
+            width: 35vw;
+            text-align: center;
+
+            display:block;
+        }
+        button:hover {
+            /* smooth transition to white as you hover over a button */
+            color: white;
+            transition: 0.3s;
+        }
+        button {
+            /* Creates circular buttons for each thing there */
+            background-color: #2bacff;
+            border-radius: 25px;
+            border: 1px solid #2bacff; 
+            font-weight: bold;
+            font-size: 15px;
+            
+
+            margin: 10px;
+            padding: 15px 20px;
+            left: 50%;
+        }
+        h1 {
+            /* accentuates the title */
+            margin: 15px;
+            font-weight: bolder;
+            font-size: 50px;            
+        }
+        
+        .linesmall {
+            /* smaller lines for aesthetic separation */
+            width: 30vw;
+        }
+        form input {
+            margin-top:15px;
+
+            padding: 12px 20px;
+            border: 2px solid #2bacff;
+            border-radius: 25px;
+            font-size: 15px;
+        }
+        form button {
+            margin-top: 50px;
+            padding: 12px 85px;
+        }
+
+    </style>
     <script>
         function showSidebar() {
             const sidebar = document.querySelector('.sidebar');
