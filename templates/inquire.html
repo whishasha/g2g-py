@@ -36,12 +36,49 @@
         </ul>
     </nav>
 
-    <div id="main">
-        <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
-        <p>Hello. Fumo. Fumo.</p>
-        <button onclick="showSidebar()">hi</button>
+    <div id="wrapper">
+        <div id="content">
+            <h1>Inquire</h1>
+            <hr class="line">
+            <form>
+                <input type="text" placeholder="Enter email here..." style="width: 20vw;">
+                <br>
+                
+                <textarea placeholder="Enter inquiry here..."></textarea>
+                <br>
+                <submit><button>SEND</button></submit>
+            </form>
+            <p>Hello. Fumo. Fumo.</p>
+            <button onclick="showSidebar()">hi</button>
+        </div>
+        <div id="banner">
+            <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
+        </div>
     </div>
 
+    <style>
+        #wrapper {
+            display: block;
+        }
+        #content {
+            width: 30vw;
+            float:left;
+        }
+        #banner {
+            width: 50vw;
+            float:right;
+        }
+        textarea {
+            margin-top: 20px;
+            height:400px;
+            width: 20vw;
+            padding: 15px 20px;
+            border: 2px solid #2bacff;
+            border-radius: 25px;
+            resize: none;
+            font-family: sans-serif;
+        }
+    </style>
     <script>
         function showSidebar() {
             const sidebar = document.querySelector('.sidebar');

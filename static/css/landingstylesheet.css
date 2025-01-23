@@ -76,3 +76,63 @@ body {
     overflow-x: hidden;
     font-family: sans-serif;
 }
+
+div {
+    display: block;
+    overflow: hidden;
+    height:100vh;
+}
+#banner {
+    float:left;
+    width: 55vw;
+}
+#content {
+    padding-right: 10px;
+    float:right;
+    margin-right:5vw;
+    margin-left:5vw;
+    width: 30vw;
+    text-align: center;
+
+    display:block;
+}
+button:hover {
+    /* smooth transition to white as you hover over a button */
+    color: white;
+    transition: 0.3s;
+}
+button {
+    /* Creates circular buttons for each thing there */
+    background-color: #2bacff;
+    border-radius: 25px;
+    border: 1px solid #2bacff; 
+    font-weight: bold;
+    font-size: 15px;
+    
+
+    margin: 10px;
+    padding: 15px 20px;
+}
+h1 {
+    /* accentuates the title */
+    margin: 15px;
+    font-weight: bolder;
+    font-size: 50px;            
+}
+
+.linesmall {
+    /* smaller lines for aesthetic separation */
+    width: 20vw;
+}
+form input {
+    margin-top:15px;
+
+    padding: 12px 20px;
+    border: 2px solid #2bacff;
+    border-radius: 25px;
+    font-size: 15px;
+}
+form button {
+    margin-top: 50px;
+    padding: 12px 85px;
+}

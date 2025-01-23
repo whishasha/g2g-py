@@ -40,9 +40,9 @@
         <div id="banner">
             <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
         </div>
-        <div id="main">
+        <div id="content">
             <h1>Log In</h1>
-            <hr>
+            <hr class="line">
 
             <button>Login with Google</button>
             <hr class="linesmall">
@@ -60,67 +60,6 @@
             <p>Hello. Fumo. Fumo.</p>
         </div>        
     </div>
-    <style>
-        div {
-            display: block;
-            overflow: hidden;
-            height:100vh;
-        }
-        #banner {
-            float:left;
-            width: 55vw;
-        }
-        #main {
-            padding-right: 10px;
-            float:right;
-            margin-right:5vw;
-            width: 35vw;
-            text-align: center;
-
-            display:block;
-        }
-        button:hover {
-            /* smooth transition to white as you hover over a button */
-            color: white;
-            transition: 0.3s;
-        }
-        button {
-            /* Creates circular buttons for each thing there */
-            background-color: #2bacff;
-            border-radius: 25px;
-            border: 1px solid #2bacff; 
-            font-weight: bold;
-            font-size: 15px;
-            
-
-            margin: 10px;
-            padding: 15px 20px;
-        }
-        h1 {
-            /* accentuates the title */
-            margin: 15px;
-            font-weight: bolder;
-            font-size: 50px;            
-        }
-        
-        .linesmall {
-            /* smaller lines for aesthetic separation */
-            width: 30vw;
-        }
-        form input {
-            margin-top:15px;
-
-            padding: 12px 20px;
-            border: 2px solid #2bacff;
-            border-radius: 25px;
-            font-size: 15px;
-        }
-        form button {
-            margin-top: 50px;
-            padding: 12px 85px;
-        }
-
-    </style>
     <script>
         function showSidebar() {
             const sidebar = document.querySelector('.sidebar');
