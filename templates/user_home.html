@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>G2G</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/g2gstylesheet.css')}}">
+    <!-- empty stylesheet, to be added to -->
+
+
+</head>
+<body>
+    
+    <nav>
+        <ul>
+            <li>
+            <a>name :)</a>
+            </li>
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Home</a></li>
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Account</a></li>            
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Chatroom</a></li>
+            <li>User Information</li>
+            <li><hr class="line"></li>
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Assignments</a></li>
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Attendance</a></li>
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Timetable</a></li>   
+            <li><hr class="line"></li>
+        </ul>
+    </nav>
+
+    <div id="main">
+        <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
+        <button onclick="hideSidenav()">hi</button>
+        <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" padding: 50px;>
+        <p style="padding-left: 50px;font-weight: bold;">Hello. Fumo. Fumo. Test.</p>        
+    </div>
+
+
+
+</body>
+<script>
+        function hideSidenav() {
+            const nav = document.querySelector('nav');
+            const main = document.getElementById('main');
+            nav.style.display = 'none';
+            main.style.marginLeft = '0';
+            
+        }
+</script>
+</html>

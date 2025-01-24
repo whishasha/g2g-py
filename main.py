@@ -19,6 +19,10 @@ def inquire():
 def test():
     return render_template('renamethis.html')
 
+@app.route("/user/home")
+def user_home():
+    return render_template('user_home.html')
+
 mode = "dev"
 if mode == "prod":
     serve(app, port=10000)
