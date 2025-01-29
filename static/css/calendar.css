@@ -1,0 +1,92 @@
+:root{ 
+    --accent: #2bacff;
+    --background: white;
+    --box: #737373;
+    --text: black;
+}
+
+
+.calendar{
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: var(--background);
+    max-width:fit-content;
+    width: 100%;
+    height:500px;
+}
+
+.calendar-inner{
+    padding: 2rem;
+    display:flex;
+    justify-content: center;
+}
+
+.calender-headings{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+
+/* this might not work */
+.btn-left.btn-right{ 
+    cursor:pointer;
+    font-size: 1.2rem;
+}
+
+.current-datetime{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--box);
+    padding: 0.7rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+}
+
+.current-datetime .daytxt {
+    background-color: var(--accent);
+    color: white;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+}
+
+.days-date ul{
+    list-style: none;
+}
+
+.days-date .days, .dates{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+}
+
+.days-date .days li{
+    border-bottom: 2px solid black;
+}
+
+.dates li{
+    padding: 0.5rem;
+    margin: 0.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 5px;
+    color: var(--text)
+}
+
+.days-date .dates li:hover {
+    background-color: var(--box);
+    color: var(--background)
+}
+
+.days-date .dates li.active {
+    background-color: var(--accent);
+    color: var(--background)
+}
+
+.days-date .dummy{
+    color: var(--box)
+}

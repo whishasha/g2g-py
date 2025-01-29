@@ -23,6 +23,10 @@ def test():
 def user_home():
     return render_template('user_home.html')
 
+@app.route("/user/timetable")
+def user_timetable():
+    return render_template('user_timetable.html')
+
 mode = "dev"
 if mode == "prod":
     serve(app, port=10000)

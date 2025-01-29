@@ -6,12 +6,18 @@ body {
     display: flex;
     font-family: sans-serif;
 }
-div {
-    height: 100vh;
-    margin-left: 20vw;
-    overflow-y: scroll;
-    
+#main {
+  display:grid;
+  height: 100vh;
+  margin-left: 20vw;
+  overflow-y: scroll;
 }
+
+#main .calendar {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 nav {
     font-weight: bold;
     background-color: #f1f1f1;
