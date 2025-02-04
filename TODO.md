@@ -32,3 +32,7 @@ credit: https://stackoverflow.com/questions/17702419/change-margin-top-with-pure
 - calendar js code + CSS variables for easy website colour changes
 https://www.youtube.com/watch?v=ZBJ44LrmwDI
 
+
+-- store firebase account key in .env and Github actions [as a base64 file encrypted from JSON]
+https://stackoverflow.com/questions/73965176/authenticating-firebase-connection-in-github-action
+
