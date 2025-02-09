@@ -7,16 +7,15 @@ landing page
 content page
 
 reduce tech debt:
-- inquire styling in its own tag ??
+<!-- some pages have page-specific styling to prevent stylesheet bloat -->
+- inquire styling in its own tag ?? [done]
 
-- replace hr with border-bottom of divs (oh my god beautiful)
+- replace hr with border-bottom of divs (oh my god beautiful) [done]
 
 
 
 TO DO:
 - logo design
-
-- calendar styling too
 
 -firebase setup
 
@@ -29,7 +28,7 @@ https://www.w3schools.com/cssref/atrule_media.php
 credit: https://stackoverflow.com/questions/17702419/change-margin-top-with-pure-javascript
 
 
-- calendar js code + CSS variables for easy website colour changes
+- calendar js code + CSS variables for easy website colour changes [done]
 https://www.youtube.com/watch?v=ZBJ44LrmwDI
 
 

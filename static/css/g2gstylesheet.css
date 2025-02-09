@@ -1,5 +1,25 @@
 /* Stylesheet for the G2G Landing Pages */
 
+/* colourscheme */
+:root {
+  /* text in sidebar */
+  --textbar: #737373;
+  /* accent background colour */
+  --accentbar: #555;
+  /* sidebar bg colour */
+  --bgbar: #d3d3d3;
+  
+  
+  /* text colour */
+  --text: black; 
+  /* bg colour */
+  --bg: white;
+
+  /* accent colour */
+  --accent: #2bacff;
+  /* alternative highlight colour */
+  --accentalt: white;
+}
 
 /* handles top sticky navbar in the landing page */
 body {
@@ -20,9 +40,10 @@ body {
 
 nav {
     font-weight: bold;
-    background-color: #f1f1f1;
-    border: 0.5px solid #737373;
+    background-color: var(--bgbar);
+    border-right: 2px solid var(--textbar);
     
+
     position: fixed;
     left:0;
     top:0;
@@ -36,27 +57,29 @@ nav ul {
     margin: 0;
     padding: 0;
     width: 20vw;
-    border:1px solid black;
+    
+    /* background-color: black; */
   }
   
 nav li {
   margin-top: 10px;
   display: block;
-  color: #737373;
+  color: var(--textbar);
   padding: 8px 12px;
   text-decoration: none;
 }
 
 li a {
   display: block;
-  color: #737373;
   text-decoration: none;
+  padding: 10px 5px;
 }
 
 /* Change the link color on hover */
 li a:hover {
-  background-color: #555;
-  color: white;
+  background-color: var(--accentbar);
+  transition: 0.3s;
+  color: var(--accentalt);
 }
 
 hr {
@@ -66,6 +89,6 @@ hr {
 .line {
   width: 80%;
   margin: auto;
-  border: 1px solid #737373;
+  border: 1px solid var(--textbar);
 }
 

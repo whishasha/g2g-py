@@ -30,9 +30,6 @@
             <li><a>bananan</a></li>   
             <li><a href="/inquire" class="important">INQUIRE</a></li>   
             <li><a href="/login" class="important">LOGIN</a></li>
-              
-            <li><hr class="line"></li>
-
         </ul>
     </nav>
 
@@ -54,12 +51,27 @@
                 <br>
                 <button>Login</button>
             </form>
-            <p style="margin-top:20px;">Having trouble? Send an <a href="/inquiry" style="font-weight: 600;">inquiry</a></p>
+            <p style="margin-top:20px;">Having trouble? Send an <a href="/inquire" style="font-weight: 600;">inquiry</a> <br><br> or <a href="/passwordreset" style="font-weight: 600;">reset your password</a></p>
             <hr>
             <button onclick="showSidebar()">hi</button>
             <p>Hello. Fumo. Fumo.</p>
         </div>        
     </div>
+    <style>
+        /* for graphic divs */
+        #banner {
+            float:left;            
+            width: 55vw;
+        }
+        /* for content divs */
+        #content {
+            padding-right: 10px;
+            float:right;
+            margin-right:5vw;
+            margin-left:5vw;
+            width: 30vw;
+        }
+    </style>
     <script>
         function showSidebar() {
             const sidebar = document.querySelector('.sidebar');

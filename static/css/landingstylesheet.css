@@ -1,9 +1,21 @@
 /* Stylesheet for the G2G Landing Pages */
 
+/* colourscheme */
+:root {
+    /* text colour */
+    --text: black; 
+    /* background colour */
+    --bg: white;
+    /* accent colour */
+    --accent: #2bacff;
+    /* alternative highlight */
+    --accentalt: white;
+}
+
 
 /* handles top sticky navbar in the landing page */
 nav {
-    background-color: white;
+    background-color: var(--bg);
     /* to prevent content from peeking through when scrolling down */
 
     position: sticky; 
@@ -16,6 +28,8 @@ nav {
     display:block; 
     /* already displays as block, but just as redundancy and for sake of example */
 
+    border-bottom: 2px solid var(--text);
+
 }
 nav ul {
 
@@ -23,24 +37,22 @@ nav ul {
     margin: 0;
     padding-right: 20px;
     overflow: hidden;
-    background-color: white;
+    background-color: var(--bg);
 }
 nav a {
     margin: 10px;
     float:left;
     
-    color:black;
+    color:var(--text);
     font-weight: bold;
     text-align: center;
     padding: 12px 20px;
 }
 nav a:hover {
     transition: 0.3s;
-    color:#2bacff;
+    color:var(--accent);
 }
-nav .line {
-    margin-bottom: 0;
-}
+/* handles vertical dropdown bar for small screens */
 .sidebar {
     position:relative;
     background-color: transparent;
@@ -54,19 +66,20 @@ nav .line {
     align-items: flex-start;
     justify-content: flex-start;
 }
+/* highlighting important buttons */
 .important:hover {
-    color: white;
+    color: var(--accentalt);
 }
 .important {
     /* Creates circular buttons for each thing there */
-    background-color: #2bacff;
+    background-color: var(--accent);
     border-radius: 25px;
-    border: 1px solid #2bacff; 
+    border: 1px solid var(--accent); 
     float: right;
 }
 hr {
     width:100vw;
-    border: 1px solid black;
+    border: 1px solid var(--text);
 }
 
 a { 
@@ -80,32 +93,18 @@ body {
 div {
     display: block;
     overflow: hidden;
-    height:100vh;
 }
-#banner {
-    float:left;
-    width: 55vw;
-}
-#content {
-    padding-right: 10px;
-    float:right;
-    margin-right:5vw;
-    margin-left:5vw;
-    width: 30vw;
-    text-align: center;
 
-    display:block;
-}
 button:hover {
     /* smooth transition to white as you hover over a button */
-    color: white;
+    color: var(--accentalt);
     transition: 0.3s;
 }
 button {
     /* Creates circular buttons for each thing there */
-    background-color: #2bacff;
+    background-color: var(--accent);
     border-radius: 25px;
-    border: 1px solid #2bacff; 
+    border: 1px solid var(--accent); 
     font-weight: bold;
     font-size: 15px;
     
@@ -113,6 +112,8 @@ button {
     margin: 10px;
     padding: 15px 20px;
 }
+
+/* for page titles */
 h1 {
     /* accentuates the title */
     margin: 15px;
@@ -120,15 +121,24 @@ h1 {
     font-size: 50px;            
 }
 
+/* for separating text within a div */
 .linesmall {
     /* smaller lines for aesthetic separation */
     width: 20vw;
 }
+
+/* for content divs */
+#wrapper {
+    text-align: center;
+    display:block;
+}
+
+/* for form information */
 form input {
     margin-top:15px;
 
     padding: 12px 20px;
-    border: 2px solid #2bacff;
+    border: 2px solid var(--accent);
     border-radius: 25px;
     font-size: 15px;
 }
@@ -136,3 +146,4 @@ form button {
     margin-top: 50px;
     padding: 12px 85px;
 }
+

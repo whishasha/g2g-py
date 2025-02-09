@@ -62,7 +62,7 @@ const displayCalendar = () => {
     }
     
     for (let i = 1; i <= lastDateofMonth; i++) {
-        
+        // code which highlights SPECIFIC dates (useful for highlighting class dates)
         let checkToday = //funky if statement syntax (=== means if statement i guess)
         i === dateObj.getDate() && 
         month === new Date().getMonth() && //if statement checking if the date matches the current one
