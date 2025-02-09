@@ -33,9 +33,9 @@
 
     <div id="main">
         <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
-        <button onclick="hideSidenav()">hi</button>
+        <div id="button"><button onclick="hideSidenav()">hi</button></div>
         <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" padding: 50px;>
-        <p style="padding-left: 50px;font-weight: bold;">Hello. Fumo. Fumo. Test.</p>        
+        <p style="padding-left: 50px;font-weight: bold;">Hello. Fumo. Fumo. Test.</p>
     </div>
 
 
@@ -47,6 +47,7 @@
             const main = document.getElementById('main');
             nav.style.display = 'none';
             main.style.marginLeft = '0';
+            main.style.width = '100vw';
             
         }
 </script>

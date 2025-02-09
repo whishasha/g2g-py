@@ -21,7 +21,7 @@
   --accentalt: white;
 }
 
-/* handles top sticky navbar in the landing page */
+/* handles left sticky navbar in the landing page */
 body {
     display: flex;
     font-family: sans-serif;
@@ -30,7 +30,7 @@ body {
   display:grid;
   height: 100vh;
   margin-left: 20vw;
-  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 #main .calendar {
