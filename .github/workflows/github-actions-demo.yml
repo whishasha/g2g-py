@@ -1,9 +1,9 @@
 # https://stackoverflow.com/questions/76158731/how-to-use-github-secrets-as-paths-in-github-actions
-name: GitHub Actions Demo
+name: python run script
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  setup_env_and_run:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -23,7 +23,7 @@ jobs:
           python-version: '3.13'
       
       - name: setup env variables
-        run: echo "TEST_VAR="banasasas"" >> $GITHUB_ENV
+        run: echo "TEST_VAR=${{secrets.TEST_VAR}}" >> $GITHUB_ENV
 
 
       - name: install dependencies
