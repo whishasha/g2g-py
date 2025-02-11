@@ -23,7 +23,7 @@ jobs:
           python-version: '3.13'
       
       - name: setup env variables
-        run: echo "{TEST_VAR}=${{secrets.TEST_VAR}}" >> $GITHUB_ENV
+        run: echo "TEST_VAR="banasasas"" >> $GITHUB_ENV
 
 
       - name: install dependencies
