@@ -9,4 +9,4 @@ jobs:
       - name: Add Environment Variable
         env:
             TEST_VAR: ${{ secrets.TEST_VAR }}
-        run: python src/testenv.py 
+        run: python testenv.py 
