@@ -36,5 +36,4 @@ jobs:
       - name: execute py script
         run: python testenv.py
 
-      - run: env  
       - run: echo "🍏 This job's status is ${{ job.status }}."
