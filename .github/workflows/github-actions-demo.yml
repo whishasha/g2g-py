@@ -9,6 +9,10 @@ jobs:
             working-directory: ./
     steps:
       - run: echo "Hello! This is Wilson, reporting from the terminal!"
+      - name: List files in the repository
+        run: |
+            ls ${{ github.workspace }}
+      
       - name: Add Environment Variable
         env:
             TEST_VAR: ${{ secrets.TEST_VAR }}
