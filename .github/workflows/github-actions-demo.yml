@@ -33,4 +33,5 @@ jobs:
             TEST_VAR: ${{secrets.TEST_VAR}}
         run: python testenv.py
 
+      - run: env  
       - run: echo "🍏 This job's status is ${{ job.status }}."
