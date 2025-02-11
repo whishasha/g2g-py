@@ -37,14 +37,3 @@ jobs:
         run: python testenv.py
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
-# https://github.com/marketplace/actions/render-deploy-action
-  deploy_to_render:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to production
-        uses: johnbeynon/render-deploy-action@v0.0.8
-        with:
-          service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
-          api-key: ${{ secrets.MY_RENDER_API_KEY }}
-          wait-for-success: true
-
