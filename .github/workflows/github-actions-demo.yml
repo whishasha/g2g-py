@@ -4,9 +4,9 @@ on: [push]
 jobs:
   Test-Github-Action:
     runs-on: ubuntu-latest
-    defaults:
-        run:
-            working-directory: ./
+    # defaults:
+    #     run:
+    #         working-directory: ./
     steps:
       - run: echo "Hello! This is Wilson, reporting from the terminal!"
       - name: List files in the repository
