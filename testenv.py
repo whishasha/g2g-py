@@ -4,4 +4,4 @@ import os
 
 load_dotenv(find_dotenv()) # loads environment variables from the .env file 
 
-print(f'TEST_VAR => {os.getenv("TEST_VAR")}')
+print(f'SERIVCE_ACCOUNT_KEY => {os.getenv("SERVICE_ACCOUNT_KEY")}')
