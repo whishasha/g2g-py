@@ -5,6 +5,8 @@ import os, base64, json
 load_dotenv(find_dotenv()) # loads environment variables from the .env file 
 encoded_service_account_key = os.getenv("SERVICE_ACCOUNT_KEY")
 SERVICE_ACCOUNT_JSON = json.loads(base64.b64decode(encoded_service_account_key).decode('utf-8'))
+
+#setting up firebase
 import firebase_admin
 from firebase_admin import firestore
 from firebase_admin import credentials
