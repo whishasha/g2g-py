@@ -10,7 +10,7 @@
     border: 1px solid black;
     border-radius: 5px;
     background-color: var(--background);
-    max-width:fit-content;
+    max-width:98vw; /* makes calendar span the width of the content div */
     width: 100%;
     height:500px;
 }
@@ -30,6 +30,7 @@
 
 
 /* this might not work */
+/*buttons misbehaving!*/
 .btn-left.btn-right{ 
     cursor:pointer;
     font-size: 1.2rem;
@@ -64,12 +65,25 @@
 
 .days-date .days li{
     border-bottom: 2px solid black;
+    font-size: 30px;
 }
 
 .dates li{
-    padding: 0.5rem;
+    /* border: 1px solid black; */
+    font-size: 20px;
+
+
+    padding: 0.75rem 0.5rem;
     margin: 0.2rem;
     display: flex;
+
+    width:2rem;
+
+
+    /* aligns dates in the centre of each day */
+    margin-left: auto;
+    margin-right:auto; 
+
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -77,9 +91,12 @@
     color: var(--text)
 }
 
+
+
 .days-date .dates li:hover {
     background-color: var(--box);
-    color: var(--background)
+    color: var(--background);
+    transition: 0.3s;
 }
 
 .days-date .dates li.active {

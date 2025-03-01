@@ -8,16 +8,9 @@ content page
 
 reduce tech debt:
 <!-- some pages have page-specific styling to prevent stylesheet bloat -->
-- inquire styling in its own tag ?? [done]
-
-- replace hr with border-bottom of divs (oh my god beautiful) [done]
-
-
 
 TO DO:
 - logo design
-
--firebase setup
 
 
 - screen-specific dimensions using @media
@@ -32,6 +25,6 @@ credit: https://stackoverflow.com/questions/17702419/change-margin-top-with-pure
 https://www.youtube.com/watch?v=ZBJ44LrmwDI
 
 
--- store firebase account key in .env and Github actions and Render [as a base64 file encrypted from JSON] [almost done]
+-- store firebase account key in .env and Github actions and Render [as a base64 file encrypted from JSON] [done]
 https://stackoverflow.com/questions/73965176/authenticating-firebase-connection-in-github-action
 
