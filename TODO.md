@@ -1,37 +1,27 @@
-make it so when you zoom in on renamethis.html, the side menu becomes a top navbar with dropdown menu
+# Long-Term Tasks
+ [] create database tables for sql
+    - tutor: storing tutee names, username, password, primary key
+    - tutee: storing tutee names, username, password, primary key
+    - preferences: colour scheme
+    - classes: classes for each person, date/s, details
+    - assignments:
+    https://firebase.google.com/docs/database/admin/structure-data (helpful website)
 
-implement the rest of the screen designs for:
+    NOTE: these classes/assignment should have unique class times / assignments as their own node, crosschecking with the current date in the frontend.
 
-landing page
+[] finish adding pages:
+    - account (change pwd, email, request to change classes, contact tutee, change colour scheme)
 
-content page
+[] create login functionality
+    - do not forget to encrypt with python bcrypt
+    - add password restrictions and prevent SQL injections
+    - + account lockouts
+    - linking to email for pwd recovery will be a later task
 
-reduce tech debt:
-<!-- some pages have page-specific styling to prevent stylesheet bloat -->
-- inquire styling in its own tag ?? [done]
+[] make website compatible with screen sizes using @media (see resources.md)
 
-- replace hr with border-bottom of divs (oh my god beautiful) [done]
+## Short-Term Tasks
 
+[] graphic design for landing pages
 
-
-TO DO:
-- logo design
-
--firebase setup
-
-
-- screen-specific dimensions using @media
-https://www.w3schools.com/cssref/atrule_media.php
-
-
-- add nice looking button to close sidenav in user directory (code done)
-credit: https://stackoverflow.com/questions/17702419/change-margin-top-with-pure-javascript
-
-
-- calendar js code + CSS variables for easy website colour changes [done]
-https://www.youtube.com/watch?v=ZBJ44LrmwDI
-
-
--- store firebase account key in .env and Github actions and Render [as a base64 file encrypted from JSON] [almost done]
-https://stackoverflow.com/questions/73965176/authenticating-firebase-connection-in-github-action
-
+[] graphic designs for icons
