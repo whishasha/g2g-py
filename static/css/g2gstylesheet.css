@@ -29,6 +29,8 @@ body {
 #main {
   display:grid;
   height: 100vh;
+  width: 80vw; /* this somehow makes it so that the div stays the same shape, even if you close sidebar*/
+  border: 1px solid black;
   margin-left: 20vw;
   overflow-x: hidden;
 }

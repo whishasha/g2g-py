@@ -55,21 +55,30 @@
             <hr>
             <button onclick="showSidebar()">hi</button>
             <p>Hello. Fumo. Fumo.</p>
-        </div>        
+        </div>
+        <div id="banner">
+            <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
+        </div>                
     </div>
     <style>
+        
+        #wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
         /* for graphic divs */
         #banner {
-            float:left;            
-            width: 55vw;
+            /* float:left;             */
+            max-width: 30vw;
         }
         /* for content divs */
         #content {
-            padding-right: 10px;
-            float:right;
-            margin-right:5vw;
-            margin-left:5vw;
-            width: 30vw;
+            
+            /*margin-right:auto;
+            margin-left:auto;*/
+            max-width: 30vw;
         }
     </style>
     <script>

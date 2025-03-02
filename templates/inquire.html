@@ -35,6 +35,9 @@
     </nav>
 
     <div id="wrapper">
+        <div id="banner">
+            <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
+        </div>
         <div id="content">
             <h1>Inquire</h1>
             <hr class="line">
@@ -57,16 +60,16 @@
     <style>
         /* overrides existing styling in g2gstylesheet */
         #wrapper {
-            display: block;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
         }
         #content {
-            margin-left: 5rem;
-            width: 30vw;
-            float:left;
+            max-width: 40vw;
         }
         #banner {
-            width: 50vw;
-            float: right;
+            max-width: 30vw;
         }
         textarea {
             margin-top: 20px;
