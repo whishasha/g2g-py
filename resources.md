@@ -1,23 +1,7 @@
-make it so when you zoom in on renamethis.html, the side menu becomes a top navbar with dropdown menu
-
-implement the rest of the screen designs for:
-
-landing page
-
-content page
-
-reduce tech debt:
 <!-- some pages have page-specific styling to prevent stylesheet bloat -->
-- inquire styling in its own tag ?? [done]
-
-- replace hr with border-bottom of divs (oh my god beautiful) [done]
 
 
 
-TO DO:
-- logo design
-
--firebase setup
 
 
 - screen-specific dimensions using @media
