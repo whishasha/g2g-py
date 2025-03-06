@@ -15,7 +15,9 @@ remote = sqlite3.connect('database.db')
 cursor = remote.cursor()
 
 # cursor.execute('''CREATE TABLE users (name varchar(100))''')
-cursor.execute('''INSERT INTO users (name) VALUES ('hello')''')
+# cursor.execute('''INSERT INTO users (name) VALUES ('hello')''')
+
+cursor.execute('''DROP TABLE users''')
 
 remote.commit()
 
