@@ -44,12 +44,12 @@
             <button>Login with Google</button>
             <hr class="linesmall">
 
-            <form>
-                <input type="text" placeholder="Username">
+            <form action="{{ url_for("login")}}" method="post"">
+                <input type="text" name="name" placeholder="Username">
                 <br>
-                <input type="text" placeholder="Password">
+                <input type="text" name="password" placeholder="Password">
                 <br>
-                <button>Login</button>
+                <button type="submit">Login</button>
             </form>
             <p style="margin-top:20px;">Having trouble? Send an <a href="/inquire" style="font-weight: 600;">inquiry</a> <br><br> or <a href="/passwordreset" style="font-weight: 600;">reset your password</a></p>
             <hr>

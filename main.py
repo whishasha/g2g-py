@@ -1,14 +1,40 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+from flask_bcrypt import Bcrypt
+
 from waitress import serve
 
+import sqlite3
+
+
+
+
+
+
+
+
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
+
 
 @app.route("/")
 def hello_world():
     return render_template('index.html')
 
-@app.route("/login")
+@app.route("/login", methods = ['GET', 'POST'])
 def login():
+    print('User is accessing login page...')
+    if request.method == "POST":
+        name = request.form.get('name')
+        password = request.form.get('password')
+        con = sqlite3.connect('database.db')
+        cur = con.cursor()
+
+        userRecord = cur.execute('''SELECT name, password FROM users WHERE name=?''', (name,)).fetchone()
+        cur.close()
+        con.close()
+
+        print(bcrypt.check_password_hash(userRecord[1], password))
+
     return render_template('login.html')
 
 @app.route("/inquire")
