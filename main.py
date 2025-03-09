@@ -41,9 +41,9 @@ def login():
 def inquire():
     return render_template('inquire.html')
 
-@app.route("/test")
-def test():
-    return render_template('renamethis.html')
+# @app.route("/test")
+# def test():
+#     return render_template('renamethis.html')
 
 @app.route("/user/home")
 def user_home():
@@ -52,6 +52,10 @@ def user_home():
 @app.route("/user/timetable")
 def user_timetable():
     return render_template('user_timetable.html')
+
+@app.route("/user/account")
+def user_account():
+    return render_template('user_account.html')
 
 mode = "dev"
 if mode == "prod":
