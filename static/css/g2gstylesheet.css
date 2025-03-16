@@ -25,14 +25,16 @@
 body {
     display: flex;
     font-family: sans-serif;
+    scrollbar-color: red;
 }
 #main {
-  display:grid;
+  display:block;
   height: 100vh;
   width: 80vw; /* this somehow makes it so that the div stays the same shape, even if you close sidebar*/
-  border: 1px solid black;
+  /* border-top: 1px solid black; */
   margin-left: 20vw;
   overflow-x: hidden;
+  word-wrap: break-word;
 }
 
 #main .calendar {
@@ -52,6 +54,7 @@ nav {
     width:20vw;
     height:100vh;
     display: flex;
+    overflow: hidden;
 }
 
 nav ul {
@@ -94,3 +97,23 @@ hr {
   border: 1px solid var(--textbar);
 }
 
+
+@media only screen and (max-width: 400px) {
+  body {
+    display: block;
+  }
+  nav {
+    width: 100vw;
+    max-height:fit-content;
+    position: relative;
+  }
+  #main {
+    width: 100vw;
+    min-height:fit-content;
+    overflow:hidden;
+    bottom:0;
+    margin-left: 0;
+    font-size: small;
+    /* scrollbar-color: orange; */
+  }
+}

@@ -51,8 +51,12 @@ nav a {
 nav a:hover {
     transition: 0.3s;
     color:var(--accent);
+    cursor: pointer;
 }
 /* handles vertical dropdown bar for small screens */
+
+
+
 .sidebar {
     position:relative;
     background-color: transparent;
@@ -66,6 +70,8 @@ nav a:hover {
     align-items: flex-start;
     justify-content: flex-start;
 }
+
+
 /* highlighting important buttons */
 .important:hover {
     color: var(--accentalt);
@@ -147,3 +153,11 @@ form button {
     padding: 12px 85px;
 }
 
+@media only screen and (max-width: 800px) {
+    ul.sidebar {
+        display: flex;
+    }
+    ul.topbar {
+        display: none;
+    }
+}
