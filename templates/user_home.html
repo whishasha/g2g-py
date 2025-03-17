@@ -42,16 +42,5 @@
 
 
 </body>
-<script>
-        function hideSidenav() {
-            // const topbar = document.querySelector('#topbar');
-            const nav = document.querySelector('nav');
-            const main = document.getElementById('main');
-            nav.style.display = 'none';
-            // topbar.style.display = 'none';
-            main.style.marginLeft = '0';
-            main.style.width = '100vw';
-            
-        }
-</script>
+<script src="{{url_for('static', filename='js/g2g.js')}}"></script>
 </html>

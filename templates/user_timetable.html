@@ -39,9 +39,9 @@
             <div class="calender-inner">
                 <div class="calendar-controls">
                     <div class="calendar-headings">
-                        <i onclick="changeMonth(this)" id="prev">L_BUTT</i> 
+                        <img src="{{url_for('static', filename='assets/fumo.svg')}}" onclick="changeMonth(this)" width="50px" height="50" id="prev">
                         <h2 class="month-year">January, 2025</h2>
-                        <i onclick="changeMonth(this)" id="next">R_BUTT</i>
+                        <img src="{{url_for('static', filename='assets/fumo.svg')}}" onclick="changeMonth(this)" width="50px" height="50" id="next">
                     </div>
                     <div class="current-datetime">
                         <p class="daytxt">Today</p>
@@ -100,14 +100,6 @@
 
 </body>
 <script src="{{url_for('static', filename='js/calendar.js')}}"></script>
-<script>
-        function hideSidenav() {
-            const nav = document.querySelector('nav');
-            const main = document.getElementById('main');
-            nav.style.display = 'none';
-            main.style.marginLeft = '0';
-            main.style.width = '100vw';
-            
-        }
-</script>
+<script src="{{url_for('static', filename='js/g2g.js')}}"></script>
+
 </html>

@@ -21,19 +21,23 @@
     justify-content: center;
 }
 
-.calender-headings{
+.calendar-headings{
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content:center;
+    align-items:center;
+    
     padding: 1rem 0;
 }
 
 
 /* this might not work */
 /*buttons misbehaving!*/
-.btn-left.btn-right{ 
+#prev{ 
     cursor:pointer;
-    font-size: 1.2rem;
+}
+
+#next{
+    cursor:pointer;
 }
 
 .current-datetime{

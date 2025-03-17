@@ -35,6 +35,12 @@ body {
   margin-left: 20vw;
   overflow-x: hidden;
   word-wrap: break-word;
+  transition: 3s;
+}
+
+#main.hide {
+  width: 100vw;
+  margin-left: 0;
 }
 
 #main .calendar {
@@ -55,6 +61,14 @@ nav {
     height:100vh;
     display: flex;
     overflow: hidden;
+    /*test anim*/
+    transition: 3s ease;
+
+}
+
+nav.hide {
+  width: 0;
+  opacity: 0;
 }
 
 nav ul {
