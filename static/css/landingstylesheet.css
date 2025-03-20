@@ -159,13 +159,14 @@ form button {
         align-items: flex-start;
         /* align-items:center; */
         justify-content: flex-start;
+        background-color: var(--bg);
     }
     ul.topbar li {
         width:100vw;
         min-height: fit-content;
         border-top: 1px solid var(--accent);
         border-radius: 25px;
-        transition: 3s;
+        transition: 0.5s;
     }
     ul.topbar a {
         float:left;
@@ -173,8 +174,15 @@ form button {
 
     /* change this to class sidebar method as used in the g2g page */
     ul.topbar li:hover {
-        height:10vw;
-        
+        background-color: var(--accent);
     }
+
+    a.navitem:hover {
+        color: white;
+    }
+
+    /* nav:hover {
+        background-color: var(--accent);
+    } */
 
 }
