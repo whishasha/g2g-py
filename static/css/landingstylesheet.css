@@ -165,6 +165,7 @@ form button {
         min-height: fit-content;
         border-top: 1px solid var(--accent);
         border-radius: 25px;
+        transition: 3s;
     }
     ul.topbar a {
         float:left;
@@ -173,7 +174,7 @@ form button {
     /* change this to class sidebar method as used in the g2g page */
     ul.topbar li:hover {
         height:10vw;
-        transition: 3s; 
+        
     }
 
 }

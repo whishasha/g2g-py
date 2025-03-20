@@ -19,7 +19,7 @@
             <li>
             <a href="/"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"></a>
             </li>
-            <li><a>About</a></li>
+            <li class="test"><a>About</a></li>
             <li><a>Pricing</a></li>   
             <li><a href="/inquire" class="important">INQUIRE</a></li>   
             <li><a href="/login" class="important">LOGIN</a></li>
@@ -33,14 +33,15 @@
         <button onclick="showSidebar()">hi</button>
     </div>
 
+
+    <script src="{{url_for('static', filename='js/landing.js')}}"></script>
     <script>
         function showSidebar() {
             const sidebar = document.querySelector('.sidebar');
             const topbar = document.querySelector('.topbar');
-            const nav = document.querySelector('nav')
+            const nav = document.querySelector('nav');
 
             sidebar.style.display = 'flex';
-
             topbar.style.display = 'none';
 
             nav.style.position = 'relative';
