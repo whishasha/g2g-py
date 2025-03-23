@@ -22,7 +22,7 @@
 ## Short-Term Tasks
 
 
-[] do smooth file up code for navbar in landing page
+[X] do smooth file up code for navbar in landing page
 
 [] graphic design for landing pages
 
