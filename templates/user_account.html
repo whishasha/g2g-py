@@ -34,12 +34,26 @@
     <div id="main">
         <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
         <div id="button"><button onclick="hideSidenav()">hi</button></div>
-        <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" padding: 50px;>
-        <p style="padding-left: 50px;font-weight: bold;">Hello. Fumo. Fumo. Test.</p>
+        <form action="" id="registerTuteeForm" method="post">
+    
+            <input type="text" name="firstname" placeholder="First Name">
+            <input type="text" name="lastname" placeholder="Last Name">
+            <br>
+            <input type="text" name="username" placeholder="Username">
+            <br>
+            <input type="text" name="password" placeholder="Password">
+            <br>
+            <button name="register" type="submit">Login</button>
+        </form>
     </div>
 
 
 
 </body>
+<style>
+form {
+    text-align: center;
+}
+</style>
 <script src="{{url_for('static', filename='js/g2g.js')}}"></script>
 </html>

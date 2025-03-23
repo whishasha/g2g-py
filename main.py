@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flask_bcrypt import Bcrypt
 
 from waitress import serve
@@ -8,7 +8,8 @@ import sqlite3
 
 
 
-
+# admin account:
+# user0, hello
 
 
 
@@ -53,9 +54,46 @@ def user_home():
 def user_timetable():
     return render_template('user_timetable.html')
 
-@app.route("/user/account")
+@app.route("/user/account", methods=["GET", "POST"])
 def user_account():
+    if request.method == "POST":
+        if 'register' in request.form:
+            register()
     return render_template('user_account.html')
+
+def register():
+        print('hello')
+        firstname = request.form.get('firstname')
+        lastname = request.form.get('lastname')
+        
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        encryptedpassword = bcrypt.generate_password_hash(password)
+        
+        con = sqlite3.connect('database.db')
+        cur = con.cursor()
+
+        userRecord = cur.execute('''SELECT name FROM users WHERE name=?''', (username,)).fetchone()
+        print(userRecord)
+        if userRecord:
+            print(f"Error: Account with {username} already exists")
+        else:
+            cur.execute('''INSERT INTO users(name, password, firstname, lastname) 
+                        VALUES(?, ?, ?, ?)''', 
+                        (username, encryptedpassword, firstname, lastname))
+            con.commit()
+            print("Yeah you good")
+
+
+
+        cur.close()
+        con.close()
+
+        return redirect("/")
+
+
+
 
 mode = "dev"
 if mode == "prod":
