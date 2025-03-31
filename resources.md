@@ -19,3 +19,6 @@ https://www.youtube.com/watch?v=ZBJ44LrmwDI
 -- store firebase account key in .env and Github actions and Render [as a base64 file encrypted from JSON] [almost done]
 https://stackoverflow.com/questions/73965176/authenticating-firebase-connection-in-github-action
 
+
+-- flask login stuff that's REALLY COOL (restrict pages to login using @login_required and FREE AUTHENTICAITON!!!)
+https://flask-login.readthedocs.io/en/latest/
