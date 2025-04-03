@@ -5,7 +5,6 @@
     --text: black;
 }
 
-
 .calendar{
     border: 1px solid black;
     border-radius: 5px;
@@ -28,10 +27,6 @@
     
     padding: 1rem 0;
 }
-
-
-/* this might not work */
-/*buttons misbehaving!*/
 #prev{ 
     cursor:pointer;
 }
@@ -95,8 +90,6 @@
     color: var(--text)
 }
 
-
-
 .days-date .dates li:hover {
     background-color: var(--box);
     color: var(--background);
@@ -110,4 +103,15 @@
 
 .days-date .dummy{
     color: var(--box)
+}
+
+#dateInfo {
+    background-color: black;
+    height: 40vh;
+    width: 15vw;
+    z-index: 9999;
+    position: absolute;
+    display: fixed;
+    opacity: 0.5;
+    color: white;
 }

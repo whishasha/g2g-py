@@ -8,6 +8,7 @@ const datesEl = document.querySelector('.dates');
 const btnEl = document.querySelectorAll('.calendar-headings');
 const monthYearEl = document.querySelector('.month-year');
 
+
 let dmObj = {
     days: [
         "Sunday",
@@ -83,10 +84,7 @@ const displayCalendar = () => {
     // display current month & year
     monthYearEl.innerHTML = `${dmObj.months[month]}, ${year}`;
 }
-
 displayCalendar();
-
-
 const changeMonth = (El) => {
     console.log('running')
     if(El.id === "prev") {
@@ -103,4 +101,11 @@ const changeMonth = (El) => {
         date = new Date();
     }
     displayCalendar();
+}
+
+const dateInfoEl = document.querySelector('#dateInfo');
+
+const displayDateInfo = () => {
+    console.log('banana')
+    dateInfoEl.innerHTML = 'yo';
 }

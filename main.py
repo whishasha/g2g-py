@@ -11,8 +11,6 @@ import sqlite3
 # admin account:
 # user0, hello
 
-
-
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 

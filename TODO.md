@@ -8,7 +8,7 @@
     https://firebase.google.com/docs/database/admin/structure-data (helpful website)
 
 
-[] finish adding pages:
+[X] finish adding pages:
     - account (change pwd, email, request to change classes, contact tutee, change colour scheme)
 
 [X] create login base functionality
@@ -17,7 +17,12 @@
     - + account lockouts
     - linking to email for pwd recovery will be a later task
 
-[] make website compatible with screen sizes using @media (see resources.md)
+[ ] add hover div for class details in calendar
+    - if click on date, then
+        - div appears over
+
+
+[-] make website compatible with screen sizes using @media (see resources.md)
 
 ## Short-Term Tasks
 
