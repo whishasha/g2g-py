@@ -59,7 +59,7 @@ const displayCalendar = () => {
 
     // dates must be added to align with the week
     for( let i = firstDayofMonth; i > 0; i--){
-        days += `<li class="dummy">${lastDateofLastMonth - i + 1}</li>` //adds days from last month
+        days += `<li class="dummy date" onclick="displayDateInfo(this)">${lastDateofLastMonth - i + 1}</li>` //adds days from last month
     }
     
     for (let i = 1; i <= lastDateofMonth; i++) {
@@ -68,14 +68,15 @@ const displayCalendar = () => {
         i === dateObj.getDate() && 
         month === new Date().getMonth() && //if statement checking if the date matches the current one
         year === new Date().getFullYear()
-            ? "active" //highlights current date
-            : "";
+            ? "active date" //highlights current date
+            : "date";
         
-        days += `<li class="${checkToday}">${i}</li>`
+            // find a better way to add the function
+        days += `<li class="${checkToday}" onclick="displayDateInfo(this)">${i}</li>`
     }
 
     for (let i = lastDayofMonth; i<6; i++){
-        days += `<li class="dummy">${i - lastDayofMonth + 1}</li>` //adds days from next month
+        days += `<li class="dummy date" onclick="displayDateInfo(this)">${i - lastDayofMonth + 1}</li>` //adds days from next month
     }
 
     // display all the days of the month within the dates div
@@ -105,7 +106,23 @@ const changeMonth = (El) => {
 
 const dateInfoEl = document.querySelector('#dateInfo');
 
-const displayDateInfo = () => {
+// datesEl selects all elements with class dates
+
+const displayDateInfo = (El) => {
+    var ElRect = El.getBoundingClientRect()
     console.log('banana')
-    dateInfoEl.innerHTML = 'yo';
+    console.log(ElRect.top, ElRect.right, ElRect.bottom, ElRect.left);
+    dateInfoEl.innerHTML = El.innerHTML;
 }
+
+//get list elements with class date
+const dateEls = document.querySelectorAll('.date');
+
+
+// this doesn't work but idk why, fix it later ==> scuffed onclick soln implemented above
+// for (var i = 0; i < dateEls.length; i++) {
+//     console.log(dateEls[i])
+//     dateEls[i].addEventListener("click", displayDateInfo(dateEls[i]));
+// }
+
+//the event listener isnt calling the right method
