@@ -13,7 +13,7 @@
 
 [X] create login base functionality
     - do not forget to encrypt with python bcrypt
-    
+
 [] add password restrictions and prevent SQL injections
     - + account lockouts
     - linking to email for pwd recovery will be a later task
@@ -27,13 +27,28 @@
 
 ## Short-Term Tasks
 
+**Functional**
+
+[ ] add jinja to make the register tutee form only visible to tutors
+
+[ ] add tutee registration
+
+[ ] make it so you can add class details on calendar [for tutor], and request changes [for tutee] using jinja
+
+[ ] add unique pages depending on username
+
+[ ] add homework page
+
+[ ] implement file uploads
+
+**Non-Functional**
 
 [X] do smooth file up code for navbar in landing page
 
-[] format the nice dateInfo for the calendar
+[ ] format the nice dateInfo for the calendar
 
-[] fix double scrollbar issue
+[ ] fix double scrollbar issue
 
-[] graphic design for landing pages
+[ ] graphic design for landing pages
 
-[] graphic designs for icons
+[ ] graphic designs for icons
