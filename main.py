@@ -95,7 +95,12 @@ def register():
 
 mode = "dev"
 if mode == "prod":
-    serve(app, port=10000)
+    try: 
+     print('WGSI server running!')
+     serve(app, port=10000)
+    except RuntimeError as e: 
+        print(f'Error: {e}')
 elif mode == "dev":
+    print('Development server running!')
     app.run(host="127.0.0.1", port=10000, debug=True) 
 # host="0.0.0.0"

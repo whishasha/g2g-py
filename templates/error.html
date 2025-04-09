@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>G2G</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/landingstylesheet.css')}}">
+    <!-- empty stylesheet, to be added to -->
+
+
+</head>
+<body>
+    
+    <nav>
+        <ul class="topbar">
+            <li>
+            <a href="/" class="navitem"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"></a>
+            </li>
+            <li><a class="navitem">About</a></li>
+            <li><a class="navitem">Pricing</a></li>   
+            <li><a href="/inquire" class="important navitem" >INQUIRE</a></li>   
+            <li><a href="/login" class="important navitem" >LOGIN</a></li>
+
+        </ul>
+    </nav>
+
+    <div id="main">
+        <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
+        <p>An unexpected error has occurred!</p>
+        <button onclick="showSidebar()">hi</button>
+    </div>
+
+
+    <script src="{{url_for('static', filename='js/landing.js')}}"></script>
+    <script>
+        function showSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const topbar = document.querySelector('.topbar');
+            const nav = document.querySelector('nav');
+
+            sidebar.style.display = 'flex';
+            topbar.style.display = 'none';
+
+            nav.style.position = 'relative';
+            
+        }
+        function hideSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

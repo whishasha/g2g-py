@@ -9,6 +9,7 @@ const btnEl = document.querySelectorAll('.calendar-headings');
 const monthYearEl = document.querySelector('.month-year');
 
 
+
 let dmObj = {
     days: [
         "Sunday",
@@ -104,15 +105,18 @@ const changeMonth = (El) => {
     displayCalendar();
 }
 
-const dateInfoEl = document.querySelector('#dateInfo');
-
+const dateInfoEl = document.getElementById('dateInfo');
 // datesEl selects all elements with class dates
 
-const displayDateInfo = (El) => {
+const displayDateInfo = (El) => { //need to add cases for when calendar number is too far to the left, etc.
     var ElRect = El.getBoundingClientRect()
     console.log('banana')
     console.log(ElRect.top, ElRect.right, ElRect.bottom, ElRect.left);
     dateInfoEl.innerHTML = El.innerHTML;
+
+    dateInfoEl.style.left = ElRect.left + 30 + 'px';
+    dateInfoEl.style.top = ElRect.top + 'px';
+    dateInfoEl.style.display = 'relative';
 }
 
 //get list elements with class date

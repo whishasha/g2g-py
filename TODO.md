@@ -13,11 +13,12 @@
 
 [X] create login base functionality
     - do not forget to encrypt with python bcrypt
+    
 [] add password restrictions and prevent SQL injections
     - + account lockouts
     - linking to email for pwd recovery will be a later task
 
-[ ] add hover div for class details in calendar
+[-] add hover div for class details in calendar
     - if click on date, then
         - div appears over
 
@@ -28,6 +29,10 @@
 
 
 [X] do smooth file up code for navbar in landing page
+
+[] format the nice dateInfo for the calendar
+
+[] fix double scrollbar issue
 
 [] graphic design for landing pages
 
