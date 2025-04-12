@@ -1,19 +1,21 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash, url_for, send_file
 from flask_bcrypt import Bcrypt
 
 from waitress import serve
 
+import os
 import sqlite3
+from dotenv import load_dotenv, find_dotenv
 
-
-
+load_dotenv(find_dotenv())
+encoded_secret_key = os.getenv("SECRET_KEY")
 
 # admin account:
 # user0, hello
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
-
+app.config["SECRET_KEY"] = encoded_secret_key
 
 @app.route("/")
 def hello_world():
@@ -90,9 +92,55 @@ def register():
 
         return redirect("/")
 
+# Beginning of file upload part
 
+from werkzeug.utils import secure_filename
+app.config['UPLOAD_FOLDER'] = 'files'
+ALLOWED_EXTENSIONS = {'pdf'} #allowed file extensions
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000 #16MB max upload
 
+def allowed_file(filename: str):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# https://flask.palletsprojects.com/en/stable/patterns/fileuploads/
+# Application example uses this feature called 'flash' will seems to be useful for sending messages to users.
+@app.route("/upload", methods = ["GET", "POST"])
+def file_upload():
+    if request.method == "POST":
+                # check if the post request has the file part
+        print('POST received!')
+        if 'file' not in request.files:
+            print('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            print('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename) 
+            file.save(filepath)
+            print('Saved!')
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('''INSERT INTO files(name, filepath) VALUES(?, ?)''', (filename, filepath))
+            
+
+            con.commit()
+            cur.close()
+            con.close()
+
+            return redirect(url_for('download_file', name=filename)) #
+        
+    return render_template('FileUpload.html')
+
+@app.route('/<name>')
+def download_file(name):
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], name)
+    return send_file(filepath)
 mode = "dev"
 if mode == "prod":
     try: 
@@ -104,3 +152,4 @@ elif mode == "dev":
     print('Development server running!')
     app.run(host="127.0.0.1", port=10000, debug=True) 
 # host="0.0.0.0"
+

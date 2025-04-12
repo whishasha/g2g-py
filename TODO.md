@@ -29,6 +29,8 @@
 
 **Functional**
 
+[ ] add sessions
+
 [ ] add jinja to make the register tutee form only visible to tutors
 
 [ ] add tutee registration
@@ -40,6 +42,8 @@
 [ ] add homework page
 
 [ ] implement file uploads
+- store on local file system
+- store the link to it on the database
 
 **Non-Functional**
 

@@ -22,3 +22,9 @@ https://stackoverflow.com/questions/73965176/authenticating-firebase-connection-
 
 -- flask login stuff that's REALLY COOL (restrict pages to login using @login_required and FREE AUTHENTICAITON!!!)
 https://flask-login.readthedocs.io/en/latest/
+
+-- flask file upload, sending, downloading
+# https://flask.palletsprojects.com/en/stable/patterns/fileuploads/
+# https://www.youtube.com/watch?time_continue=185&v=WICXiCtXX5U&embeds_referring_euri=https%3A%2F%2Fwww.google.com%2F&source_ve_path=MTM5MTE3LDEzOTExNywyMzg1MQ
+
+

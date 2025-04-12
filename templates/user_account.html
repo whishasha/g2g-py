@@ -15,7 +15,7 @@
 <body>
     
     <nav>
-        <ul>
+        <ul id="topbar">
             <li>
             <a>name :)</a>
             </li>
@@ -34,26 +34,21 @@
     <div id="main">
         <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
         <div id="button"><button onclick="hideSidenav()">hi</button></div>
-        <form action="" id="registerTuteeForm" method="post"> <!--make this only visible to tutors, then add change email, request class change, etc.-->
-    
-            <input type="text" name="firstname" placeholder="First Name">
-            <input type="text" name="lastname" placeholder="Last Name">
-            <br>
-            <input type="text" name="username" placeholder="Username">
-            <br>
-            <input type="text" name="password" placeholder="Password">
-            <br>
-            <button name="register" type="submit">Login</button>
-        </form>
+        <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" padding: 50px;>
+        <p style="padding-left: 50px;font-weight: bold;">Hello. Fumo. Fumo. Test.</p>
     </div>
 
 
 
 </body>
-<style>
-form {
-    text-align: center;
-}
-</style>
-<script src="{{url_for('static', filename='js/g2g.js')}}"></script>
+<script>
+        function hideSidenav() {
+            const nav = document.querySelector('nav');
+            const main = document.getElementById('main');
+            nav.style.display = 'none';
+            main.style.marginLeft = '0';
+            main.style.width = '100vw';
+            
+        }
+</script>
 </html>
