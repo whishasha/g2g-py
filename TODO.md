@@ -36,12 +36,18 @@
 [ ] add tutee registration
 
 [ ] make it so you can add class details on calendar [for tutor], and request changes [for tutee] using jinja
+    [ ] add class details to SQL database
+    [ ] retrieve from SQL database [use RDBS to find all dates i guess]
+    [ ] send to template
 
 [ ] add unique pages depending on username
 
-[ ] add homework page
+[ ] add + link homework page
+should be able to:
+[ ] upload multiple files
+[ ] download, upload, & delete view files
 
-[ ] implement file uploads
+[X] implement file uploads
 - store on local file system
 - store the link to it on the database
 
