@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, flash, url_for, send_file
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, UserMixin
+from flask_login import LoginManager, UserMixin, login_user, login_required
 from waitress import serve
 from uuid import uuid4
 import os
@@ -10,8 +10,39 @@ from werkzeug.utils import secure_filename
 load_dotenv(find_dotenv())
 encoded_secret_key = os.getenv("SECRET_KEY")
 
+# see Documentation for Flask_Login here:
+# https://flask-login.readthedocs.io/en/latest/
+
+# + Help from my friend ChatGPT!
 class User(UserMixin):
-    pass
+    def __init__(self, id, username, password):
+        self.id = id
+        self.username = username
+        self.password = password
+
+    @staticmethod
+    def get(user_id):
+        con = sqlite3.connect('database.db')
+        cur = con.cursor()
+        cur.execute("SELECT ID, name, password FROM users WHERE ID = ?", (user_id,))
+        row = cur.fetchone()
+        con.close()
+        if row:
+            print(User(*row).username) #unpacks user tuple and returns a USER OBJECT
+            return User(*row)
+        return None
+
+    @staticmethod
+    def find_by_username(username):
+        con = sqlite3.connect('database.db')
+        cur = con.cursor()
+        row = cur.execute('''SELECT ID, name, password FROM users WHERE name=?''', (username,)).fetchone()
+        
+        cur.close()
+        con.close()
+        if row:
+            return User(*row)
+        return None
 
 def make_unique(string): # for making a unique filepath to prevent clashing
     ident = uuid4().__str__()
@@ -25,6 +56,8 @@ login_manager.init_app(app)
 bcrypt = Bcrypt(app)
 app.config["SECRET_KEY"] = encoded_secret_key
 
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
@@ -34,9 +67,6 @@ def load_user(user_id):
 def hello_world():
     return render_template('index.html')
 
-@app.route("/test")
-def test():
-    return render_template('test_user_home.html')
 
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
@@ -47,31 +77,38 @@ def login():
         con = sqlite3.connect('database.db')
         cur = con.cursor()
 
-        userRecord = cur.execute('''SELECT name, password FROM users WHERE name=?''', (name,)).fetchone()
+        userRecord = cur.execute('''SELECT ID, name, password FROM users WHERE name=?''', (name,)).fetchone()
         cur.close()
         con.close()
 
-        print(bcrypt.check_password_hash(userRecord[1], password))
+        print(userRecord[2])
 
+        passwordValidated = bcrypt.check_password_hash(userRecord[2], password)
+        print(passwordValidated)
+        if passwordValidated:
+            userID = str(userRecord[0])
+            user = User(userID)
+            login_user(user) #from Flask_Login
+            print('Successfully logged in')
     return render_template('login.html')
 
 @app.route("/inquire")
 def inquire():
     return render_template('inquire.html')
 
-# @app.route("/test")
-# def test():
-#     return render_template('renamethis.html')
 
 @app.route("/user/home")
+@login_required
 def user_home():
     return render_template('user_home.html')
 
 @app.route("/user/timetable")
+@login_required
 def user_timetable():
     return render_template('user_timetable.html')
 
 @app.route("/user/account", methods=["GET", "POST"])
+@login_required
 def user_account():
     if request.method == "POST":
         print(request.form)
@@ -94,7 +131,7 @@ def register():
         else:
             is_tutor = 0
 
-        encryptedpassword = bcrypt.generate_password_hash(password)
+        encryptedpassword = bcrypt.generate_password_hash(password).decode('utf-8')
         
         con = sqlite3.connect('database.db')
         cur = con.cursor()
@@ -131,6 +168,7 @@ def allowed_file(filename: str):
 # https://flask.palletsprojects.com/en/stable/patterns/fileuploads/
 # Application example uses this feature called 'flash' will seems to be useful for sending messages to users.
 @app.route("/upload", methods = ["GET", "POST"])
+@login_required
 def file_upload():
     if request.method == "POST":
                 # check if the post request has the file part
@@ -163,9 +201,13 @@ def file_upload():
     return render_template('FileUpload.html')
 
 @app.route('/<name>')
+@login_required
 def download_file(name):
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], name)
     return send_file(filepath)
+
+
+
 mode = "dev"
 if mode == "prod":
     try: 

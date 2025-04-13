@@ -29,11 +29,26 @@
 
 **Functional**
 
-[ ] add sessions
+# UI DEISNG FIRST!! DO UI DEIGNS!! 
+[ ] UI DEISNG
+    [ ] homework
+    [ ] creating a user
+    [ ] cleanup + animations
+    [ ] adding info about G2G
+    [ ] remove login by Google bit from Login
+    [ ] LINK PAGES!!!
+
+[X] login required thing
+
+[X] add sessions
 
 [ ] add jinja to make the register tutee form only visible to tutors
 
-[ ] add tutee registration
+[X] add tutee registration
+
+[ ] invalid login redirect
+
+[ ] be able to assign classes to students
 
 [ ] make it so you can add class details on calendar [for tutor], and request changes [for tutee] using jinja
     [ ] add class details to SQL database
