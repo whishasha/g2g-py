@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>G2G</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/g2gstylesheet.css')}}">
+    <!-- empty stylesheet, to be added to -->
+
+    {% endblock %}
+</head>
+
+<style>
+    :root{ 
+    --accent: #2bacff;
+    --background: white;
+    --box: #737373;
+    --text: black;
+}
+
+.calendar{
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: var(--background);
+    max-width:98vw; /* makes calendar span the width of the content div */
+    width: 100%;
+    height:500px;
+}
+
+.calendar-inner{
+    padding: 2rem;
+    display:flex;
+    justify-content: center;
+}
+
+.calendar-headings{
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    
+    padding: 1rem 0;
+}
+#prev{ 
+    cursor:pointer;
+}
+
+#next{
+    cursor:pointer;
+}
+
+.current-datetime{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--box);
+    padding: 0.7rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+}
+
+.current-datetime .daytxt {
+    background-color: var(--accent);
+    color: white;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+}
+
+.days-date ul{
+    list-style: none;
+}
+
+.days-date .days, .dates{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+}
+
+.days-date .days li{
+    border-bottom: 2px solid black;
+    font-size: 30px;
+}
+
+.dates li{
+    /* border: 1px solid black; */
+    font-size: 20px;
+
+
+    padding: 0.75rem 0.5rem;
+    margin: 0.2rem;
+    display: flex;
+
+    width:2rem;
+
+
+    /* aligns dates in the centre of each day */
+    margin-left: auto;
+    margin-right:auto; 
+
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 5px;
+    color: var(--text)
+}
+
+.days-date .dates li:hover {
+    background-color: var(--box);
+    color: var(--background);
+    transition: 0.3s;
+}
+
+.days-date .dates li.active {
+    background-color: var(--accent);
+    color: var(--background)
+}
+
+.days-date .dummy{
+    color: var(--box)
+}
+
+#dateInfo {
+    background-color: black;
+    height: 40vh;
+    width: 15vw;
+    z-index: 9999;
+    position: absolute;
+    display: fixed;
+    opacity: 0.5;
+    color: white;
+}
+
+</style>
+
+<body>
+    
+    <nav>
+        {%block topbar%}
+        <ul id="topbar">
+            <li><a>name :)</a></li>
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Home</a></li>
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Account</a></li>            
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Chatroom</a></li>
+            <li>User Information</li>
+            <li><hr class="line"></li>
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Assignments</a></li>
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Attendance</a></li>
+            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Timetable</a></li>   
+            <li><hr class="line"></li>            
+
+        </ul> 
+        {% endblock %}
+    </nav>
+
+        
+    <div id="main">
+        {% block main%}
+        <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
+        <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="padding: 50px;">
+        <p style="padding-left: 50px;font-weight: bold;">Hello. Fumo. Fumo. Test.</p>        
+       {% endblock %}
+    </div>
+
+</body>
+{% block js %}
+<script>
+    function hideSidenav() {
+        const nav = document.querySelector('nav');
+        const main = document.getElementById('main');
+        // nav.style.display = 'none';
+        nav.style.width= 0;
+        main.style.marginLeft = '0';
+        main.style.width = '100vw';
+        
+    }
+</script>
+{% endblock %}
+</html>

@@ -1,16 +1,11 @@
+{%extends "user_template.html.jinja" %}
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>G2G</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}">
-    <!-- <link rel="stylesheet" href="{{url_for('static', filename='css/calendar.css')}}"> -->
-    <link rel="stylesheet" href="{{url_for('static', filename='css/g2gstylesheet.css')}}">
-
-
+{%block head%}
+{{super()}}
+{%endblock%}
 </head>
 <style>
     :root{ 
@@ -134,30 +129,19 @@
 </style>
 
 <body>
-    <div id="dateInfo">
-        hi ;3
 
-    </div>
+<nav>
+{%block topbar%} <!--inherits from user_template-->
+{{super()}}
+{%endblock%}
+</nav>
 
-
-    <nav>
-        <ul>
-            <li>
-            <a>name :)</a>
-            </li>
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Home</a></li>
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Account</a></li>            
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Chatroom</a></li>
-            <li>User Information</li>
-            <li><hr class="line"></li>
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Assignments</a></li>
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Attendance</a></li>
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Timetable</a></li>   
-            <li><hr class="line"></li>
-        </ul>
-    </nav>
 
     <div id="main">
+        {%block main%}
+        <div id="dateInfo">
+            hi ;3
+        </div>
         <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
         <button onclick="hideSidenav()">hi</button>
         <button onclick="displayDateInfo(this)">hi again</button>
@@ -220,12 +204,14 @@
                 </div>
             </div>
         </div>   
+        <script src="{{url_for('static', filename='js/calendar.js')}}"></script>
+<script src="{{url_for('static', filename='js/g2g.js')}}"></script>
+        {%endblock%}
     </div>
 
 
 
 </body>
-<script src="{{url_for('static', filename='js/calendar.js')}}"></script>
-<script src="{{url_for('static', filename='js/g2g.js')}}"></script>
+
 
 </html>

@@ -1,25 +1,42 @@
 from flask import Flask, render_template, request, redirect, flash, url_for, send_file
 from flask_bcrypt import Bcrypt
-
+from flask_login import LoginManager, UserMixin
 from waitress import serve
-
+from uuid import uuid4
 import os
 import sqlite3
 from dotenv import load_dotenv, find_dotenv
-
+from werkzeug.utils import secure_filename
 load_dotenv(find_dotenv())
 encoded_secret_key = os.getenv("SECRET_KEY")
 
-# admin account:
-# user0, hello
+class User(UserMixin):
+    pass
+
+def make_unique(string): # for making a unique filepath to prevent clashing
+    ident = uuid4().__str__()
+    return f"{ident}-{string}" #combines the strings together
+
+login_manager = LoginManager()
+#John, banana
 
 app = Flask(__name__)
+login_manager.init_app(app)
 bcrypt = Bcrypt(app)
 app.config["SECRET_KEY"] = encoded_secret_key
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
+
 
 @app.route("/")
 def hello_world():
     return render_template('index.html')
+
+@app.route("/test")
+def test():
+    return render_template('test_user_home.html')
 
 @app.route("/login", methods = ['GET', 'POST'])
 def login():
@@ -57,7 +74,9 @@ def user_timetable():
 @app.route("/user/account", methods=["GET", "POST"])
 def user_account():
     if request.method == "POST":
+        print(request.form)
         if 'register' in request.form:
+            print('Processing registration')
             register()
     return render_template('user_account.html')
 
@@ -69,6 +88,12 @@ def register():
         username = request.form.get('username')
         password = request.form.get('password')
 
+        is_tutor = request.form.get('is_tutor')
+        if is_tutor:
+            is_tutor = 1
+        else:
+            is_tutor = 0
+
         encryptedpassword = bcrypt.generate_password_hash(password)
         
         con = sqlite3.connect('database.db')
@@ -79,9 +104,9 @@ def register():
         if userRecord:
             print(f"Error: Account with {username} already exists")
         else:
-            cur.execute('''INSERT INTO users(name, password, firstname, lastname) 
-                        VALUES(?, ?, ?, ?)''', 
-                        (username, encryptedpassword, firstname, lastname))
+            cur.execute('''INSERT INTO users(name, firstname, lastname, password, is_tutor) 
+                        VALUES(?, ?, ?, ?, ?)''', 
+                        (username, firstname, lastname, encryptedpassword, is_tutor))
             con.commit()
             print("Yeah you good")
 
@@ -94,7 +119,7 @@ def register():
 
 # Beginning of file upload part
 
-from werkzeug.utils import secure_filename
+
 app.config['UPLOAD_FOLDER'] = 'files'
 ALLOWED_EXTENSIONS = {'pdf'} #allowed file extensions
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000 #16MB max upload

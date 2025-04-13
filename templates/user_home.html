@@ -1,56 +1,33 @@
+{% extends "user_template.html.jinja" %}
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>G2G</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/g2gstylesheet.css')}}">
-    <!-- empty stylesheet, to be added to -->
-
-
+    {%block head%}
+    {{super()}}
+    {%endblock%}
 </head>
 <body>
     
     <nav>
-        <ul id="topbar">
-            <li>
-            <a>name :)</a>
-            </li>
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Home</a></li>
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Account</a></li>            
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Chatroom</a></li>
-            <li>User Information</li>
-            <li><hr class="line"></li>
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Assignments</a></li>
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Attendance</a></li>
-            <li><a><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Timetable</a></li>   
-            <li><hr class="line"></li>
-        </ul>
+    {%block topbar%} <!--inherits from user_template-->
+    {{super()}}
+    {%endblock%}
     </nav>
 
     <div id="main">
+        {% block main %}
         <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
         <div id="button"><button onclick="hideSidenav()">hi</button></div>
         <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" padding: 50px;>
         <p style="padding-left: 50px;font-weight: bold;">Hello. Fumo. Fumo. Test.</p>
+        {% endblock %}
     </div>
 
 
 
 </body>
-<script>
-        function hideSidenav() {
-            // const topbar = document.querySelector('#topbar');
-            const nav = document.querySelector('nav');
-            const main = document.getElementById('main');
-            nav.style.display = 'none';
-            // topbar.style.display = 'none';
-            main.style.marginLeft = '0';
-            main.style.width = '100vw';
-            
-        }
-</script>
+{% block js %}
+{{super()}}
+{% endblock %}
 </html>
