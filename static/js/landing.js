@@ -10,8 +10,8 @@
 //     navitem[i].addEventListener("click", liftNav(navitem[i] ));
 // }
 
-const li = document.getElementsByName('li');
-for (var i = 0; i < li.length; i++) {
-li[i].innerHTML = 'hi';
-};
+// const li = document.getElementsByName('li');
+// for (var i = 0; i < li.length; i++) {
+// li[i].innerHTML = 'hi';
+// };
 

@@ -97,6 +97,16 @@ def inquire():
     return render_template('inquire.html')
 
 
+@app.route("/pricing")
+def pricing():
+    return render_template('pricing.html')
+
+@app.route("/about")
+def about():
+    return render_template('about.html')
+
+
+
 @app.route("/user/home")
 @login_required
 def user_home():
@@ -145,7 +155,7 @@ def register():
                         VALUES(?, ?, ?, ?, ?)''', 
                         (username, firstname, lastname, encryptedpassword, is_tutor))
             con.commit()
-            print("Yeah you good")
+            print("Account registered!")
 
 
 

@@ -1,97 +1,120 @@
+{% extends "index.html" %}
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>G2G</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/landingstylesheet.css')}}">
-    <!-- empty stylesheet, to be added to -->
+    {% block head %}
+        {{ super() }}
+        
+        {% block css %} <!--css renders in the HEAD first, else the template overrides-->
+            <style>
+                /* overrides existing styling in g2gstylesheet */
+                #main {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                }
+                #content {
+                    max-width: 50%;
+                    min-width: 40%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    text-align: center;
+                }
+                #banner {
+                    max-width: 30vw;
+                }
+                textarea {
+                    margin-top: 20px;
+                    height:200px;
+                    width: 20vw;
+                    padding: 15px 20px;
+                    border: 2px solid #2bacff;
+                    border-radius: 25px;
+                    resize: none;
+                    font-family: sans-serif;
+                }
 
 
+                @media (max-width: 768px) {
+                #main {
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: column;
+                    align-items: center;
+                    max-width: 100%;
+                }
+                #content {
+                    min-width: 100%;
+                }
+                #banner{
+                    max-width: 100%;
+                }
+            }
+            </style>
+        {% endblock %}
+
+    {% endblock %}
 </head>
 <body>
     
     <nav>
-        <ul class="topbar">
-            <li>
-            <a href="/"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"></a>
-            </li>
-            <li><a>About</a></li>
-            <li><a>Pricing</a></li>   
-            <li><a href="/inquire" class="important">INQUIRE</a></li>   
-            <li><a href="/login" class="important">LOGIN</a></li>
-
-        </ul>
+        {% block topbar %}
+            {{ super() }}
+        {% endblock %}
     </nav>
 
-    <div id="wrapper">
-        <div id="banner">
-            <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
-        </div>
-        <div id="content">
-            <h1>Inquire</h1>
-            <hr class="line">
-            <form>
-                <input type="text" placeholder="Enter email here..." style="width: 20vw;">
-                <br>
+    <div id="main">
+        {% block main %}
+            <div id="banner">
+                <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
+            </div>
+
+            <div id="content">
+                <h1>Inquire</h1>
+                <hr class="line">
                 
-                <textarea placeholder="Enter inquiry here..."></textarea>
-                <br>
-                <submit><button>SEND</button></submit>
-            </form>
-            <p>Hello. Fumo. Fumo.</p>
-            <button onclick="showSidebar()">hi</button>
-        </div>
-        <div id="banner">
-            <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
-        </div>
+                <form>
+                    <input type="text" placeholder="Enter email here..." style="width: 20vw;">
+                    <br>
+                    
+                    <textarea placeholder="Enter inquiry here..."></textarea>
+                    <br>
+                    <submit><button>SEND</button></submit>
+                </form>
+                
+                <p>Hello. Fumo. Fumo.</p>
+                <button onclick="showSidebar()">hi</button>
+            </div>
+
+            <div id="banner">
+                <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
+            </div>
+        {% endblock %}
     </div>
 
-    <style>
-        /* overrides existing styling in g2gstylesheet */
-        #wrapper {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-        }
-        #content {
-            max-width: 40vw;
-        }
-        #banner {
-            max-width: 30vw;
-        }
-        textarea {
-            margin-top: 20px;
-            height:200px;
-            width: 20vw;
-            padding: 15px 20px;
-            border: 2px solid #2bacff;
-            border-radius: 25px;
-            resize: none;
-            font-family: sans-serif;
-        }
-    </style>
-    <script>
-        function showSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            const topbar = document.querySelector('.topbar');
-            const nav = document.querySelector('nav')
+    {% block js %}
+        <script>
+            function showSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                const topbar = document.querySelector('.topbar');
+                const nav = document.querySelector('nav')
 
-            sidebar.style.display = 'flex';
+                sidebar.style.display = 'flex';
 
-            topbar.style.display = 'none';
+                topbar.style.display = 'none';
 
-            nav.style.position = 'relative';
-            
-        }
-        function hideSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.style.display = 'none';
-        }
-    </script>
+                nav.style.position = 'relative';
+                
+            }
+            function hideSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.style.display = 'none';
+            }
+        </script>
+    {% endblock %}
 </body>
 </html>

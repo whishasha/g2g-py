@@ -4,12 +4,20 @@
 :root {
     /* text colour */
     --text: black; 
+    /* grayer text */
+    --textalt: #7e929c;
+
+    --textalt2: white;
     /* background colour */
     --bg: white;
     /* accent colour */
     --accent: #2bacff;
     /* alternative highlight */
     --accentalt: white;
+
+    --line: #ced6d6;
+
+    --box: #9dd2ed;
 }
 
 
@@ -21,18 +29,16 @@ nav {
     position: sticky; 
     top: 0px;
 
-    width:100lvw;
+    width:100vw;
     /* makes a sticky navbar */
 
     overflow: hidden;
-    display:block; 
-    /* already displays as block, but just as redundancy and for sake of example */
 
-    border-bottom: 2px solid var(--text);
+    border-bottom: 0.5px solid var(--line);
 
 }
 nav ul {
-
+    align-items: center; /* Vertically center the items */
     list-style-type: none;
     margin: 0;
     padding-right: 20px;
@@ -41,10 +47,10 @@ nav ul {
 }
 nav a {
     margin: 10px;
-    float:left;
+    float: left;
     
     color:var(--text);
-    font-weight: bold;
+    font-weight: 550;
     text-align: center;
     padding: 12px 20px;
 }
@@ -56,18 +62,27 @@ nav a:hover {
 /* handles vertical dropdown bar for small screens */
 
 
-
+nav img {
+    margin-right: 20px; /* Add some space after the logo */
+    width: 30px;
+    height: auto;
+    display: inline-block; /* Ensure the logo is inline with the text */
+    vertical-align: middle; /* Align with the text vertically */
+}
 
 /* highlighting important buttons */
-.important:hover {
+nav .important:hover {
     color: var(--accentalt);
 }
-.important {
+nav .important {
     /* Creates circular buttons for each thing there */
     background-color: var(--accent);
-    border-radius: 25px;
+    border-radius: 10px;
+    font-weight: bold;
     border: 1px solid var(--accent); 
-    float: right;
+    float: right;  /* Push this item to the right */
+
+    color: var(--textalt2)
 }
 hr {
     width:100vw;
@@ -118,6 +133,13 @@ h1 {
     /* smaller lines for aesthetic separation */
     width: 20vw;
 }
+
+.line {
+    width: 80%;
+    margin: auto;
+    border: 0.2px solid var(--line);
+  }
+
 
 /* for content divs */
 #wrapper {

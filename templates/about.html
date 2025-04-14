@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+<!DOCTYPE html>
+
+<html>
+<head>
+    {% block head %}
+        {{ super() }}
+        
+        {% block css %} <!--css renders in the HEAD first, else the template overrides-->
+            {{super()}}
+        {% endblock %}
+
+    {% endblock %}
+</head>
+<body>
+    
+    <nav>
+        {% block topbar %}
+            {{ super() }}
+        {% endblock %}
+    </nav>
+
+    <div id="main">
+        {% block main %}
+        <div class="section">
+            <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
+            <h1>Meet the Man Behind G2G</h1>
+            <p>A tutor that will ensure you reach the pearly gates.</p>
+            <button onclick="showSidebar()">hi</button>
+        </div>
+        <div class="section">
+            <h1>Qualified Help</h1>
+            <p> Elevate your connection with God's numbers through G2G's maths tutoring </p>
+        </div>
+        <div class="section">
+            <h1>Proven Results</h1>
+            <p>Learn to speak with the gravitas of God and learn about Him</p>
+        </div>
+        {% endblock %}
+    </div>
+
+    {% block js %}
+        <script>
+            function showSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                const topbar = document.querySelector('.topbar');
+                const nav = document.querySelector('nav')
+
+                sidebar.style.display = 'flex';
+
+                topbar.style.display = 'none';
+
+                nav.style.position = 'relative';
+                
+            }
+            function hideSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.style.display = 'none';
+            }
+        </script>
+    {% endblock %}
+</body>
+</html>

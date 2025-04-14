@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-
+<!--acts as the template html for all the landing pages-->
 <html>
 <head>
+    {% block head %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -9,48 +10,87 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/landingstylesheet.css')}}">
     <!-- empty stylesheet, to be added to -->
+        {% block css %} 
+            <style>
+                #main{
+                    display:flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .section{
+                    text-align: center;
+                    max-width: 90%;
+                    min-width: 70%;
+                    padding-bottom: 20px;
+                    border-bottom: 1px solid var(--line)
+                }
 
-
+            </style>
+        {% endblock %}
+    {% endblock %}
 </head>
 <body>
     
     <nav>
+        {% block topbar %}
         <ul class="topbar">
             <li>
-            <a href="/" class="navitem"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"></a>
+            <a href="/" class="navitem"><img src="{{url_for('static', filename='assets/g2glogoalt.svg')}}"></a>
             </li>
-            <li><a class="navitem">About</a></li>
-            <li><a class="navitem">Pricing</a></li>   
-            <li><a href="/inquire" class="important navitem" >INQUIRE</a></li>   
-            <li><a href="/login" class="important navitem" >LOGIN</a></li>
+            <li><a href="/about" class="navitem">About</a></li>
+            <li><a href="/pricing" class="navitem">Pricing</a></li>   
+            <li><a href="/inquire" class="important navitem" >Inquire</a></li>   
+            <li><a href="/login" class="important navitem" >Login</a></li>
 
         </ul>
+        {% endblock %}
     </nav>
 
     <div id="main">
-        <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
-        <p>Hello. Fumo. Fumo.</p>
-        <button onclick="showSidebar()">hi</button>
+        {% block main %}
+            <div class="section">
+                <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
+                <h1>Graceful 2 God</h1>
+                <p>A tutor that will ensure you reach the pearly gates.</p>
+                <button onclick="showSidebar()">hi</button>
+            </div>
+            <div class="section">
+                <h1>Become One with Mathematics</h1>
+                <p> Elevate your connection with God's numbers through G2G's maths tutoring </p>
+            </div>
+            <div class="section">
+                <h1>Intertwine yourself with English</h1>
+                <p>Learn to speak with the gravitas of God and learn about Him</p>
+            </div>
+        {% endblock %}
+
     </div>
 
+    <div id="main2"> <!--just in case for extra styling-->
+        {% block main2 %}{% endblock %}
+    </div>
 
-    <script src="{{url_for('static', filename='js/landing.js')}}"></script>
-    <script>
-        function showSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            const topbar = document.querySelector('.topbar');
-            const nav = document.querySelector('nav');
+        {% block js %}
+            <script src="{{url_for('static', filename='js/landing.js')}}"></script>
+            <script>
+                function showSidebar() {
+                    const sidebar = document.querySelector('.sidebar');
+                    const topbar = document.querySelector('.topbar');
+                    const nav = document.querySelector('nav');
+        
+                    sidebar.style.display = 'flex';
+                    topbar.style.display = 'none';
+        
+                    nav.style.position = 'relative';
+                    
+                }
+                function hideSidebar() {
+                    const sidebar = document.querySelector('.sidebar');
+                    sidebar.style.display = 'none';
+                }
+            </script>
+        {% endblock %}
 
-            sidebar.style.display = 'flex';
-            topbar.style.display = 'none';
-
-            nav.style.position = 'relative';
-            
-        }
-        function hideSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.style.display = 'none';
-        }
-    </script>
 </body>
 </html>

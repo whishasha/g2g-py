@@ -27,4 +27,6 @@ https://flask-login.readthedocs.io/en/latest/
 # https://flask.palletsprojects.com/en/stable/patterns/fileuploads/
 # https://www.youtube.com/watch?time_continue=185&v=WICXiCtXX5U&embeds_referring_euri=https%3A%2F%2Fwww.google.com%2F&source_ve_path=MTM5MTE3LDEzOTExNywyMzg1MQ
 
+-- nice logos to snatch
+https://fonts.google.com/icons?icon.size=24&icon.color=%23e3e3e3
 
