@@ -1,4 +1,4 @@
-{%extends "user_template.html.jinja" %}
+{%extends "user_template.html" %}
 <!DOCTYPE html>
 
 <html>
@@ -210,6 +210,9 @@
     </div>
 
 
+{% block js %}
+    {{super()}}
+{% endblock %}
 
 </body>
 

@@ -80,14 +80,12 @@ def login():
         userRecord = cur.execute('''SELECT ID, name, password FROM users WHERE name=?''', (name,)).fetchone()
         cur.close()
         con.close()
-
-        print(userRecord[2])
-
         passwordValidated = bcrypt.check_password_hash(userRecord[2], password)
         print(passwordValidated)
         if passwordValidated:
+            #userRecord[0] = ID, [1] = username, [2] = encrypted password
             userID = str(userRecord[0])
-            user = User(userID)
+            user = User(userID, userRecord[1], userRecord[2])
             login_user(user) #from Flask_Login
             print('Successfully logged in')
     return render_template('login.html')
@@ -116,6 +114,12 @@ def user_home():
 @login_required
 def user_timetable():
     return render_template('user_timetable.html')
+
+
+@app.route("/user/assignments")
+@login_required
+def user_assignments():
+    return render_template('user_assignments.html')
 
 @app.route("/user/account", methods=["GET", "POST"])
 @login_required

@@ -1,0 +1,97 @@
+{% extends "user_template.html" %}
+<!DOCTYPE html>
+
+<html>
+<head>
+    {%block head%}
+    {{super()}}
+    {% block css %}
+        <style>
+            #wrapper{
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            h1 {
+                font-weight: bold;
+                font-size: large;
+            }
+
+            #dueAssignments{
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            #completedAssignments{
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .assignment {
+                margin-left: auto;
+                margin-right: auto;
+
+                max-width: 50%;
+                display: grid;
+                grid: 
+                'title . . .'
+                'title . . .';
+                border: 1px solid black;
+                grid-gap: 10px;
+                background-color: var(--bgbar);
+                border-radius: 10px;
+                padding: 10px;
+            }
+            .assignment.title{
+                grid-area: title;
+            }
+        </style>
+    {% endblock %}
+    {%endblock%}
+</head>
+<body>
+    
+    <nav>
+    {%block topbar%} <!--inherits from user_template-->
+    {{super()}}
+    {%endblock%}
+    </nav>
+
+    <div id="main">
+        {% block main %}
+        <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
+        <div id="wrapper">            
+            <div id="dueAssignments">
+                <h1>Due Assignments</h1>
+                <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
+                    <div class="title">English Essay Writing</div>
+                    <div class="2">2</div>
+                    <div class="3">3</div>
+                    <div class="4">4</div>
+                    <div class="5">5</div>
+                </div>
+            </div>
+            <div id="completedAssignments">
+                <h1>Completed Assignments</h1>
+                <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
+                    <div class="title">Maths 12/02/25</div>
+                    <div class="2">2</div>
+                    <div class="3">3</div>
+                    <div class="4">4</div>
+                    <div class="5">5</div>
+                </div>
+            </div>
+        </div>   
+        {% endblock %}
+    </div>
+
+{% block js %}
+{{super()}}
+{% endblock %}
+
+</body>
+
+</html>

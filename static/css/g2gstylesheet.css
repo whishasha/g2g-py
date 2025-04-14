@@ -3,9 +3,9 @@
 /* colourscheme */
 :root {
   /* text in sidebar */
-  --textbar: #737373;
+  --textbar: #8f9c9c;
   /* accent background colour */
-  --accentbar: #555;
+  --accentbar: #8f9c9c;
   /* sidebar bg colour */
   --bgbar: #d3d3d3;
   
@@ -35,7 +35,7 @@ body {
   margin-left: 20vw;
   overflow-x: hidden;
   word-wrap: break-word;
-  transition: 3s;
+  transition: 1s ease;
 }
 
 #main.hide {
@@ -51,8 +51,11 @@ body {
 nav {
     font-weight: bold;
     background-color: var(--bgbar);
-    border-right: 2px solid var(--textbar);
+    border-right: 1px solid var(--textbar);
     
+    overflow-y: auto;
+
+    scrollbar-color: var(--accentbar) var(--bgbar);
 
     position: fixed;
     left:0;
@@ -60,15 +63,19 @@ nav {
     width:20vw;
     height:100vh;
     display: flex;
-    overflow: hidden;
     /*test anim*/
-    transition: 3s ease;
+    transition: 1s ease;
 
 }
 
-nav.hide {
+nav.hide { /* neat javascript stuff */
   width: 0;
-  opacity: 0;
+  transform: translateX(-100%);
+}
+
+#main.show {
+  margin-left: 0;
+  width: 100%;
 }
 
 nav ul {
@@ -103,23 +110,44 @@ li a:hover {
 
 hr {
     width:100%;
-    border: 1px solid black;
 }
 .line {
   width: 80%;
   margin: auto;
-  border: 0.5px solid var(--textbar);
+  border-top: 0.2px solid var(--textbar);
 }
 
+#menu {
+  background-color: var(--bgbar);
+  border-radius: 5px;
+  width: fit-content;
+  
+  margin: 10px;
+}
 
-@media only screen and (max-width: 400px) {
+#menu:hover{
+  cursor: pointer;
+}
+
+#menu.img {
+  color:#2bacff;
+}
+
+@media only screen and (max-width: 768px) {
   body {
-    display: block;
+    flex-direction: column;
   }
   nav {
     width: 100vw;
     max-height:fit-content;
     position: relative;
+    overflow: hidden;
+  }
+  nav.hide{
+    height: 0;
+    width: 100%;
+    transform: translateX(0);
+    transform: translateY(-100%);
   }
   #main {
     width: 100vw;

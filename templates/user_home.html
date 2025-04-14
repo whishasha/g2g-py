@@ -1,4 +1,4 @@
-{% extends "user_template.html.jinja" %}
+{% extends "user_template.html" %}
 <!DOCTYPE html>
 
 <html>
@@ -17,17 +17,19 @@
 
     <div id="main">
         {% block main %}
+        <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
+        
         <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
-        <div id="button"><button onclick="hideSidenav()">hi</button></div>
+        
         <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" padding: 50px;>
         <p style="padding-left: 50px;font-weight: bold;">Hello. Fumo. Fumo. Test.</p>
         {% endblock %}
     </div>
 
-
-
-</body>
 {% block js %}
 {{super()}}
 {% endblock %}
+
+</body>
+
 </html>
