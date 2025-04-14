@@ -62,10 +62,10 @@
 
     <div id="main">
         {% block main %}
-        <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
         <div id="wrapper">            
             <div id="dueAssignments">
                 <h1>Due Assignments</h1>
+                <p>Sort by: <button>Subject</button> <button>Date</button></p>
                 <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
                     <div class="title">English Essay Writing</div>
                     <div class="2">2</div>

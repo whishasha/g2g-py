@@ -31,12 +31,15 @@
 
 # UI DEISNG FIRST!! DO UI DEIGNS!! 
 [ ] UI DEISNG
-    [ ] homework
+    [X] homework
     [ ] creating a user
-    [ ] cleanup + animations
+    [ ] add CLASSES!
+    [ ] fix the doodoo ugly form in user_account
+    [X] cleanup + animations
     [ ] adding info about G2G
     [ ] remove login by Google bit from Login
     [ ] LINK PAGES!!!
+    [X] remake logo
 
 [X] login required thing
 
@@ -57,7 +60,7 @@
 
 [ ] add unique pages depending on username
 
-[ ] add + link homework page
+[X] add + link homework page
 should be able to:
 [ ] upload multiple files
 [ ] download, upload, & delete view files
@@ -72,7 +75,7 @@ should be able to:
 
 [ ] format the nice dateInfo for the calendar
 
-[ ] fix double scrollbar issue
+[ ] fix double scrollbar issue [WHERE IS IT]
 
 [ ] graphic design for landing pages
 
