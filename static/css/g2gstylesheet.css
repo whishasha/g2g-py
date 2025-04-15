@@ -139,10 +139,14 @@ hr {
   }
   nav {
     width: 100vw;
-    max-height:fit-content;
+    height:fit-content;
     position: relative;
-    overflow: hidden;
+
   }
+  nav ul{
+    width: 100vw;
+  }
+  
   nav.hide{
     height: 0;
     width: 100%;

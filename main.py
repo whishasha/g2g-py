@@ -88,6 +88,7 @@ def login():
             user = User(userID, userRecord[1], userRecord[2])
             login_user(user) #from Flask_Login
             print('Successfully logged in')
+            return redirect(url_for('user_home')) #add username as a parameter
     return render_template('login.html')
 
 @app.route("/inquire")
