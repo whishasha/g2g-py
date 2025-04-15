@@ -84,37 +84,74 @@
             <br><button type="submit" id="submit">Change Password</button>
         </form>
 
-            <form method="post" name="register">
-                <h1>Register a Tutee</h1>
-                <label>Username</label>
-                <input type="text" name="username">
-                
-                <br><label>Password</label>
-                <input type="text" name="password">
-                
-                <br><label>First Name</label>
-                <input type="text" name="firstname">
-                
-                <br><label>Last Name</label>
-                <input type="text" name="lastname">
-                
-                <br><label>Are they a tutor?</label>
-                <input type="checkbox" id="checkbox" name="is_tutor">
+        <form method="post" name="register">
+            <h1>Register a Tutee</h1>
+            <label>Username</label>
+            <input type="text" name="username">
+            
+            <br><label>Password</label>
+            <input type="text" name="password">
+            
+            <br><label>First Name</label>
+            <input type="text" name="firstname">
+            
+            <br><label>Last Name</label>
+            <input type="text" name="lastname">
+            
+            <br><label>Are they a tutor?</label>
+            <input type="checkbox" id="checkbox" name="is_tutor">
 
-                <br><label>What subjects are they taking?</label>
-                
-                <div id="subjects">
-                    <label>English</label><label>Mathematics</label>
-                    <input type="checkbox" id="checkbox" name="is_english">
+            <br><label>What subjects are they taking?</label>
+            
+            <div id="subjects">
+                <label>English</label><label>Mathematics</label>
+                <input type="checkbox" id="checkbox" name="is_english">
 
-                    <input type="checkbox" id="checkbox" name="is_maths">
+                <input type="checkbox" id="checkbox" name="is_maths">
 
 
-                </div>
+            </div>
 
-                <input type="hidden" name="register">
-                <br><button type="submit" id="submit">Register</button>
-            </form>
+            <input type="hidden" name="register">
+            <br><button type="submit" id="submit">Register</button>
+        </form>
+        
+        <form method="post" name="unenrollTutee">
+            <h1>Unenroll a Tutee</h1>
+            <select name="tutee" id="tutee" required>
+                <option value="johnny">John Ben</option> <!--John Ben represents firstname lastname, value is username-->
+                <option value="TGVBHJJ">Litched Field</option>
+                <option value="mizi">Mizi the Cat</option> <!--utilise jinja for this-->
+
+            </select>
+            
+            <br><label>Are you sure?</label>
+            <input type="checkbox" name="unenrollCheck">
+            <br><button type="submit" id="submit">Unenroll Tutee</button>
+        </form>
+
+        <form method="post" name="changeSubjects">
+            <h1>Unenroll a Tutee</h1>
+            <select name="tutee" id="tutee" required>
+                <option value="johnny">John Ben</option> <!--John Ben represents firstname lastname, value is username-->
+                <option value="TGVBHJJ">Litched Field</option>
+                <option value="mizi">Mizi the Cat</option> <!--utilise jinja for this-->
+            </select>
+            
+            <br><label>Subjects Taken</label>
+            
+            <div id="subjects">
+                <label>English</label><label>Mathematics</label>
+                <input type="checkbox" id="checkbox" name="is_english" checked> <!--use this to auto check using if statements in jinja-->
+
+                <input type="checkbox" id="checkbox" name="is_maths">
+            </div>
+
+            <br><label>Are you sure?</label>
+            <input type="checkbox" name="unenrollCheck">
+            <br><button type="submit" id="submit">Change Classes</button>
+        </form>
+
         {% endblock %}
     </div>
 

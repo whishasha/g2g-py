@@ -256,7 +256,7 @@ textarea {
         <form method="post" name="setClass">
             <h1>Set Class</h1>
             <label>Tutee</label>
-            <select name="tutee" id="tutee">
+            <select name="tutee" id="tutee" required> <!--use jinja for options-->
                 <option value="johnny">John Ben</option> <!--John Ben represents firstname lastname, value is username-->
                 <option value="TGVBHJJ">Litched Field</option>
                 <option value="mizi">Mizi the Cat</option>
@@ -264,13 +264,13 @@ textarea {
             </select>
             
             <br><label>Date</label>
-            <input type="date" name="classdate">
+            <input type="date" name="classdate" required>
             
 
             <br><label>Time</label>
-            <input type="time" name="classtimebegin">
+            <input type="time" name="classtimebegin" required>
             <label>to</label>
-            <input type="time" name="classtimeend">
+            <input type="time" name="classtimeend" required>
 
             <br><label>Additional Notes</label>
             <textarea name="classnotes"></textarea>
