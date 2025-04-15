@@ -5,8 +5,7 @@
 <head>
 {%block head%}
 {{super()}}
-{%endblock%}
-</head>
+{% block css %}
 <style>
     :root{ 
     --accent: #2bacff;
@@ -126,7 +125,57 @@
     color: white;
 }
 
+form {
+    margin: 50px auto;
+
+    border: 1px solid orange;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    width: 50%;
+}
+
+form input{
+    border-radius: 5px;
+    border: 1px solid var(--accent);
+    margin: 10px;
+}
+
+form select{
+    border-radius: 5px;
+    border: 1px solid var(--accent);
+    margin: 10px;    
+}
+
+form h1{
+    font-weight: bold;
+    font-size: large;
+    margin-bottom: 20px;
+}
+
+form #submit{
+    background-color: var(--accent);
+    font-weight: lighter;
+    font-size: 20px;
+    border-radius: 15px;
+    border: 1px solid var(--accent);
+    padding: 10px 30px;
+}
+
+textarea {
+    border-radius: 5px;
+    border: 1px solid var(--accent);
+    margin: 10px;
+}
+
 </style>
+{% endblock %}
+
+{%endblock%}
+</head>
+
 
 <body>
 
@@ -203,7 +252,31 @@
                     </div>
                 </div>
             </div>
-        </div>   
+        </div>
+        <form method="post" name="setClass">
+            <h1>Set Class</h1>
+            <label>Tutee</label>
+            <select name="tutee" id="tutee">
+                <option value="johnny">John Ben</option> <!--John Ben represents firstname lastname, value is username-->
+                <option value="TGVBHJJ">Litched Field</option>
+                <option value="mizi">Mizi the Cat</option>
+
+            </select>
+            
+            <br><label>Date</label>
+            <input type="date" name="classdate">
+            
+
+            <br><label>Time</label>
+            <input type="time" name="classtimebegin">
+            <label>to</label>
+            <input type="time" name="classtimeend">
+
+            <br><label>Additional Notes</label>
+            <textarea name="classnotes"></textarea>
+
+            <br><button type="submit" id="submit">Change Password</button>
+        </form>
         <script src="{{url_for('static', filename='js/calendar.js')}}"></script>
 <script src="{{url_for('static', filename='js/g2g.js')}}"></script>
         {%endblock%}
