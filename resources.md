@@ -30,3 +30,6 @@ https://flask-login.readthedocs.io/en/latest/
 -- nice logos to snatch
 https://fonts.google.com/icons?icon.size=24&icon.color=%23e3e3e3
 
+
+-- to implement CSRF tokens into forms
+https://flask-wtf.readthedocs.io/en/0.15.x/csrf/
