@@ -32,8 +32,8 @@
 # UI DEISNG FIRST!! DO UI DEIGNS!! 
 [ ] UI DEISNG
     [X] homework
-    [ ] creating a user
-    [ ] add CLASSES!
+    [X] creating a user
+    [X] add CLASSES!
     [ ] fix the doodoo ugly form in user_account
     [X] cleanup + animations
     [ ] adding info about G2G
@@ -51,7 +51,7 @@
 
 [ ] invalid login redirect
 
-[ ] be able to assign classes to students
+[X] be able to assign classes to students
 
 [ ] make it so you can add class details on calendar [for tutor], and request changes [for tutee] using jinja
     [ ] add class details to SQL database
@@ -75,7 +75,7 @@ should be able to:
 
 [ ] format the nice dateInfo for the calendar
 
-[ ] fix double scrollbar issue [WHERE IS IT]
+[ ] fix double scrollbar issue [in the timetable page]
 
 [ ] graphic design for landing pages
 

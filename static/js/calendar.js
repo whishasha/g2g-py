@@ -22,7 +22,7 @@ let dmObj = {
     ],
     months: [
         "January",
-        "Febuary",
+        "February",
         "March",
         "April",
         "May",
@@ -72,6 +72,8 @@ const displayCalendar = () => {
             ? "active date" //highlights current date
             : "date";
         
+
+
             // find a better way to add the function
         days += `<li class="${checkToday}" onclick="displayDateInfo(this)">${i}</li>`
     }
@@ -109,18 +111,44 @@ const dateInfoEl = document.getElementById('dateInfo');
 // datesEl selects all elements with class dates
 
 const displayDateInfo = (El) => { //need to add cases for when calendar number is too far to the left, etc.
+    //event.stopPropagation();
+    const offset = 200;
     var ElRect = El.getBoundingClientRect()
     console.log('banana')
     console.log(ElRect.top, ElRect.right, ElRect.bottom, ElRect.left);
     dateInfoEl.innerHTML = El.innerHTML;
 
-    dateInfoEl.style.left = ElRect.left + 30 + 'px';
-    dateInfoEl.style.top = ElRect.top + 'px';
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    const dateInfoWidth = dateInfoEl.offsetWidth;
+    const dateInfoHeight = dateInfoEl.offsetHeight;
+
+    let leftPosition = ElRect.left + 30;
+    let topPosition = ElRect.top;
+
+    if (ElRect.left + dateInfoWidth > windowWidth) { //checking for the RIGHT 
+        leftPosition -= offset;
+    }
+    if (ElRect.top < 0) {
+        topPosition = 10
+    }
+
+    dateInfoEl.style.left = leftPosition + 'px'; //makes it APPEAR real SNAZZY!
+    dateInfoEl.style.top = topPosition + 'px';
     dateInfoEl.style.display = 'relative';
 }
 
 //get list elements with class date
 const dateEls = document.querySelectorAll('.date');
+
+
+document.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('date') && !dateInfoEl.contains(e.target)) {
+        dateInfoEl.style.left = '-9999px';
+        dateInfoEl.style.top = '-9999px';
+    }
+});
 
 
 // this doesn't work but idk why, fix it later ==> scuffed onclick soln implemented above
