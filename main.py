@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, flash, url_for, send_file
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, UserMixin, login_user, login_required
+from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
 from waitress import serve
 from uuid import uuid4
 import os
@@ -15,16 +15,17 @@ encoded_secret_key = os.getenv("SECRET_KEY")
 
 # + Help from my friend ChatGPT!
 class User(UserMixin):
-    def __init__(self, id, username, password):
+    def __init__(self, id, username, password, is_tutor):
         self.id = id
         self.username = username
         self.password = password
+        self.is_tutor = is_tutor #is assigned 1 (TRUE) or 0 (FALSE)
 
     @staticmethod
     def get(user_id):
         con = sqlite3.connect('database.db')
         cur = con.cursor()
-        cur.execute("SELECT ID, name, password FROM users WHERE ID = ?", (user_id,))
+        cur.execute("SELECT ID, name, password, is_tutor FROM users WHERE ID = ?", (user_id,))
         row = cur.fetchone()
         con.close()
         if row:
@@ -43,10 +44,17 @@ class User(UserMixin):
         if row:
             return User(*row)
         return None
-
 def make_unique(string): # for making a unique filepath to prevent clashing
     ident = uuid4().__str__()
     return f"{ident}-{string}" #combines the strings together
+
+def assign_int_boolean(var):
+    if var:
+        var = 1 #True
+    else:
+        var = 0 #False
+    return var
+
 
 login_manager = LoginManager()
 #John, banana
@@ -77,15 +85,15 @@ def login():
         con = sqlite3.connect('database.db')
         cur = con.cursor()
 
-        userRecord = cur.execute('''SELECT ID, name, password FROM users WHERE name=?''', (name,)).fetchone()
+        userRecord = cur.execute('''SELECT ID, name, password, is_tutor FROM users WHERE name=?''', (name,)).fetchone()
         cur.close()
         con.close()
         passwordValidated = bcrypt.check_password_hash(userRecord[2], password)
         print(passwordValidated)
         if passwordValidated:
-            #userRecord[0] = ID, [1] = username, [2] = encrypted password
+            #userRecord[0] = ID, [1] = username, [2] = encrypted password, [3] = is_tutor as a 1(TRUE) or 0 (FALSE)
             userID = str(userRecord[0])
-            user = User(userID, userRecord[1], userRecord[2])
+            user = User(userID, userRecord[1], userRecord[2], userRecord[3])
             login_user(user) #from Flask_Login
             print('Successfully logged in')
             return redirect(url_for('user_home')) #add username as a parameter
@@ -140,20 +148,25 @@ def register():
         username = request.form.get('username')
         password = request.form.get('password')
 
+        is_english = request.form.get('is_english')
+        is_maths = request.form.get('is_maths')
         is_tutor = request.form.get('is_tutor')
-        if is_tutor:
-            is_tutor = 1
-        else:
-            is_tutor = 0
 
+        is_english = assign_int_boolean(is_english) #Turns str value of checkbox to boolean integer (1: True, 2: False)
+        is_maths = assign_int_boolean(is_maths)
+        is_tutor = assign_int_boolean(is_tutor)
+
+        print(f'{is_english} + {is_maths} + {is_tutor} + {current_user.is_tutor}')
         encryptedpassword = bcrypt.generate_password_hash(password).decode('utf-8')
         
         con = sqlite3.connect('database.db')
         cur = con.cursor()
 
-        userRecord = cur.execute('''SELECT name FROM users WHERE name=?''', (username,)).fetchone()
-        print(userRecord)
-        if userRecord:
+        usernameCheck = cur.execute('''SELECT name FROM users WHERE name=?''', (username,)).fetchone()
+        print(usernameCheck)
+
+
+        if usernameCheck:
             print(f"Error: Account with {username} already exists")
         else:
             cur.execute('''INSERT INTO users(name, firstname, lastname, password, is_tutor) 
@@ -162,7 +175,12 @@ def register():
             con.commit()
             print("Account registered!")
 
-
+        registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck)).fetchone()[0]
+        if is_tutor == 0:
+            cur.execute('''INSERT INTO testClasses(userID, tutorID, is_english, is_maths) 
+                        VALUES(?, ?, ?, ?)''',
+                        (registereduserID, current_user.id, is_english, is_maths))
+            con.commit()
 
         cur.close()
         con.close()
