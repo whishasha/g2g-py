@@ -226,10 +226,10 @@ textarea {
         <div id="dateInfo">
             hi ;3
         </div>
-        <div id="changeClassDetails">
+        <div id="changeClassDetails"> <!--only visible to tutors-->
             <form method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <h1>Set Class</h1>
+                <h1>Change Class Details</h1>
                 <label>Tutee</label>
                 <select name="tutee" id="tutee" required> <!--use jinja for options-->
                     <option value="johnny">John Ben</option> <!--John Ben represents firstname lastname, value is username-->
@@ -244,13 +244,11 @@ textarea {
     
                 <br><label>Time</label>
                 <input type="time" name="classtimebegin" required>
-                <label>to</label>
-                <input type="time" name="classtimeend" required>
     
                 <br><label>Additional Notes</label>
                 <textarea name="classnotes"></textarea>
     
-                <br><button type="submit" id="submit">Set Class</button>
+                <br><button type="submit" id="submit">Change Details</button>
             </form>
         </div>
         <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
@@ -332,8 +330,6 @@ textarea {
 
             <br><label>Time</label>
             <input type="time" name="classtimebegin" required>
-            <label>to</label>
-            <input type="time" name="classtimeend" required>
 
             <br><label>Additional Notes</label>
             <textarea name="classnotes"></textarea>
@@ -485,7 +481,6 @@ displayCalendar();
 
 
 const changeMonth = (El) => { //change the displayed month
-    console.log('running')
     if(El.id === "prev") {
         month -= 1;
     } else if(El.id === "next") {

@@ -41,7 +41,7 @@ class User(UserMixin):
     def find_by_username(username):
         con = sqlite3.connect('database.db')
         cur = con.cursor()
-        row = cur.execute('''SELECT ID, name, password FROM users WHERE name=?''', (username,)).fetchone()
+        row = cur.execute('''SELECT ID, name, password, is_tutor FROM users WHERE name=?''', (username,)).fetchone()
         
         cur.close()
         con.close()
@@ -163,10 +163,59 @@ def about():
 def user_home():
     return render_template('user_home.html')
 
-@app.route("/user/timetable")
+@app.route("/user/timetable", methods=["GET","POST"])
 @login_required
 def user_timetable():
+    if request.method == "POST":
+        tutee = request.form['tutee']
+        daymonthyear = request.form['classdate']
+        time = request.form['classtimebegin']
+        notes = request.form['classnotes']
+        print(f'{tutee}, {daymonthyear}, {time}, {notes}')
+        print(time[0:2])
+        print(time[3:5])
+        formattedData = format_calendar_data(tutee, daymonthyear, time, notes)
+
+        if formattedData:
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+
+            cur.execute('''INSERT OR REPLACE INTO testDates(tuteeID, tutorID, classdate, classtime, classnotes)
+                        VALUES(?, ?, ?, ?, ?)''', formattedData)
+            con.commit()
+
+            cur.close()
+            con.close()
+            print('Class details updated')
+        else:
+            print('Class details could not be found')
+
+
     return render_template('user_timetable.html', class_dates=init_test_data())
+
+def format_calendar_data(tutee, daymonthyear, time, notes):
+    #store daymonthyear in 2 separate variables:
+    # DATE (YYYY-MM-DD)
+    # TIME (HH:MM:SS)
+    if current_user.is_tutor == 1:
+        print('User is a tutor!')
+        if User.find_by_username('Apple'):
+            tuteeID = User.find_by_username('Apple').id
+
+            tutorID = current_user.id
+
+            hours = str(time[0:2])
+            minutes = str(time[3:5])
+            seconds = '00'
+
+            classTime = ":".join([hours, minutes, seconds]) #in form HH:MM:SS
+            
+            #will return a valid tuple which can be uploaded to the database
+            return (tuteeID, tutorID, daymonthyear, classTime, notes)
+        else:
+            print('User cannot be found.')
+    print('Invalid request.')
+    return None
 
 
 @app.route("/user/assignments")
