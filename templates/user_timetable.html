@@ -120,9 +120,21 @@
     width: 15vw;
     z-index: 9999;
     position: absolute;
-    display: fixed;
-    opacity: 0.5;
+
+
+    display: flex; /*ultimate div centering technique */
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    
+    border-radius: 5px;
+
+    opacity: 1;
     color: white;
+    border: 1px solid var(--accent);
+}
+#dateInfo div {
+    margin: 10px;
 }
 
 form {
@@ -195,7 +207,7 @@ textarea {
         <button onclick="hideSidenav()">hi</button>
         <button onclick="displayDateInfo(this)">hi again</button>
         <div class="calendar">
-            <div class="calender-inner">
+            <div class="calendar-inner">
                 <div class="calendar-controls">
                     <div class="calendar-headings">
                         <img src="{{url_for('static', filename='assets/fumo.svg')}}" onclick="changeMonth(this)" width="50px" height="50" id="prev">
@@ -276,7 +288,7 @@ textarea {
             <br><label>Additional Notes</label>
             <textarea name="classnotes"></textarea>
 
-            <br><button type="submit" id="submit">Change Password</button>
+            <br><button type="submit" id="submit">Set Class</button>
         </form>
         {%endblock%}
     </div>
@@ -375,8 +387,9 @@ const displayCalendar = () => {
     
     // dates must be added to align with the week
     for( let i = firstDayofMonth; i > 0; i--){// add overflow dates of the last month
-        const dayEvents = classesLastMonth[i] || [];
-        const class1 = dayEvents[0] || {description: "No classes"};
+        const overflowDate = lastDateofLastMonth - i + 1;
+        const dayEvents = classesLastMonth[overflowDate] || [];
+        const class1 = dayEvents[0] || {time:"Not set", description: "Not set", subject: "Not set"};
         days += `<li class="dummy date" data-info="${class1.description}" data-year-month="${lastyear_month}" onclick="displayDateInfo(this)">${lastDateofLastMonth - i + 1}</li>` //adds days from last month
     }
     
@@ -397,7 +410,8 @@ const displayCalendar = () => {
     }
 
     for (let i = lastDayofMonth; i<6; i++){ //add next month date overflow
-        const dayEvents = classesLastMonth[i] || [];
+        const overflowDate = i - lastDayofMonth + 1;
+        const dayEvents = classesNextMonth[overflowDate] || [];
         const class1 = dayEvents[0] || {description: "No classes"};
         
         days += `<li class="dummy date" data-info="${class1.description}" data-year-month="${nextyear_month}" onclick="displayDateInfo(this)">${i - lastDayofMonth + 1}</li>` //adds days from next month
@@ -439,7 +453,10 @@ const displayDateInfo = (El) => { //display class details for each date
     var ElRect = El.getBoundingClientRect()
     console.log('banana')
     console.log(ElRect.top, ElRect.right, ElRect.bottom, ElRect.left);
-    dateInfoEl.innerHTML = El.dataset.info;
+    dateInfoEl.innerHTML = "";
+    dateInfoEl.innerHTML = `
+    <div>El.dataset.info</div> 
+    <div><button id='editClass'>Edit Details</button></div>`;
 
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
@@ -455,6 +472,9 @@ const displayDateInfo = (El) => { //display class details for each date
     }
     if (ElRect.top < 0) {
         topPosition = 10
+    }
+    if (ElRect.top + dateInfoHeight > windowHeight) {
+        topPosition = windowHeight - (dateInfoHeight+ 30);
     }
 
     dateInfoEl.style.left = leftPosition + 'px'; //makes it APPEAR real SNAZZY!
