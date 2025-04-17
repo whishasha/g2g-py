@@ -58,7 +58,7 @@ def assign_int_boolean(var):
         var = 0 #False
     return var
 
-def init_test_data():
+def init_test_data(): #replace with dbedit2.py version
     from collections import defaultdict
     from json import dumps
 
@@ -89,8 +89,37 @@ def init_test_data():
         }) 
     return events_data
 
-# print(dumps(events_data, indent=3))    Hierarchy of events
+def init_real_data():
+    con = sqlite3.connect('database.db')
+    cur = con.cursor()
 
+    real_data = cur.execute('''SELECT * FROM testDates''').fetchall()
+    
+    cur.close()
+    con.close()
+
+
+    from collections import defaultdict #this function is altered to fit the testData database structure
+    from json import dumps
+    events_data = defaultdict(lambda: defaultdict(list))
+    for event in real_data:
+        subject = event[2]
+        date = event[3]
+        time = event[4]
+        note = event[5]
+        year_month = str(date[:7]) #isolates YYYY-MM [7 char long]
+        day = int(date[8:10])
+
+        classtime = time[:5]
+
+        events_data[year_month][day].append({
+            "time": classtime,
+            "description": note,
+            "subject": subject
+        })
+    return events_data
+
+# print(dumps(events_data, indent=3))    Hierarchy of events
 
 
 login_manager = LoginManager()
@@ -171,17 +200,19 @@ def user_timetable():
         daymonthyear = request.form['classdate']
         time = request.form['classtimebegin']
         notes = request.form['classnotes']
+        subject = request.form['subject']
         print(f'{tutee}, {daymonthyear}, {time}, {notes}')
         print(time[0:2])
         print(time[3:5])
-        formattedData = format_calendar_data(tutee, daymonthyear, time, notes)
+        formattedData = format_calendar_data(subject, tutee, daymonthyear, time, notes)
 
         if formattedData:
             con = sqlite3.connect('database.db')
             cur = con.cursor()
 
-            cur.execute('''INSERT OR REPLACE INTO testDates(tuteeID, tutorID, classdate, classtime, classnotes)
-                        VALUES(?, ?, ?, ?, ?)''', formattedData)
+            # the below statement will either overrwrite class dates or add a new class date
+            cur.execute('''INSERT OR REPLACE INTO testDates(tuteeID, tutorID, subject, classdate, classtime, classnotes)
+                        VALUES(?, ?, ?, ?, ?, ?)''', formattedData)
             con.commit()
 
             cur.close()
@@ -191,16 +222,16 @@ def user_timetable():
             print('Class details could not be found')
 
 
-    return render_template('user_timetable.html', class_dates=init_test_data())
+    return render_template('user_timetable.html', class_dates=init_real_data())
 
-def format_calendar_data(tutee, daymonthyear, time, notes):
+def format_calendar_data(subject, tutee, daymonthyear, time, notes):
     #store daymonthyear in 2 separate variables:
     # DATE (YYYY-MM-DD)
     # TIME (HH:MM:SS)
     if current_user.is_tutor == 1:
         print('User is a tutor!')
-        if User.find_by_username('Apple'):
-            tuteeID = User.find_by_username('Apple').id
+        if User.find_by_username(tutee):
+            tuteeID = User.find_by_username(tutee).id
 
             tutorID = current_user.id
 
@@ -211,7 +242,7 @@ def format_calendar_data(tutee, daymonthyear, time, notes):
             classTime = ":".join([hours, minutes, seconds]) #in form HH:MM:SS
             
             #will return a valid tuple which can be uploaded to the database
-            return (tuteeID, tutorID, daymonthyear, classTime, notes)
+            return (subject, tuteeID, tutorID, daymonthyear, classTime, notes)
         else:
             print('User cannot be found.')
     print('Invalid request.')

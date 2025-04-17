@@ -9,8 +9,10 @@ cur = con.cursor()
 # cur.execute('''CREATE TABLE testClasses(userID, tutorID, is_english BOOL, is_maths BOOL)''')
 
 cur.execute('''DROP TABLE testDates''')
-cur.execute('''CREATE TABLE testDates(tuteeID, tutorID, classdate DATE, classtime TIME, classnotes TEXT, UNIQUE(classdate, classtime))''')
+cur.execute('''CREATE TABLE testDates(tuteeID, tutorID, subject TEXT, classdate DATE, classtime TIME, classnotes TEXT, UNIQUE(classdate, classtime))''')
 
 print('Success!')
+con.commit()
+
 cur.close()
 con.close()

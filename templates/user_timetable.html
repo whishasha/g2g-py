@@ -205,6 +205,8 @@ textarea {
     margin: 10px;
 }
 
+
+
 </style>
 {% endblock %}
 
@@ -245,6 +247,11 @@ textarea {
                 <br><label>Time</label>
                 <input type="time" name="classtimebegin" required>
     
+                <select name="subject" id="subject" required> <!--use jinja for options-->
+                    <option value="english">English</option>
+                    <option value="maths">Mathematics</option>
+                </select>
+
                 <br><label>Additional Notes</label>
                 <textarea name="classnotes"></textarea>
     
@@ -331,6 +338,11 @@ textarea {
             <br><label>Time</label>
             <input type="time" name="classtimebegin" required>
 
+            <select name="subject" id="subject" required> <!--use jinja for options-->
+                <option value="english">English</option>
+                <option value="maths">Mathematics</option>
+            </select>
+
             <br><label>Additional Notes</label>
             <textarea name="classnotes"></textarea>
 
@@ -356,7 +368,7 @@ const btnEl = document.querySelectorAll('.calendar-headings');
 const monthYearEl = document.querySelector('.month-year');
 
 const class_dates = {{ class_dates | tojson }}; //stop freaking out, Javascript!
-
+console.log(class_dates)
 let dmObj = {
     days: [
         "Sunday",
@@ -433,9 +445,9 @@ const displayCalendar = () => {
     for( let i = firstDayofMonth; i > 0; i--){// add overflow dates of the last month
         const overflowDate = lastDateofLastMonth - i + 1;
         const dayEvents = classesLastMonth[overflowDate] || [];
-        const class1 = [{time:"Not set", description: "Not set", subject: "Not set"}];
+        let class1 = [{time:"Not set", description: "Not set", subject: "Not set"}];
         if (dayEvents.length > 0) {
-            const class1 = dayEvents;
+            class1 = dayEvents;
         }
         const encoded = encodeURIComponent(JSON.stringify(class1));
         days += `<li class="dummy date" data-info="${encoded}" data-year-month="${lastyear_month}" onclick="displayDateInfo(this)">${lastDateofLastMonth - i + 1}</li>` //adds days from last month
@@ -452,9 +464,10 @@ const displayCalendar = () => {
         
         // add other bits such as time, date passed? etc. here too
         const dayEvents = classes[i] || []; // Default to an empty array if no events exist for the day
-        const class1 = [{time:"Not set", description: "Not set", subject: "Not set"}];
+        console.log(dayEvents.length);
+        let class1 = [{time:"Not set", description: "Not set", subject: "Not set"}];
         if (dayEvents.length > 0) {
-            const class1 = dayEvents;
+            class1 = dayEvents;
         }
         const encoded = encodeURIComponent(JSON.stringify(class1));
         days += `<li class="${checkToday}" data-info="${encoded}" data-year-month="${year_month}" onclick="displayDateInfo(this)">${i}</li>`
@@ -463,9 +476,9 @@ const displayCalendar = () => {
     for (let i = lastDayofMonth; i<6; i++){ //add next month date overflow
         const overflowDate = i - lastDayofMonth + 1;
         const dayEvents = classesNextMonth[overflowDate] || [];
-        const class1 = [{time:"Not set", description: "Not set", subject: "Not set"}];
+        let class1 = [{time:"Not set", description: "Not set", subject: "Not set"}];
         if (dayEvents.length > 0) {
-            const class1 = dayEvents;
+            class1 = dayEvents;
         }
         const encoded = encodeURIComponent(JSON.stringify(class1));
         days += `<li class="dummy date" data-info="${encoded}" data-year-month="${nextyear_month}" onclick="displayDateInfo(this)">${i - lastDayofMonth + 1}</li>` //adds days from next month
