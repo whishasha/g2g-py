@@ -254,6 +254,7 @@ textarea {
             </div>
         </div>
         <form method="post" name="setClass">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <h1>Set Class</h1>
             <label>Tutee</label>
             <select name="tutee" id="tutee" required> <!--use jinja for options-->
@@ -342,24 +343,24 @@ datetxtEl.innerHTML = `${dayName}, ${date}, ${dmObj.months[month]}, ${year}`;
 
 const displayCalendar = () => {
     // Grabbing class data
-    const classes = class_dates[`${year}-${String(month + 1).padStart(2, '0')}`] || {}; // || means logical OR
-    
+    const year_month = `${year}-${String(month + 1).padStart(2, '0')}`;
+    const classes = class_dates[year_month] || {}; // || means logical OR
+
     let lastmonth = month - 1;
     let lastyear = year;
     let nextmonth = month + 1;
-    let nextyear = year;
 
     if (month == 1) { //adding edge cases
         lastmonth = 12;
-        lastyear = year-1;
+        lastyear = year - 1;
     }
     if (month == 12) {
         nextmonth = 1;
-        nextyear = year + 1;
+        lastyear = year + 1;
     }
 
     const classesLastMonth = class_dates[`${lastyear}-${String(lastmonth).padStart(2, '0')}`] || {};
-    const classesNextMonth = class_dates[`${nextyear}-${String(nextmonth).padStart(2, '0')}`] || {};
+    const classesNextMonth = class_dates[`${lastyear}-${String(nextmonth).padStart(2, '0')}`] || {};
     //padStart thickens the data with '0' until it reaches desired length of 2
 
     let firstDayofMonth = new Date(year, month, 1).getDay(); // first day of current month
@@ -367,16 +368,19 @@ const displayCalendar = () => {
     let lastDayofMonth = new Date(year, month, lastDateofMonth).getDay(); //last day of current month
     let lastDateofLastMonth = new Date(year, month, 0).getDate(); // last day of prev month
     let days = ""; //long HTML string of dates
-    
 
+
+    const lastyear_month = `${lastyear}-${String(lastmonth).padStart(2, '0')}`;
+    const nextyear_month = `${lastyear}-${String(nextmonth).padStart(2, '0')}`;
+    
     // dates must be added to align with the week
-    for( let i = firstDayofMonth; i > 0; i--){
+    for( let i = firstDayofMonth; i > 0; i--){// add overflow dates of the last month
         const dayEvents = classesLastMonth[i] || [];
         const class1 = dayEvents[0] || {description: "No classes"};
-        days += `<li class="dummy date" data-info="${class1.description}" onclick="displayDateInfo(this)">${lastDateofLastMonth - i + 1}</li>` //adds days from last month
+        days += `<li class="dummy date" data-info="${class1.description}" data-year-month="${lastyear_month}" onclick="displayDateInfo(this)">${lastDateofLastMonth - i + 1}</li>` //adds days from last month
     }
     
-    for (let i = 1; i <= lastDateofMonth; i++) {
+    for (let i = 1; i <= lastDateofMonth; i++) { //add dates of the current month
         // code which highlights SPECIFIC dates (useful for highlighting class dates)
         let checkToday = //funky if statement syntax (=== means if statement i guess)
         i === dateObj.getDate() && 
@@ -389,14 +393,14 @@ const displayCalendar = () => {
         const dayEvents = classes[i] || []; // Default to an empty array if no events exist for the day
         const class1 = dayEvents[0] || { description: "No classes" }; // Default description if no events for the day
 
-        days += `<li class="${checkToday}" data-info="${class1.description}" onclick="displayDateInfo(this)">${i}</li>`
+        days += `<li class="${checkToday}" data-info="${class1.description}" data-year-month="${year_month}" onclick="displayDateInfo(this)">${i}</li>`
     }
 
-    for (let i = lastDayofMonth; i<6; i++){
+    for (let i = lastDayofMonth; i<6; i++){ //add next month date overflow
         const dayEvents = classesLastMonth[i] || [];
         const class1 = dayEvents[0] || {description: "No classes"};
         
-        days += `<li class="dummy date" data-info="${class1.description}" onclick="displayDateInfo(this)">${i - lastDayofMonth + 1}</li>` //adds days from next month
+        days += `<li class="dummy date" data-info="${class1.description}" data-year-month="${nextyear_month}" onclick="displayDateInfo(this)">${i - lastDayofMonth + 1}</li>` //adds days from next month
     }
 
     // display all the days of the month within the dates div
@@ -406,7 +410,9 @@ const displayCalendar = () => {
     monthYearEl.innerHTML = `${dmObj.months[month]}, ${year}`;
 }
 displayCalendar();
-const changeMonth = (El) => {
+
+
+const changeMonth = (El) => { //change the displayed month
     console.log('running')
     if(El.id === "prev") {
         month -= 1;
@@ -427,7 +433,7 @@ const changeMonth = (El) => {
 const dateInfoEl = document.getElementById('dateInfo');
 // datesEl selects all elements with class dates
 
-const displayDateInfo = (El) => { //need to add cases for when calendar number is too far to the left, etc.
+const displayDateInfo = (El) => { //display class details for each date
     //event.stopPropagation();
     const offset = 200;
     var ElRect = El.getBoundingClientRect()
@@ -456,11 +462,13 @@ const displayDateInfo = (El) => { //need to add cases for when calendar number i
     dateInfoEl.style.display = 'relative';
 }
 
+
+
 //get list elements with class date
 const dateEls = document.querySelectorAll('.date');
 
 
-document.addEventListener('click', (e) => {
+document.addEventListener('click', (e) => { //Listener which closes the dateInfoElement when cursor clicks away
     if (!e.target.classList.contains('date') && !dateInfoEl.contains(e.target)) {
         dateInfoEl.style.left = '-9999px';
         dateInfoEl.style.top = '-9999px';
@@ -468,13 +476,6 @@ document.addEventListener('click', (e) => {
 });
 
 
-// this doesn't work but idk why, fix it later ==> scuffed onclick soln implemented above
-// for (var i = 0; i < dateEls.length; i++) {
-//     console.log(dateEls[i])
-//     dateEls[i].addEventListener("click", displayDateInfo(dateEls[i]));
-// }
-
-//the event listener isnt calling the right method
     </script>
 {% endblock %}
 

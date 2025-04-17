@@ -78,6 +78,7 @@
                 <hr class="line">
                 
                 <form>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <input type="text" placeholder="Enter email here..." style="width: 20vw;">
                     <br>
                     

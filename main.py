@@ -1,12 +1,16 @@
 from flask import Flask, render_template, request, redirect, flash, url_for, send_file
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
+from flask_wtf.csrf import CSRFProtect
 from waitress import serve
 from uuid import uuid4
 import os
 import sqlite3
 from dotenv import load_dotenv, find_dotenv
 from werkzeug.utils import secure_filename
+
+
+
 load_dotenv(find_dotenv())
 encoded_secret_key = os.getenv("SECRET_KEY")
 
@@ -47,7 +51,6 @@ class User(UserMixin):
 def make_unique(string): # for making a unique filepath to prevent clashing
     ident = uuid4().__str__()
     return f"{ident}-{string}" #combines the strings together
-
 def assign_int_boolean(var):
     if var:
         var = 1 #True
@@ -93,9 +96,16 @@ def init_test_data():
 login_manager = LoginManager()
 #John, banana
 
+
+#Initialising the application
 app = Flask(__name__)
 login_manager.init_app(app)
 bcrypt = Bcrypt(app)
+
+
+csrf = CSRFProtect(app)
+csrf.init_app(app)
+
 app.config["SECRET_KEY"] = encoded_secret_key
 
 

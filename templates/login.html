@@ -86,6 +86,7 @@
             <hr class="linesmall">
 
             <form action="{{ url_for('login') }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="text" name="name" placeholder="Username">
                 <br>
                 <input type="text" name="password" placeholder="Password">
