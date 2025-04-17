@@ -33,3 +33,7 @@ https://fonts.google.com/icons?icon.size=24&icon.color=%23e3e3e3
 
 -- to implement CSRF tokens into forms
 https://flask-wtf.readthedocs.io/en/0.15.x/csrf/
+
+
+-- for adding class details into SQL databases when a record already exists or doesnt
+https://sqlite.org/lang_insert.html [INSERT OR REPLACE]
