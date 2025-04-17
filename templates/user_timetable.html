@@ -120,8 +120,8 @@
     width: 15vw;
     z-index: 9999;
     position: absolute;
-
-
+    overflow: scroll;
+    overflow-x:hidden;
     display: flex; /*ultimate div centering technique */
     justify-content: flex-start;
     align-items: center;
@@ -133,8 +133,31 @@
     color: white;
     border: 1px solid var(--accent);
 }
+
 #dateInfo div {
     margin: 10px;
+    align-items: center;
+    word-wrap: break-word;
+}
+
+#changeClassDetails{
+    background-color: black;
+    height: 80vh;
+    width: 30vw;
+    z-index: 99999;
+    position: absolute;
+    overflow: scroll;
+    overflow-x:hidden;
+    display: flex; /*ultimate div centering technique */
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    
+    border-radius: 5px;
+
+    opacity: 1;
+    color: white;
+    border: 1px solid var(--accent);
 }
 
 form {
@@ -202,6 +225,33 @@ textarea {
         {%block main%}
         <div id="dateInfo">
             hi ;3
+        </div>
+        <div id="changeClassDetails">
+            <form method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <h1>Set Class</h1>
+                <label>Tutee</label>
+                <select name="tutee" id="tutee" required> <!--use jinja for options-->
+                    <option value="johnny">John Ben</option> <!--John Ben represents firstname lastname, value is username-->
+                    <option value="TGVBHJJ">Litched Field</option>
+                    <option value="mizi">Mizi the Cat</option>
+    
+                </select>
+                
+                <br><label>Date</label>
+                <input type="date" name="classdate" required>
+                
+    
+                <br><label>Time</label>
+                <input type="time" name="classtimebegin" required>
+                <label>to</label>
+                <input type="time" name="classtimeend" required>
+    
+                <br><label>Additional Notes</label>
+                <textarea name="classnotes"></textarea>
+    
+                <br><button type="submit" id="submit">Set Class</button>
+            </form>
         </div>
         <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
         <button onclick="hideSidenav()">hi</button>
@@ -311,8 +361,6 @@ const monthYearEl = document.querySelector('.month-year');
 
 const class_dates = {{ class_dates | tojson }}; //stop freaking out, Javascript!
 
-console.log(class_dates["2025-04"][1][0]["description"])
-
 let dmObj = {
     days: [
         "Sunday",
@@ -389,8 +437,12 @@ const displayCalendar = () => {
     for( let i = firstDayofMonth; i > 0; i--){// add overflow dates of the last month
         const overflowDate = lastDateofLastMonth - i + 1;
         const dayEvents = classesLastMonth[overflowDate] || [];
-        const class1 = dayEvents[0] || {time:"Not set", description: "Not set", subject: "Not set"};
-        days += `<li class="dummy date" data-info="${class1.description}" data-year-month="${lastyear_month}" onclick="displayDateInfo(this)">${lastDateofLastMonth - i + 1}</li>` //adds days from last month
+        const class1 = [{time:"Not set", description: "Not set", subject: "Not set"}];
+        if (dayEvents.length > 0) {
+            const class1 = dayEvents;
+        }
+        const encoded = encodeURIComponent(JSON.stringify(class1));
+        days += `<li class="dummy date" data-info="${encoded}" data-year-month="${lastyear_month}" onclick="displayDateInfo(this)">${lastDateofLastMonth - i + 1}</li>` //adds days from last month
     }
     
     for (let i = 1; i <= lastDateofMonth; i++) { //add dates of the current month
@@ -404,17 +456,23 @@ const displayCalendar = () => {
         
         // add other bits such as time, date passed? etc. here too
         const dayEvents = classes[i] || []; // Default to an empty array if no events exist for the day
-        const class1 = dayEvents[0] || { description: "No classes" }; // Default description if no events for the day
-
-        days += `<li class="${checkToday}" data-info="${class1.description}" data-year-month="${year_month}" onclick="displayDateInfo(this)">${i}</li>`
+        const class1 = [{time:"Not set", description: "Not set", subject: "Not set"}];
+        if (dayEvents.length > 0) {
+            const class1 = dayEvents;
+        }
+        const encoded = encodeURIComponent(JSON.stringify(class1));
+        days += `<li class="${checkToday}" data-info="${encoded}" data-year-month="${year_month}" onclick="displayDateInfo(this)">${i}</li>`
     }
 
     for (let i = lastDayofMonth; i<6; i++){ //add next month date overflow
         const overflowDate = i - lastDayofMonth + 1;
         const dayEvents = classesNextMonth[overflowDate] || [];
-        const class1 = dayEvents[0] || {description: "No classes"};
-        
-        days += `<li class="dummy date" data-info="${class1.description}" data-year-month="${nextyear_month}" onclick="displayDateInfo(this)">${i - lastDayofMonth + 1}</li>` //adds days from next month
+        const class1 = [{time:"Not set", description: "Not set", subject: "Not set"}];
+        if (dayEvents.length > 0) {
+            const class1 = dayEvents;
+        }
+        const encoded = encodeURIComponent(JSON.stringify(class1));
+        days += `<li class="dummy date" data-info="${encoded}" data-year-month="${nextyear_month}" onclick="displayDateInfo(this)">${i - lastDayofMonth + 1}</li>` //adds days from next month
     }
 
     // display all the days of the month within the dates div
@@ -445,18 +503,32 @@ const changeMonth = (El) => { //change the displayed month
 }
 
 const dateInfoEl = document.getElementById('dateInfo');
+const changeClassDetailsEl = document.getElementById('changeClassDetails');
 // datesEl selects all elements with class dates
 
 const displayDateInfo = (El) => { //display class details for each date
     //event.stopPropagation();
     const offset = 200;
-    var ElRect = El.getBoundingClientRect()
-    console.log('banana')
-    console.log(ElRect.top, ElRect.right, ElRect.bottom, ElRect.left);
+    var ElRect = El.getBoundingClientRect();
+    
     dateInfoEl.innerHTML = "";
-    dateInfoEl.innerHTML = `
-    <div>El.dataset.info</div> 
-    <div><button id='editClass'>Edit Details</button></div>`;
+
+    const infoData = JSON.parse(decodeURIComponent(El.dataset.info));
+
+    infoData.forEach(function createDivs(value, index, array){
+        dateInfoEl.innerHTML += `
+            <div>
+                <ul>
+                <li>Time: ${infoData[index].time}</li>
+                <li>Subject: ${infoData[index].subject}</li>
+                <li>Description: ${infoData[index].description}</li>
+                </ul>
+            </div>` ;
+    })
+
+    dateInfoEl.innerHTML += `<button onclick="changeClassDetails()">Change Details</button>` //use INSERT OR REPLACE for sql post here
+
+
 
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
@@ -474,7 +546,7 @@ const displayDateInfo = (El) => { //display class details for each date
         topPosition = 10
     }
     if (ElRect.top + dateInfoHeight > windowHeight) {
-        topPosition = windowHeight - (dateInfoHeight+ 30);
+        topPosition = windowHeight - (dateInfoHeight + 30);
     }
 
     dateInfoEl.style.left = leftPosition + 'px'; //makes it APPEAR real SNAZZY!
@@ -487,11 +559,22 @@ const displayDateInfo = (El) => { //display class details for each date
 //get list elements with class date
 const dateEls = document.querySelectorAll('.date');
 
+function changeClassDetails() {
+    console.log('Running');
+    changeClassDetailsEl.style.left = '10px';
+    changeClassDetailsEl.style.top = "20px";
+}
+
 
 document.addEventListener('click', (e) => { //Listener which closes the dateInfoElement when cursor clicks away
     if (!e.target.classList.contains('date') && !dateInfoEl.contains(e.target)) {
         dateInfoEl.style.left = '-9999px';
         dateInfoEl.style.top = '-9999px';
+    }
+
+    if (!changeClassDetailsEl.contains(e.target)) {
+        changeClassDetailsEl.style.left = '-9999px';
+        changeClassDetailsEl.style.top = '-9999px';
     }
 });
 
