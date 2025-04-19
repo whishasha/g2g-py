@@ -8,8 +8,22 @@ cur = con.cursor()
 
 # cur.execute('''CREATE TABLE testClasses(userID, tutorID, is_english BOOL, is_maths BOOL)''')
 
-cur.execute('''DROP TABLE testDates''')
-cur.execute('''CREATE TABLE testDates(tuteeID, tutorID, subject TEXT, classdate DATE, classtime TIME, classnotes TEXT, UNIQUE(classdate, classtime))''')
+# cur.execute('''DROP TABLE testDates''')
+# cur.execute('''CREATE TABLE testDates(tuteeID, tutorID, subject TEXT, classdate DATE, classtime TIME, classnotes TEXT, UNIQUE(classdate, classtime))''')
+
+# cur.execute('''CREATE TABLE testAssignments(assignmentID INTEGER PRIMARY KEY, tuteeID, tutorID, is_completed BOOLEAN, grade INTEGER)''')
+
+# Q: What is status in testFiles?
+# A: Status refers to the state of the assignment file:
+# Is it:
+# 0: The tutor's original assignment?
+# 1: The tutee's uploaded files?
+# 2: The tutor's returned files?
+
+cur.execute('''DROP TABLE testFiles''')
+
+cur.execute('''CREATE TABLE testFiles(assignmentID INTEGER, status INTEGER, name, filepath, CONSTRAINT check_status CHECK(status BETWEEN -1 AND 3))''')
+
 
 print('Success!')
 con.commit()

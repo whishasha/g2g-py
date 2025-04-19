@@ -8,7 +8,7 @@
 https://www.w3schools.com/cssref/atrule_media.php
 
 
-- add nice looking button to close sidenav in user directory (code done)
+- add nice looking button to close sidenav in user directory [done]
 credit: https://stackoverflow.com/questions/17702419/change-margin-top-with-pure-javascript
 
 
@@ -37,3 +37,10 @@ https://flask-wtf.readthedocs.io/en/0.15.x/csrf/
 
 -- for adding class details into SQL databases when a record already exists or doesnt
 https://sqlite.org/lang_insert.html [INSERT OR REPLACE]
+
+
+-- for dynamically displaying links to files for assignments
+https://stackoverflow.com/questions/74331680/dynamically-create-links-from-list-in-flask
+
+-- for uploading multiple files in a form
+https://www.w3schools.com/tags/att_input_multiple.asp

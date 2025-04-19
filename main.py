@@ -9,6 +9,7 @@ import sqlite3
 from dotenv import load_dotenv, find_dotenv
 from werkzeug.utils import secure_filename
 
+import functions
 
 
 load_dotenv(find_dotenv())
@@ -249,9 +250,36 @@ def format_calendar_data(subject, tutee, daymonthyear, time, notes):
     return None
 
 
-@app.route("/user/assignments")
+@app.route("/user/assignments", methods=['GET', 'POST'])
 @login_required
 def user_assignments():
+    if request.method == "POST":
+        
+        # If no file is uploaded, cancel request
+        if 'file' not in request.files:
+            print('No file part(s) selected')
+            return redirect(request.url)
+        
+        # request.files returns a MultiDict due to multiple files being uploaded
+        # getlist('file') method returns a list of all values under the key 'list' from the dictionary
+        # In this case we get FileStorage, which acts as an instance to store file data such as filename
+        
+        assignmentID = functions.new_assignment_ID()
+        for file in request.files.getlist('file'):
+            if file.filename == '':
+                print('No selected file')
+                return redirect(request.url)
+            
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
+                unique_filename = make_unique(filename)
+                
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
+                file.save(filepath)
+                print('Saved!')
+                functions.set_assignment_files(assignmentID, status=0, filename=filename, filepath=filepath)
+        print('Assignment files set!')
+
     return render_template('user_assignments.html')
 
 @app.route("/user/account", methods=["GET", "POST"])
@@ -314,7 +342,7 @@ def register():
 # Beginning of file upload part
 
 
-app.config['UPLOAD_FOLDER'] = 'files'
+app.config['UPLOAD_FOLDER'] = 'static/files'
 ALLOWED_EXTENSIONS = {'pdf'} #allowed file extensions
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000 #16MB max upload
 
