@@ -44,3 +44,6 @@ https://stackoverflow.com/questions/74331680/dynamically-create-links-from-list-
 
 -- for uploading multiple files in a form
 https://www.w3schools.com/tags/att_input_multiple.asp
+
+-- on handling duplicate filenames
+https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask

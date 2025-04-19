@@ -95,6 +95,7 @@
 
     <div id="main">
         {% block main %}
+        <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
         <div id="wrapper">        
             
             <form id="setAssignment" method="post" enctype=multipart/form-data>
@@ -103,15 +104,15 @@
                 <h1>Set an Assignment</h1>
                 <label>Tutee</label>
                 <br>
-                <select> <!--value is username, text will be firstname lastname-->
+                <select name="tutee" required> <!--value is username, text will be firstname lastname-->
                     <option value="Johnathan">Johnathan</option>
                     <option value="Apple">Apple</option>
                 </select>
                 <br>
 
-                <label>Description</label>
+                <label>Title</label>
                 <br>
-                <textarea placeholder="What is your assignment about?"></textarea>
+                <textarea name="title" placeholder="What is the title of your assignment?"></textarea>
 
                 <br>
                 <label>Assignment File</label>

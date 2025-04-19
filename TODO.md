@@ -53,16 +53,16 @@
 
 [X] be able to assign classes to students
 
-[ ] make it so you can add class details on calendar [for tutor], and request changes [for tutee] using jinja
-    [ ] add class details to SQL database
-    [ ] retrieve from SQL database [use RDBS to find all dates i guess]
-    [ ] send to template
+[X] make it so you can add class details on calendar [for tutor]
+    [X] add class details to SQL database
+    [X] retrieve from SQL database [use RDBS to find all dates i guess]
+    [X] send to template
 
 [ ] add unique pages depending on username
 
 [X] add + link homework page
 should be able to:
-[ ] upload multiple files
+[X] upload multiple files
 [ ] download, upload, & delete view files
 
 [X] implement file uploads

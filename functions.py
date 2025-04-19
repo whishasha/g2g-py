@@ -27,6 +27,7 @@ def new_assignment_ID():
 
 
 def set_assignment_files(assignmentID: int, status: int, filename: str, filepath: str):
+
     con = sqlite3.connect('database.db')
     cur = con.cursor()
     cur.execute('''INSERT INTO testFiles(assignmentID, status, name, filepath) VALUES(?, ?, ?, ?)''',
@@ -34,5 +35,16 @@ def set_assignment_files(assignmentID: int, status: int, filename: str, filepath
     
     con.commit()
 
+    cur.close()
+    con.close()
+
+def set_assignment_details(assignmentID: int, tuteeID: int, tutorID: int, title: str):
+    con = sqlite3.connect('database.db')
+    cur = con.cursor()
+
+    cur.execute('''INSERT INTO testAssignments(assignmentID, tuteeID, tutorID, title, is_completed, grade) VALUES(?, ?, ?, ?, ?, ?)''',
+                (assignmentID, tuteeID, tutorID, title, False, None))
+    
+    con.commit()
     cur.close()
     con.close()
