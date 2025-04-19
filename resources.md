@@ -47,3 +47,8 @@ https://www.w3schools.com/tags/att_input_multiple.asp
 
 -- on handling duplicate filenames
 https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
+
+-- on deleting files that you accidentally uploaded and submitting things
+https://stackoverflow.com/questions/379610/can-you-nest-html-forms => bad method
+
+https://www.geeksforgeeks.org/html-clearing-the-input-field/ => pog method
