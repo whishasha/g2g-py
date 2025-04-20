@@ -256,58 +256,91 @@ def format_calendar_data(subject, tutee, daymonthyear, time, notes):
 @login_required
 def user_assignments():
     if request.method == "POST":
-
-        tuteeName = request.form['tutee']
-        if not request.form['date']:
-            print('Invalid date')
-            return redirect(request.url)
-        duedate = str(request.form['date'])
-
-        if not request.form['tutee']:
-            print('Invalid tutee') #change this to flash later
-            return redirect(request.url)
-        
-        if not User.find_by_username(tuteeName):
-            print('Invalid tutee')
-            return redirect(request.url)
-
-        if not request.form['title']:
-            print('Title not set')
-            return redirect(request.url)
-        title = str(request.form['title'])
-
-        # If no file is uploaded, cancel request
-        if 'file' not in request.files:
-            print('No file part(s) selected')
-            return redirect(request.url)
-        
-        # request.files returns a MultiDict due to multiple files being uploaded
-        # getlist('file') method returns a list of all values under the key 'list' from the dictionary
-        # In this case we get FileStorage, which acts as an instance to store file data such as filename
-        
-        assignmentID = functions.new_assignment_ID()
-
-        # code for uploading to the table handling assignment files
-        for file in request.files.getlist('file'):
-            if file.filename == '':
-                print('No selected file')
+        print(request.form)
+        if 'setassignment' in request.form:
+            tuteeName = request.form['tutee']
+            if not request.form['date']:
+                print('Invalid date')
                 return redirect(request.url)
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
-                unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
-                filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
-                file.save(filepath)
-                print('Saved!')
-                functions.set_assignment_files(assignmentID, status=0, filename=filename, filepath=filepath)
-        print('Assignment files set!')
+            duedate = str(request.form['date'])
 
-        # after the files have been uploaded, we will now upload assignment details concerning the involved tutor, tutee, 
-        # assignment, and name of the task
-        tuteeID = User.find_by_username(tuteeName).id
-        print(duedate)
-        functions.set_assignment_details(assignmentID=assignmentID, tuteeID=tuteeID, tutorID=current_user.id, title=title, duedate=duedate)
+            if not request.form['tutee']:
+                print('Invalid tutee') #change this to flash later
+                return redirect(request.url)
+            
+            if not User.find_by_username(tuteeName):
+                print('Invalid tutee')
+                return redirect(request.url)
 
+            if not request.form['title']:
+                print('Title not set')
+                return redirect(request.url)
+            title = str(request.form['title'])
 
+            # If no file is uploaded, cancel request
+            if 'file' not in request.files:
+                print('No file part(s) selected')
+                return redirect(request.url)
+            
+            # request.files returns a MultiDict due to multiple files being uploaded
+            # getlist('file') method returns a list of all values under the key 'list' from the dictionary
+            # In this case we get FileStorage, which acts as an instance to store file data such as filename
+            
+            assignmentID = functions.new_assignment_ID()
+
+            # code for uploading to the table handling assignment files
+            for file in request.files.getlist('file'):
+                if file.filename == '':
+                    print('No selected file')
+                    return redirect(request.url)
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
+                    unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
+                    file.save(filepath)
+                    print('Saved!')
+                    functions.set_assignment_files(assignmentID, status=0, filename=filename, filepath=filepath)
+            print('Assignment files set!')
+
+            # after the files have been uploaded, we will now upload assignment details concerning the involved tutor, tutee, 
+            # assignment, and name of the task
+            tuteeID = User.find_by_username(tuteeName).id
+            print(duedate)
+            functions.set_assignment_details(assignmentID=assignmentID, tuteeID=tuteeID, tutorID=current_user.id, title=title, duedate=duedate)
+        if 'submitassignment' in request.form:
+            if 'file' not in request.files:
+                print('No file part(s) selected')
+                return redirect(request.url)
+            
+            if 'submitassignment' not in request.form:
+                print('Invalid request')
+                return redirect(request.url)
+            
+            assignmentID = request.form['submitassignment']
+            for file in request.files.getlist('file'):
+                if file.filename == '':
+                    print('No selected file')
+                    return redirect(request.url)
+            
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename) 
+                    unique_filename = make_unique(filename) 
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
+                    file.save(filepath)
+                    print('Saved!')
+                    functions.set_assignment_files(assignmentID=assignmentID, status=1, filename=unique_filename, filepath=filepath)
+            # need to: upload files to testFiles, with status 1
+            functions.update_assignment_status(assignmentID=assignmentID, is_completed=1)
+            # update testAssignment, turning is_completed = 1
+            
+            print('Assignment files submitted!')
+        if 'unsubmitassignment' in request.form:
+            if 'unsubmitassignment' not in request.form:
+                print('Invalid request')
+                return redirect(request.url)
+            print("It's going through!")
+            assignmentID = request.form['unsubmitassignment']
+            functions.update_assignment_status(assignmentID=assignmentID, is_completed=0)
     assignments = functions.get_assignment_details(current_user.id) # returns all assignments associated with the user's ID
     return render_template('user_assignments.html', assignments=assignments)
 

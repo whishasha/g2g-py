@@ -2,6 +2,8 @@
 import sqlite3
 from collections import defaultdict #this function is altered to fit the testData database structure
 from json import dumps
+from datetime import datetime
+
 
 def new_assignment_ID():
 
@@ -26,7 +28,6 @@ def new_assignment_ID():
 
     return newID
 
-
 def set_assignment_files(assignmentID: int, status: int, filename: str, filepath: str):
 
     con = sqlite3.connect('database.db')
@@ -43,14 +44,16 @@ def set_assignment_details(assignmentID: int, tuteeID: int, tutorID: int, title:
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    cur.execute('''INSERT INTO testAssignments(assignmentID, tuteeID, tutorID, title, duedate, is_completed, grade) VALUES(?, ?, ?, ?, ?, ?, ?)''',
-                (assignmentID, tuteeID, tutorID, title, duedate, False, None))
+    cur.execute('''INSERT INTO testAssignments(assignmentID, tuteeID, tutorID, title, duedate, is_completed, is_late, grade) VALUES(?, ?, ?, ?, ?, ?, ?, ?)''',
+                (assignmentID, tuteeID, tutorID, title, duedate, False, None, None))
     
     con.commit()
     cur.close()
     con.close()
 
 def get_assignment_details(ID):
+
+
 
     assignments = defaultdict(list)
 
@@ -64,13 +67,19 @@ def get_assignment_details(ID):
     for assignment in assignmentDetails:
         assignmentID = assignment[0]
 
-        assignmentFilepaths = cur.execute('''SELECT name, filepath FROM testFiles WHERE assignmentID=? AND status=0''', (assignmentID,)).fetchall()
-        print(assignmentFilepaths)
-        formattedFilepaths = []
-        formattedFilenames = []
-        for _ in assignmentFilepaths:
-            formattedFilepaths.append(_[1])
-            formattedFilenames.append(_[0])
+        setAssignmentFilepaths = cur.execute('''SELECT name, filepath FROM testFiles WHERE assignmentID=? AND status=0''', (assignmentID,)).fetchall()
+        formattedSetFilepaths = []
+        formattedSetFilenames = []
+        for _ in setAssignmentFilepaths:
+            formattedSetFilepaths.append(_[1])
+            formattedSetFilenames.append(_[0])
+
+        submittedAssignmentFilepaths = cur.execute('''SELECT name, filepath FROM testFiles WHERE assignmentID=? AND status=1''', (assignmentID,)).fetchall()
+        formattedSubmittedFilepaths = []
+        formattedSubmittedFilenames = []
+        for _ in submittedAssignmentFilepaths:
+            formattedSubmittedFilepaths.append(_[1])
+            formattedSubmittedFilenames.append(_[0])
 
 
         assignments[assignmentID].append({
@@ -80,13 +89,43 @@ def get_assignment_details(ID):
             "title": assignment[3],
             "duedate": assignment[4],
             "is_completed": assignment[5],
-            "grade": assignment[6],
-            "set_files": formattedFilepaths, # the initial assignment files w/ status 0
-            "set_files_names": formattedFilenames
+            "is_late": assignment[6],
+            "grade": assignment[7],
+            "set_files": formattedSetFilepaths, # the initial assignment files w/ status 0
+            "set_files_names": formattedSetFilenames,
+            "submitted_files": formattedSetFilepaths,
+            "submitted_files_names": formattedSetFilenames
         })
     cur.close()
     con.close()
 
     return assignments
 
-print(dumps(get_assignment_details(1), indent=2))
+def update_assignment_status(assignmentID: int, is_completed: int):
+
+    con = sqlite3.connect('database.db')
+    cur = con.cursor()
+
+
+    if is_completed == 0:
+        cur.execute('''UPDATE testAssignments SET is_completed = 0 WHERE assignmentID = ?''', (assignmentID,))
+    if is_completed == 1:
+        duedate = cur.execute('''SELECT duedate FROM testAssignments WHERE assignmentID=?''', (assignmentID,)).fetchone()[0]
+        is_late = 0
+        date = datetime.today().strftime('%Y-%m-%d')
+        if duedate > date:
+            is_late = 0
+        elif duedate < date:
+            is_late = 1
+
+        cur.execute('''UPDATE testAssignments SET is_completed = ?, is_late=? WHERE assignmentID = ?''', (is_completed, is_late, assignmentID,))
+    con.commit()
+    
+    
+    cur.close()
+    con.close()
+    
+
+if __name__ == '__main__':
+    print('Running functions.py on main thread!')
+    print(update_assignment_status(1, 1))

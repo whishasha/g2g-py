@@ -77,8 +77,77 @@
             .assignment > div.submitbox {
                 grid-area: submitbox;
                 border: 1px solid black;
+
+                overflow-y: scroll;
+                height: 100%;
+
+                display: flex;
+                justify-content: flex-start;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
             }
             .assignment > div.files {
+                grid-area: files;
+                height: 100%;
+                overflow-y: scroll;
+                border: 1px solid black;
+            }
+
+            .markAssignment {
+                margin-top: 10px;
+                margin-left: auto;
+                margin-right: auto;
+
+                min-width: 60%;
+                max-width: 80%;
+
+                height: 30%;
+
+                display: grid;
+                grid: 
+                'title files submitfiles submitbox'
+                'duedate files submitfiles submitbox';
+                border: 1px solid black;
+                gap: 10px;
+                background-color: var(--bgbar);
+                border-radius: 10px;
+                padding: 10px;
+            }
+
+            .markAssignment > div.submitfiles {
+                grid-area: submitfiles;
+                border: 1px solid black;
+
+                overflow-y: scroll;
+                height: 100%;
+
+                display: flex;
+                justify-content: flex-start;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .markAssignment > div.title{
+                grid-area: title;
+            }
+            .markAssignment > div.duedate{
+                grid-area: duedate;
+            }
+            .markAssignment > div.submitbox {
+                grid-area: submitbox;
+                border: 1px solid black;
+
+                overflow-y: scroll;
+                height: 100%;
+
+                display: flex;
+                justify-content: flex-start;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .markAssignment > div.files {
                 grid-area: files;
                 height: 100%;
                 overflow-y: scroll;
@@ -120,6 +189,7 @@
         {% block main %}
         <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
         <div id="wrapper">        
+
             
             <form id="setAssignment" method="post" enctype=multipart/form-data>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -184,7 +254,7 @@
                 <p>Sort by: <button>Subject</button> <button>Date</button></p>
                 <div id="unmarkedAssignments">
 
-                    <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
+                    <div class="markAssignment"> <!--will need to add Jinja here in future for due assignments-->
                         <div class="title">English Essay Writing</div>
                         <div class="submitbox">2</div>
                         <div class="duedate">Due by:</div>
@@ -199,46 +269,168 @@
 {{super()}}
 <script>
     const dueAssignmentsEl = document.getElementById('dueAssignments');
+    const completedAssignmentsEl = document.getElementById('completedAssignments');
+    const unmarkedAssignmentsEl = document.getElementById('unmarkedAssignments');
 // pass list of due assignments as json here
 
     const assignmentDict = {{ assignments | tojson }};
 
-    console.log(assignmentDict);
-    assignmentTemplate = 
-                `<div class="assignment">
-                    <div class="title">English Essay Writing</div>
-                    <div class="submitbox">2</div>
-                    <div class="duedate">Due by:</div>
-                </div>`;
+    console.log(assignmentDict); //for debugging purposes
 
     dueAssignmentsEl.innerHTML = "";
-
+    completedAssignmentsEl.innerHTML = '';
+    unmarkedAssignmentsEl.innerHTML = '';
+    
     for (const assignmentID in assignmentDict) {
-        const assignmentFiles = assignmentDict[assignmentID][0].set_files;
-        const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
-        let fileList = ``;
-        
-        for (index in assignmentFiles) {
-            // console.log(assignmentFiles[index]); //filepath
+        console.log(assignmentDict[assignmentID][0].is_completed);
 
-            // console.log(assignmentFilesNames[index]); //name of file for filepath
-            fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+        //for due assignments
+        if (assignmentDict[assignmentID][0].is_completed == String(0)) {
+            const assignmentFiles = assignmentDict[assignmentID][0].set_files;
+            const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
+            let fileList = ``;
+            
+            for (index in assignmentFiles) {
+                // console.log(assignmentFiles[index]); //filepath
+                // console.log(assignmentFilesNames[index]); //name of file for filepath
+                fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+            }
+
+            dueAssignmentsEl.innerHTML +=
+                    `<div class="assignment" id="${assignmentID}">
+                        <div class="title">${assignmentDict[assignmentID][0].title}</div>
+                        <div class="submitbox">
+                            <h1>Submission Box</h1>
+                                <form enctype="multipart/form-data" method="post">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit">Turn in</button><br>
+                                    <input type="file" name="file" accept="application/pdf" multiple/>       
+                                    <input type="hidden" name="submitassignment" value="${assignmentID}">
+                                </form>
+                            </div>
+                            <div class="files">
+                                <h1>Assignment Attachments</h1>
+                                <ul>
+                                    ${fileList}
+                                </ul>
+                        </div>
+                        <div class="duedate">Due by: ${assignmentDict[assignmentID][0].duedate}</div>
+                    </div>` ;    
         }
+        // for submitted assignments
+        if (assignmentDict[assignmentID][0].is_completed == String(1)) {
+            const assignmentFiles = assignmentDict[assignmentID][0].set_files;
+            const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
 
 
-        dueAssignmentsEl.innerHTML +=
-                `<div class="assignment">
-                    <div class="title">${assignmentDict[assignmentID][0].title}</div>
-                    <div class="submitbox">2</div>
-                    <div class="files">
-                        <h1>Assignment Attachments</h1>
-                        <ul>
-                            ${fileList}
-                        </ul>
-                    </div>
-                    <div class="duedate">Due by: ${assignmentDict[assignmentID][0].duedate}</div>
-                </div>` ;
-        }            
+            const submittedAssignmentFiles = assignmentDict[assignmentID][0].submitted_files;
+            const submittedAssignmentFilesNames = assignmentDict[assignmentID][0].submitted_files_names; 
+            let fileList = ``;
+            let submittedFileList = ``;
+            
+            let lateMessage = '';
+
+            if (assignmentDict[assignmentID][0].is_late == 0) {
+                lateMessage = 'Turned in';
+            } else if (assignmentDict[assignmentID][0].is_late == 1) {
+                lateMessage = 'Turned in late';
+            }
+
+            for (index in assignmentFiles) {
+                // console.log(assignmentFiles[index]); //filepath
+                // console.log(assignmentFilesNames[index]); //name of file for filepath
+                fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+            }
+
+            for (index in submittedAssignmentFiles) {
+                submittedFileList += `<li><a href="/${submittedAssignmentFiles[index]}">${submittedAssignmentFilesNames[index]}</a></li>`
+            }
+
+            completedAssignmentsEl.innerHTML +=
+                    `<div class="assignment" id="${assignmentID}">
+                        <div class="title">${assignmentDict[assignmentID][0].title}</div>
+                        <div class="submitbox">
+                            <h1>Submitted Files</h1>
+                                <form method="post">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit">Unsubmit</button><br>       
+                                    <input type="hidden" name="unsubmitassignment" value="${assignmentID}">
+                                </form>
+                                <ul>
+                                    ${submittedFileList}
+                                </ul>
+                            </div>
+                            <div class="files">
+                                <h1>Assignment Attachments</h1>
+                                <ul>
+                                    ${fileList}
+                                </ul>
+                        </div>
+                        <div class="duedate">${lateMessage}</div>
+                    </div>` ;    
+        }
+        // for assignments awaiting marking
+        if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade == null) {
+            const assignmentFiles = assignmentDict[assignmentID][0].set_files;
+            const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
+            
+            
+            const submittedAssignmentFiles = assignmentDict[assignmentID][0].submitted_files;
+            const submittedAssignmentFilesNames = assignmentDict[assignmentID][0].submitted_files_names; 
+            
+            let fileList = ``;
+            let submittedFileList = ``;
+            
+            let lateMessage = '';
+
+            if (assignmentDict[assignmentID][0].is_late == 0) {
+                lateMessage = 'Turned in';
+            } else if (assignmentDict[assignmentID][0].is_late == 1) {
+                lateMessage = 'Turned in late';
+            }
+
+            for (index in assignmentFiles) {
+                // console.log(assignmentFiles[index]); //filepath
+                // console.log(assignmentFilesNames[index]); //name of file for filepath
+                fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+            }
+
+
+            for (index in submittedAssignmentFiles) {
+                submittedFileList += `<li><a href="/${submittedAssignmentFiles[index]}">${submittedAssignmentFilesNames[index]}</a></li>`
+            }
+
+            unmarkedAssignmentsEl.innerHTML +=
+                    `<div class="markAssignment" id="${assignmentID}">
+                        <div class="title">${assignmentDict[assignmentID][0].title}</div>
+                        <div class="submitfiles">
+                            <h1>Submitted Files</h1>
+                                <ul>
+                                    ${submittedFileList}
+                                </ul>
+                        </div>
+                        <div class="files">
+                            <h1>Assignment Attachments</h1>
+                            <ul>
+                                ${fileList}
+                            </ul>
+                        </div>
+                        <div class="submitbox">
+                            <h1>Upload Marked Files</h1>
+                                <form method="post">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <br><button type="submit">Submit</button><br>  
+                                    <input type="file" name="file" accept="application/pdf" multiple/><br>                                       
+                                    <label>Grade (%):</label><input type="number" onkeypress="return /[0-9]/i.test(event.key)"> 
+                                         
+                                    <input type="hidden" name="markassignment" value="${assignmentID}">
+                                </form>
+                        </div>
+                        <div class="duedate">${lateMessage}</div>
+                    </div>` ;    
+        }// NOTE: the onkeypress function in the input here still allows copy and pasting! Please validate the grade in the backend or otherwise.
+    
+    }            
 
 </script>
 {% endblock %}
