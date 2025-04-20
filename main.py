@@ -258,6 +258,11 @@ def user_assignments():
     if request.method == "POST":
 
         tuteeName = request.form['tutee']
+        if not request.form['date']:
+            print('Invalid date')
+            return redirect(request.url)
+        duedate = str(request.form['date'])
+
         if not request.form['tutee']:
             print('Invalid tutee') #change this to flash later
             return redirect(request.url)
@@ -299,9 +304,19 @@ def user_assignments():
         # after the files have been uploaded, we will now upload assignment details concerning the involved tutor, tutee, 
         # assignment, and name of the task
         tuteeID = User.find_by_username(tuteeName).id
-        functions.set_assignment_details(assignmentID=assignmentID, tuteeID=tuteeID, tutorID=current_user.id, title=title)
+        print(duedate)
+        functions.set_assignment_details(assignmentID=assignmentID, tuteeID=tuteeID, tutorID=current_user.id, title=title, duedate=duedate)
 
-    return render_template('user_assignments.html')
+
+    assignments = functions.get_assignment_details(current_user.id) # returns all assignments associated with the user's ID
+    return render_template('user_assignments.html', assignments=assignments)
+
+
+@app.route('/static/<page>')
+def get_link(page):
+    return f'{page}'
+
+
 
 @app.route("/user/account", methods=["GET", "POST"])
 @login_required

@@ -11,6 +11,8 @@ cur = con.cursor()
 # cur.execute('''DROP TABLE testDates''')
 # cur.execute('''CREATE TABLE testDates(tuteeID, tutorID, subject TEXT, classdate DATE, classtime TIME, classnotes TEXT, UNIQUE(classdate, classtime))''')
 
+
+# cur.execute('''DROP TABLE testAssignments''')
 # cur.execute('''CREATE TABLE testAssignments(assignmentID INTEGER PRIMARY KEY, tuteeID, tutorID, is_completed BOOLEAN, grade INTEGER)''')
 
 # Q: What is status in testFiles?
@@ -28,7 +30,7 @@ cur.execute('''CREATE TABLE testFiles(assignmentID INTEGER, status INTEGER, name
 # this one really should be called AssignmentDetails
 
 cur.execute('''DROP TABLE testAssignments''')
-cur.execute('''CREATE TABLE testAssignments(assignmentID INTEGER PRIMARY KEY, tuteeID, tutorID, title, is_completed BOOLEAN, grade INTEGER, CONSTRAINT check_grade CHECK(grade BETWEEN -1 and 101))''')
+cur.execute('''CREATE TABLE testAssignments(assignmentID INTEGER PRIMARY KEY, tuteeID, tutorID, title, duedate DATE, is_completed BOOLEAN, grade INTEGER, CONSTRAINT check_grade CHECK(grade BETWEEN -1 and 101))''')
 
 
 print('Success!')

@@ -20,9 +20,21 @@
                 font-size: large;
             }
 
-            #dueAssignments{
+            .assignmentWrapper{
                 width: 100%;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            #dueAssignments{
+                width: 80%;
                 margin-bottom: 20px;
+
+                height: 60vh;
+                overflow: auto;
             }
 
             #completedAssignments{
@@ -36,14 +48,20 @@
             }
 
             .assignment {
+                margin-top: 10px;
+
                 margin-left: auto;
                 margin-right: auto;
 
-                max-width: 50%;
+                min-width: 60%;
+                max-width: 80%;
+
+                height: 30%;
+
                 display: grid;
                 grid: 
-                'title submitbox'
-                'duedate submitbox';
+                'title files submitbox'
+                'duedate files submitbox';
                 border: 1px solid black;
                 gap: 10px;
                 background-color: var(--bgbar);
@@ -60,7 +78,12 @@
                 grid-area: submitbox;
                 border: 1px solid black;
             }
-
+            .assignment > div.files {
+                grid-area: files;
+                height: 100%;
+                overflow-y: scroll;
+                border: 1px solid black;
+            }
 
             #setAssignment{
                 padding: 10px;
@@ -114,6 +137,10 @@
                 <br>
                 <textarea name="title" placeholder="What is the title of your assignment?"></textarea>
 
+                <br><label>Date</label><br>
+                <input type="date" name="date" required>
+                <br>
+
                 <br>
                 <label>Assignment File</label>
                 <br>
@@ -123,32 +150,45 @@
 
                 <br><button type="submit">Set Assignment</button>
             </form>
-
-            <div id="dueAssignments">
+        
+            <div class="assignmentWrapper">
                 <h1>Due Assignments</h1>
                 <p>Sort by: <button>Subject</button> <button>Date</button></p>
-                <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
-                    <div class="title">English Essay Writing</div>
-                    <div class="submitbox">2</div>
-                    <div class="duedate">Due by:</div>
+                <div id="dueAssignments">
+
+                    <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
+                        <div class="title">English Essay Writing</div>
+                        <div class="files">
+                            hi
+                        </div>
+                        <div class="submitbox">2</div>
+                        <div class="duedate">Due by:</div>
+                    </div>
                 </div>
             </div>
-            <div id="completedAssignments">
+
+            <div class="assignmentWrapper">
                 <h1>Completed Assignments</h1>
                 <p>Sort by: <button>Subject</button> <button>Date</button></p>
-                <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
-                    <div class="title">Maths 12/02/25</div>
-                    <div class="submitbox">2</div>
-                    <div class="duedate">Due by:</div>
+                <div id="completedAssignments">
+                    <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
+                        <div class="title">Maths 12/02/25</div>
+                        <div class="submitbox">2</div>
+                        <div class="duedate">Due by:</div>
+                    </div>
                 </div>
             </div>
-            <div id="unmarkedAssignments">
+
+            <div class="assignmentWrapper">
                 <h1>Awaiting Assignments</h1>
                 <p>Sort by: <button>Subject</button> <button>Date</button></p>
-                <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
-                    <div class="title">English Essay Writing</div>
-                    <div class="submitbox">2</div>
-                    <div class="duedate">Due by:</div>
+                <div id="unmarkedAssignments">
+
+                    <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
+                        <div class="title">English Essay Writing</div>
+                        <div class="submitbox">2</div>
+                        <div class="duedate">Due by:</div>
+                    </div>
                 </div>
             </div>
         </div>   
@@ -157,6 +197,50 @@
 
 {% block js %}
 {{super()}}
+<script>
+    const dueAssignmentsEl = document.getElementById('dueAssignments');
+// pass list of due assignments as json here
+
+    const assignmentDict = {{ assignments | tojson }};
+
+    console.log(assignmentDict);
+    assignmentTemplate = 
+                `<div class="assignment">
+                    <div class="title">English Essay Writing</div>
+                    <div class="submitbox">2</div>
+                    <div class="duedate">Due by:</div>
+                </div>`;
+
+    dueAssignmentsEl.innerHTML = "";
+
+    for (const assignmentID in assignmentDict) {
+        const assignmentFiles = assignmentDict[assignmentID][0].set_files;
+        const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
+        let fileList = ``;
+        
+        for (index in assignmentFiles) {
+            // console.log(assignmentFiles[index]); //filepath
+
+            // console.log(assignmentFilesNames[index]); //name of file for filepath
+            fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+        }
+
+
+        dueAssignmentsEl.innerHTML +=
+                `<div class="assignment">
+                    <div class="title">${assignmentDict[assignmentID][0].title}</div>
+                    <div class="submitbox">2</div>
+                    <div class="files">
+                        <h1>Assignment Attachments</h1>
+                        <ul>
+                            ${fileList}
+                        </ul>
+                    </div>
+                    <div class="duedate">Due by: ${assignmentDict[assignmentID][0].duedate}</div>
+                </div>` ;
+        }            
+
+</script>
 {% endblock %}
 
 </body>
