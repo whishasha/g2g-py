@@ -47,6 +47,11 @@
                 margin-bottom: 20px;
             }
 
+            #markedAssignments{
+                width: 100%;
+                margin-bottom: 20px;             
+            }
+
             .assignment {
                 margin-top: 10px;
 
@@ -261,6 +266,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="assignmentWrapper">
+                <h1>Marked Assignments</h1>
+                <p>Sort by: <button>Subject</button> <button>Date</button></p>
+                <div id="markedAssignments">
+
+                    <div class="markAssignment"> <!--will need to add Jinja here in future for due assignments-->
+                        <div class="title">English Essay Writing</div>
+                        <div class="submitbox">2</div>
+                        <div class="duedate">Due by:</div>
+                    </div>
+                </div>
+            </div>
         </div>   
         {% endblock %}
     </div>
@@ -271,6 +289,7 @@
     const dueAssignmentsEl = document.getElementById('dueAssignments');
     const completedAssignmentsEl = document.getElementById('completedAssignments');
     const unmarkedAssignmentsEl = document.getElementById('unmarkedAssignments');
+    const markedAssignmentsEl = document.getElementById('markedAssignments');
 // pass list of due assignments as json here
 
     const assignmentDict = {{ assignments | tojson }};
@@ -280,11 +299,11 @@
     dueAssignmentsEl.innerHTML = "";
     completedAssignmentsEl.innerHTML = '';
     unmarkedAssignmentsEl.innerHTML = '';
-    
+    markedAssignmentsEl.innerHTML = '';
     for (const assignmentID in assignmentDict) {
         console.log(assignmentDict[assignmentID][0].is_completed);
 
-        //for due assignments
+        //for due assignments [tutee]
         if (assignmentDict[assignmentID][0].is_completed == String(0)) {
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
@@ -317,7 +336,7 @@
                         <div class="duedate">Due by: ${assignmentDict[assignmentID][0].duedate}</div>
                     </div>` ;    
         }
-        // for submitted assignments
+        // for submitted assignments [tutee]
         if (assignmentDict[assignmentID][0].is_completed == String(1)) {
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
@@ -369,7 +388,70 @@
                         <div class="duedate">${lateMessage}</div>
                     </div>` ;    
         }
-        // for assignments awaiting marking
+        
+        // put one here for marked assignments [tutee + tutor]
+        if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade != null) {
+            const assignmentFiles = assignmentDict[assignmentID][0].set_files;
+            const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
+            
+            
+            const submittedAssignmentFiles = assignmentDict[assignmentID][0].submitted_files;
+            const submittedAssignmentFilesNames = assignmentDict[assignmentID][0].submitted_files_names; 
+         
+            
+            const markedAssignmentFiles = assignmentDict[assignmentID][0].marked_files;
+            const markedAssignmentFilesNames = assignmentDict[assignmentID][0].marked_files_names; 
+
+            let fileList = ``;
+            let submittedFileList = ``;
+            let markedFilelist = ``;
+            let lateMessage = '';
+
+            if (assignmentDict[assignmentID][0].is_late == 0) {
+                lateMessage = 'Turned in';
+            } else if (assignmentDict[assignmentID][0].is_late == 1) {
+                lateMessage = 'Turned in late';
+            }
+
+            for (index in assignmentFiles) {
+                // console.log(assignmentFiles[index]); //filepath
+                // console.log(assignmentFilesNames[index]); //name of file for filepath
+                fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+            }
+
+
+            for (index in submittedAssignmentFiles) {
+                submittedFileList += `<li><a href="/${submittedAssignmentFiles[index]}">${submittedAssignmentFilesNames[index]}</a></li>`
+            }
+
+            for (index in markedAssignmentFiles) {
+                markedFilelist += `<li><a href="/${markedAssignmentFiles[index]}">${markedAssignmentFilesNames[index]}</a></li>`
+            }
+
+            markedAssignmentsEl.innerHTML +=
+                    `<div class="markAssignment" id="${assignmentID}">
+                        <div class="title">${assignmentDict[assignmentID][0].title}</div>
+                        <div class="submitfiles">
+                            <h1>Submitted Files</h1>
+                                <ul>
+                                    ${submittedFileList}
+                                </ul>
+                        </div>
+                        <div class="files">
+                            <h1>Assignment Attachments</h1>
+                            <ul>
+                                ${fileList}
+                            </ul>
+                        </div>
+                        <div class="submitbox">
+                            <h1>Marked Files</h1>
+
+                        </div>
+                        <div class="duedate">Grade (%): ${assignmentDict[assignmentID][0].grade}</div>
+                    </div>` ;    
+        }// NOTE: the onkeypress function in the input here still allows copy and pasting! Please validate the grade in the backend or otherwise.
+
+        // for assignments awaiting marking [tutor]
         if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade == null) {
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 

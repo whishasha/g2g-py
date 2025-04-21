@@ -81,6 +81,14 @@ def get_assignment_details(ID):
             formattedSubmittedFilepaths.append(_[1])
             formattedSubmittedFilenames.append(_[0])
 
+        markedAssignmentFilepaths = cur.execute('''SELECT name, filepath FROM testFiles WHERE assignmentID=? AND status=2''', (assignmentID,)).fetchall()
+        formattedMarkedFilepaths = []
+        formattedMarkedFilenames = []
+        for _ in markedAssignmentFilepaths:
+            formattedMarkedFilepaths.append(_[1])
+            formattedMarkedFilenames.append(_[0])
+
+
 
         assignments[assignmentID].append({
             "assignmentID": assignment[0],
@@ -94,7 +102,9 @@ def get_assignment_details(ID):
             "set_files": formattedSetFilepaths, # the initial assignment files w/ status 0
             "set_files_names": formattedSetFilenames,
             "submitted_files": formattedSetFilepaths,
-            "submitted_files_names": formattedSetFilenames
+            "submitted_files_names": formattedSetFilenames,
+            "marked_files": formattedMarkedFilepaths,
+            "marked_files_names": formattedMarkedFilenames 
         })
     cur.close()
     con.close()

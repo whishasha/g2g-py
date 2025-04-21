@@ -361,7 +361,7 @@ def user_assignments():
                     filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
                     file.save(filepath)
                     print('Saved!')
-                    functions.set_assignment_files(assignmentID=assignmentID, status=2, filename=unique_filename, filepath=filepath)
+                    functions.set_assignment_files(assignmentID=assignmentID, status=2, filename=filename, filepath=filepath)
             # need to: upload files to testFiles, with status 2
             functions.update_assignment_status(assignmentID=assignmentID, is_completed=1, grade=grade)
             # update testAssignment, turning is_completed = 1
