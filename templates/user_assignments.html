@@ -417,11 +417,11 @@
                         </div>
                         <div class="submitbox">
                             <h1>Upload Marked Files</h1>
-                                <form method="post">
+                                <form method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                     <br><button type="submit">Submit</button><br>  
                                     <input type="file" name="file" accept="application/pdf" multiple/><br>                                       
-                                    <label>Grade (%):</label><input type="number" onkeypress="return /[0-9]/i.test(event.key)"> 
+                                    <label>Grade (%):</label><input name=grade type="number" onkeypress="return /[0-9]/i.test(event.key)" required> 
                                          
                                     <input type="hidden" name="markassignment" value="${assignmentID}">
                                 </form>

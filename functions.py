@@ -101,7 +101,7 @@ def get_assignment_details(ID):
 
     return assignments
 
-def update_assignment_status(assignmentID: int, is_completed: int):
+def update_assignment_status(assignmentID: int, is_completed: int, grade: int):
 
     con = sqlite3.connect('database.db')
     cur = con.cursor()
@@ -118,7 +118,7 @@ def update_assignment_status(assignmentID: int, is_completed: int):
         elif duedate < date:
             is_late = 1
 
-        cur.execute('''UPDATE testAssignments SET is_completed = ?, is_late=? WHERE assignmentID = ?''', (is_completed, is_late, assignmentID,))
+        cur.execute('''UPDATE testAssignments SET is_completed = ?, is_late=?, grade=? WHERE assignmentID = ?''', (is_completed, is_late, grade, assignmentID,))
     con.commit()
     
     

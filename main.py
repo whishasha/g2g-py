@@ -330,17 +330,44 @@ def user_assignments():
                     print('Saved!')
                     functions.set_assignment_files(assignmentID=assignmentID, status=1, filename=unique_filename, filepath=filepath)
             # need to: upload files to testFiles, with status 1
-            functions.update_assignment_status(assignmentID=assignmentID, is_completed=1)
+            functions.update_assignment_status(assignmentID=assignmentID, is_completed=1, grade=None)
             # update testAssignment, turning is_completed = 1
             
             print('Assignment files submitted!')
         if 'unsubmitassignment' in request.form:
-            if 'unsubmitassignment' not in request.form:
-                print('Invalid request')
-                return redirect(request.url)
             print("It's going through!")
             assignmentID = request.form['unsubmitassignment']
-            functions.update_assignment_status(assignmentID=assignmentID, is_completed=0)
+            functions.update_assignment_status(assignmentID=assignmentID, is_completed=0, grade=None)
+        if 'markassignment' in request.form:
+            print(request.files)
+            if 'file' not in request.files:
+                print('No file part(s) selected')
+                return redirect(request.url)
+            
+            if 'grade' not in request.form:
+                print('No grade submitted!')
+                return redirect(request.url)
+
+            grade = int(request.form['grade'])
+            assignmentID = request.form['markassignment']
+            for file in request.files.getlist('file'):
+                if file.filename == '':
+                    print('No selected file')
+                    return redirect(request.url)
+            
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename) 
+                    unique_filename = make_unique(filename) 
+                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
+                    file.save(filepath)
+                    print('Saved!')
+                    functions.set_assignment_files(assignmentID=assignmentID, status=2, filename=unique_filename, filepath=filepath)
+            # need to: upload files to testFiles, with status 2
+            functions.update_assignment_status(assignmentID=assignmentID, is_completed=1, grade=grade)
+            # update testAssignment, turning is_completed = 1
+            
+            print('Assignment marked & uploaded!!')
+ 
     assignments = functions.get_assignment_details(current_user.id) # returns all assignments associated with the user's ID
     return render_template('user_assignments.html', assignments=assignments)
 
