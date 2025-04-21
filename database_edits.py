@@ -32,7 +32,7 @@ cur.execute('''CREATE TABLE testFiles(assignmentID INTEGER, status INTEGER, name
 # this one really should be called AssignmentDetails
 
 cur.execute('''DROP TABLE testAssignments''')
-cur.execute('''CREATE TABLE testAssignments(assignmentID INTEGER PRIMARY KEY, tuteeID, tutorID, title, duedate DATE, is_completed BOOLEAN, is_late BOOLEAN, grade INTEGER, CONSTRAINT check_grade CHECK(grade BETWEEN -1 and 101))''')
+cur.execute('''CREATE TABLE testAssignments(assignmentID INTEGER PRIMARY KEY, tuteeID, tutorID, title, duedate DATE, is_completed BOOLEAN, is_late BOOLEAN, grade INTEGER, subject CONSTRAINT check_grade CHECK(grade BETWEEN -1 and 101))''')
 
 
 print('Success!')

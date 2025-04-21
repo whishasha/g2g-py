@@ -258,6 +258,12 @@ def user_assignments():
     if request.method == "POST":
         print(request.form)
         if 'setassignment' in request.form:
+
+            if not request.form['subject']:
+                print('No subject selected')
+                return redirect(request.url)
+            subject = request.form['subject']
+
             tuteeName = request.form['tutee']
             if not request.form['date']:
                 print('Invalid date')
@@ -306,7 +312,7 @@ def user_assignments():
             # assignment, and name of the task
             tuteeID = User.find_by_username(tuteeName).id
             print(duedate)
-            functions.set_assignment_details(assignmentID=assignmentID, tuteeID=tuteeID, tutorID=current_user.id, title=title, duedate=duedate)
+            functions.set_assignment_details(assignmentID=assignmentID, tuteeID=tuteeID, tutorID=current_user.id, title=title, duedate=duedate, subject=subject)
         if 'submitassignment' in request.form:
             if 'file' not in request.files:
                 print('No file part(s) selected')
@@ -367,14 +373,30 @@ def user_assignments():
             # update testAssignment, turning is_completed = 1
             
             print('Assignment marked & uploaded!!')
- 
+        if 'deleteassignment' in request.form:
+            try:
+                assignmentID = request.form['deleteassignment']
+                print(assignmentID)
+            except ValueError:
+                print('Invalid ID')
+                return redirect(request.url)
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+
+            cur.execute('''DELETE FROM testAssignments WHERE assignmentID=?''', (assignmentID,))
+            cur.execute('''DELETE FROM testFiles WHERE assignmentID=?''', (assignmentID,))
+            con.commit()
+            
+            cur.close()
+            con.close()
+            print(f'Assignment with ID {assignmentID} successfully deleted!')
     assignments = functions.get_assignment_details(current_user.id) # returns all assignments associated with the user's ID
     return render_template('user_assignments.html', assignments=assignments)
 
 
 @app.route('/static/<page>')
 def get_link(page):
-    return f'{page}'
+    return f'{page}' #PLEASE ADD USER VERIFICATION FOR THIS OH MY GOD!!
 
 
 

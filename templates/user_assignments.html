@@ -52,6 +52,10 @@
                 margin-bottom: 20px;             
             }
 
+            #assignedAssignments{
+                width: 100%;
+                margin-bottom: 20px;             
+            }
             .assignment {
                 margin-top: 10px;
 
@@ -221,15 +225,43 @@
                 <br>
                 <input type=file name=file accept="application/pdf" multiple>
 
+
+                <br>
+                <label>Subject</label>
+                <select name="subject" required>
+                    <option value="English">English</option>
+                    <option value="Maths">Maths</option>
+                </select>
+                <br>
+
                 <input name="setassignment" type="hidden">
 
                 <br><button type="submit">Set Assignment</button>
             </form>
         
             <div class="assignmentWrapper">
-                <h1>Due Assignments</h1>
-                <p>Sort by: <button>Subject</button> <button>Date</button></p>
+                <h1>Due Assignments [tutee]</h1>
+                <p>Sort by: <button onclick="filterByDate(document.getElementById('dueAssignments'))">Date</button> 
+                    Subject:<button value="English" onclick="filterBySubject(document.getElementById('dueAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('dueAssignments'), this.value)">Maths</button> 
+                    <button onclick="resetFilters(document.getElementById('dueAssignments'))">Reset</button>
                 <div id="dueAssignments">
+                    <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
+                        <div class="title">English Essay Writing</div>
+                        <div class="files">
+                            hi
+                        </div>
+                        <div class="submitbox">2</div>
+                        <div class="duedate">Due by:</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="assignmentWrapper">
+                <h1>Assigned Assignments [tutor]</h1>
+                <p>Sort by: <button onclick="filterByDate(document.getElementById('assignedAssignments'))">Date</button> 
+                    Subject:<button value="English" onclick="filterBySubject(document.getElementById('assignedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('assignedAssignments'), this.value)">Maths</button> 
+                    <button onclick="resetFilters(document.getElementById('assignedAssignments'))">Reset</button>
+                <div id="assignedAssignments">
 
                     <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
                         <div class="title">English Essay Writing</div>
@@ -243,8 +275,10 @@
             </div>
 
             <div class="assignmentWrapper">
-                <h1>Completed Assignments</h1>
-                <p>Sort by: <button>Subject</button> <button>Date</button></p>
+                <h1>Completed Assignments [tutee + tutor]</h1>
+                <p>Sort by: <button onclick="filterByDate(document.getElementById('completedAssignments'))">Date</button> 
+                    Subject:<button value="English" onclick="filterBySubject(document.getElementById('completedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('completedAssignments'), this.value)">Maths</button> 
+                    <button onclick="resetFilters(document.getElementById('completedAssignments'))">Reset</button>
                 <div id="completedAssignments">
                     <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
                         <div class="title">Maths 12/02/25</div>
@@ -255,8 +289,11 @@
             </div>
 
             <div class="assignmentWrapper">
-                <h1>Awaiting Assignments</h1>
-                <p>Sort by: <button>Subject</button> <button>Date</button></p>
+                <h1>Awaiting Assignments [tutor]</h1>
+                <p>Sort by: <button onclick="filterByDate(document.getElementById('unmarkedAssignments'))">Date</button> 
+                    Subject:<button value="English" onclick="filterBySubject(document.getElementById('unmarkedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('unmarkedAssignments'), this.value)">Maths</button> 
+                    <button onclick="resetFilters(document.getElementById('unmarkedAssignments'))">Reset</button>
+                </p>
                 <div id="unmarkedAssignments">
 
                     <div class="markAssignment"> <!--will need to add Jinja here in future for due assignments-->
@@ -268,8 +305,11 @@
             </div>
 
             <div class="assignmentWrapper">
-                <h1>Marked Assignments</h1>
-                <p>Sort by: <button>Subject</button> <button>Date</button></p>
+                <h1>Marked Assignments [tutee + tutor]</h1>
+                <p>Sort by: <button onclick="filterByDate(document.getElementById('markedAssignments'))">Date</button> 
+                    Subject:<button value="English" onclick="filterBySubject(document.getElementById('markedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('markedAssignments'), this.value)">Maths</button> 
+                    <button onclick="resetFilters(document.getElementById('markedAssignments'))">Reset</button>
+                </p>        
                 <div id="markedAssignments">
 
                     <div class="markAssignment"> <!--will need to add Jinja here in future for due assignments-->
@@ -290,16 +330,19 @@
     const completedAssignmentsEl = document.getElementById('completedAssignments');
     const unmarkedAssignmentsEl = document.getElementById('unmarkedAssignments');
     const markedAssignmentsEl = document.getElementById('markedAssignments');
-// pass list of due assignments as json here
-
-    const assignmentDict = {{ assignments | tojson }};
-
+    const assignedAssignmentsEl = document.getElementById('assignedAssignments');
+    const assignmentDict = {{ assignments | tojson }}; //List of all assignments
+    
     console.log(assignmentDict); //for debugging purposes
 
-    dueAssignmentsEl.innerHTML = "";
+
+    dueAssignmentsEl.innerHTML = '';
     completedAssignmentsEl.innerHTML = '';
     unmarkedAssignmentsEl.innerHTML = '';
     markedAssignmentsEl.innerHTML = '';
+    assignedAssignmentsEl.innerHTML = '';
+
+    function displayAssignments() {
     for (const assignmentID in assignmentDict) {
         console.log(assignmentDict[assignmentID][0].is_completed);
 
@@ -316,8 +359,13 @@
             }
 
             dueAssignmentsEl.innerHTML +=
-                    `<div class="assignment" id="${assignmentID}">
-                        <div class="title">${assignmentDict[assignmentID][0].title}</div>
+                    `<div class="assignment" id="${assignmentID}" data-due-date="${assignmentDict[assignmentID][0].duedate}" data-subject="${assignmentDict[assignmentID][0].subject}">
+                        <div class="title">
+                            <ul>
+                                <li>${assignmentDict[assignmentID][0].title}</li>
+                                <li>${assignmentDict[assignmentID][0].subject}</li>
+                            </ul>
+                        </div>
                         <div class="submitbox">
                             <h1>Submission Box</h1>
                                 <form enctype="multipart/form-data" method="post">
@@ -366,8 +414,13 @@
             }
 
             completedAssignmentsEl.innerHTML +=
-                    `<div class="assignment" id="${assignmentID}">
-                        <div class="title">${assignmentDict[assignmentID][0].title}</div>
+                    `<div class="assignment" id="${assignmentID}" data-due-date="${assignmentDict[assignmentID][0].duedate}" data-subject="${assignmentDict[assignmentID][0].subject}">
+                        <div class="title">
+                            <ul>
+                                <li>${assignmentDict[assignmentID][0].title}</li>
+                                <li>${assignmentDict[assignmentID][0].subject}</li>
+                            </ul>
+                        </div>
                         <div class="submitbox">
                             <h1>Submitted Files</h1>
                                 <form method="post">
@@ -387,8 +440,46 @@
                         </div>
                         <div class="duedate">${lateMessage}</div>
                     </div>` ;    
+        }      
+        // for viewing assigned & unmarked assignments [tutor]
+        if (assignmentDict[assignmentID][0].is_completed == String(0)) {
+            const assignmentFiles = assignmentDict[assignmentID][0].set_files;
+            const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
+            let fileList = ``;
+            
+            for (index in assignmentFiles) {
+                // console.log(assignmentFiles[index]); //filepath
+                // console.log(assignmentFilesNames[index]); //name of file for filepath
+                fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+            }
+
+            assignedAssignmentsEl.innerHTML +=
+                    `<div class="assignment" id="${assignmentID}" data-due-date="${assignmentDict[assignmentID][0].duedate}" data-subject="${assignmentDict[assignmentID][0].subject}">
+                        <div class="title">
+                            <ul>
+                                <li>${assignmentDict[assignmentID][0].title}</li>
+                                <li>${assignmentDict[assignmentID][0].subject}</li>
+                            </ul> 
+                        </div>
+                        <div class="submitbox">
+                            <h1>Student</h1>
+                                ${assignmentDict[assignmentID][0].tutee}
+                                <form method="post">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="deleteassignment" value="${assignmentID}">
+                                    <button type="submit">Delete</button><br>
+                                </form>
+                            </div>
+                            <div class="files">
+                                <h1>Assignment Attachments</h1>
+                                <ul>
+                                    ${fileList}
+                                </ul>
+                        </div>
+                        <div class="duedate">Due by: ${assignmentDict[assignmentID][0].duedate}</div>
+                    </div>` ;    
         }
-        
+            
         // put one here for marked assignments [tutee + tutor]
         if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade != null) {
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
@@ -429,8 +520,13 @@
             }
 
             markedAssignmentsEl.innerHTML +=
-                    `<div class="markAssignment" id="${assignmentID}">
-                        <div class="title">${assignmentDict[assignmentID][0].title}</div>
+                    `<div class="markAssignment" id="${assignmentID}" data-due-date="${assignmentDict[assignmentID][0].duedate}" data-subject="${assignmentDict[assignmentID][0].subject}">
+                        <div class="title">
+                            <ul>
+                                <li>${assignmentDict[assignmentID][0].title}</li>
+                                <li>${assignmentDict[assignmentID][0].subject}</li>
+                            </ul> 
+                        </div>
                         <div class="submitfiles">
                             <h1>Submitted Files</h1>
                                 <ul>
@@ -450,7 +546,6 @@
                         <div class="duedate">Grade (%): ${assignmentDict[assignmentID][0].grade}</div>
                     </div>` ;    
         }// NOTE: the onkeypress function in the input here still allows copy and pasting! Please validate the grade in the backend or otherwise.
-
         // for assignments awaiting marking [tutor]
         if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade == null) {
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
@@ -483,8 +578,13 @@
             }
 
             unmarkedAssignmentsEl.innerHTML +=
-                    `<div class="markAssignment" id="${assignmentID}">
-                        <div class="title">${assignmentDict[assignmentID][0].title}</div>
+                    `<div class="markAssignment" id="${assignmentID}" data-due-date="${assignmentDict[assignmentID][0].duedate}" data-subject="${assignmentDict[assignmentID][0].subject}">
+                        <div class="title">
+                            <ul>
+                                <li>${assignmentDict[assignmentID][0].title}</li>
+                                <li>${assignmentDict[assignmentID][0].subject}</li>
+                            </ul> 
+                        </div>
                         <div class="submitfiles">
                             <h1>Submitted Files</h1>
                                 <ul>
@@ -510,9 +610,52 @@
                         </div>
                         <div class="duedate">${lateMessage}</div>
                     </div>` ;    
-        }// NOTE: the onkeypress function in the input here still allows copy and pasting! Please validate the grade in the backend or otherwise.
-    
-    }            
+        }// NOTE: the onkeypress function in the input here still allows copy and pasting! Please validate the grade in the backend or otherwise. 
+    }      
+}
+
+displayAssignments()
+
+
+function filterBySubject(assignmentEl, subject) {
+    console.log('banana');
+    const assignments = Array.from(assignmentEl.querySelectorAll('.assignment'));
+
+    // assignments.forEach(assignment => assignmentEl.removeChild(assignment));
+    // //Filter assignments according to subject
+
+    // const filteredAssignments = assignments.filter(assignment => assignment.getAttribute('data-subject') == subject);
+    // filteredAssignments.forEach(assignment => assignmentEl.appendChild(assignment));
+
+    assignments.forEach(assignment => {
+        const match = assignment.getAttribute('data-subject') === subject;
+        assignment.style.display = match ? '' : 'none';
+    });
+}
+
+
+
+
+
+function filterByDate(assignmentEl) {
+    const assignments = Array.from(assignmentEl.querySelectorAll('.assignment'));
+    assignments.sort((a, b) => {
+        const dateA = new Date(a.getAttribute('data-due-date'));
+        const dateB = new Date(b.getAttribute('data-due-date'));
+        console.log(dateB - dateA);
+      return dateB - dateA; // descending order
+    });
+
+    assignments.forEach(assignment =>  assignmentEl.appendChild(assignment));
+
+} //thanks chatGPT!
+
+function resetFilters(assignmentEl) {
+    const assignments = assignmentEl.querySelectorAll('.assignment');
+    assignments.forEach(assignment => {
+        assignment.style.display = '';
+    });
+}
 
 </script>
 {% endblock %}

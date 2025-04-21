@@ -40,21 +40,21 @@ def set_assignment_files(assignmentID: int, status: int, filename: str, filepath
     cur.close()
     con.close()
 
-def set_assignment_details(assignmentID: int, tuteeID: int, tutorID: int, title: str, duedate:str):
-    con = sqlite3.connect('database.db')
-    cur = con.cursor()
+def set_assignment_details(assignmentID: int, tuteeID: int, tutorID: int, title: str, duedate:str, subject:str):
+        if subject == "English" or subject == "Maths":
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
 
-    cur.execute('''INSERT INTO testAssignments(assignmentID, tuteeID, tutorID, title, duedate, is_completed, is_late, grade) VALUES(?, ?, ?, ?, ?, ?, ?, ?)''',
-                (assignmentID, tuteeID, tutorID, title, duedate, False, None, None))
-    
-    con.commit()
-    cur.close()
-    con.close()
+
+
+            cur.execute('''INSERT INTO testAssignments(assignmentID, tuteeID, tutorID, title, duedate, is_completed, is_late, grade, subject) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                        (assignmentID, tuteeID, tutorID, title, duedate, False, None, None, subject))
+            
+            con.commit()
+            cur.close()
+            con.close()
 
 def get_assignment_details(ID):
-
-
-
     assignments = defaultdict(list)
 
     con = sqlite3.connect('database.db')
@@ -88,17 +88,27 @@ def get_assignment_details(ID):
             formattedMarkedFilepaths.append(_[1])
             formattedMarkedFilenames.append(_[0])
 
+        newcon = sqlite3.connect('database.db')
+        newcur = newcon.cursor()
+
+
+        newcur.execute('''SELECT name FROM users WHERE ID = ?''', (assignment[1],))
+        row = newcur.fetchone()
+
+        newcon.close()
 
 
         assignments[assignmentID].append({
             "assignmentID": assignment[0],
             "tuteeID": assignment[1],
+            "tutee": row[0],
             "tutorID": assignment[2],
             "title": assignment[3],
             "duedate": assignment[4],
             "is_completed": assignment[5],
             "is_late": assignment[6],
             "grade": assignment[7],
+            "subject": assignment[8],
             "set_files": formattedSetFilepaths, # the initial assignment files w/ status 0
             "set_files_names": formattedSetFilenames,
             "submitted_files": formattedSetFilepaths,
@@ -138,4 +148,4 @@ def update_assignment_status(assignmentID: int, is_completed: int, grade: int):
 
 if __name__ == '__main__':
     print('Running functions.py on main thread!')
-    print(update_assignment_status(1, 1))
+    print(dumps(get_assignment_details(1), indent=2))
