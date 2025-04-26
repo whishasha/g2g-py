@@ -150,7 +150,7 @@ def get_tutees():
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    tutees = cur.execute('''SELECT ID, firstname, lastname FROM users WHERE is_tutor=0''').fetchall()
+    tutees = cur.execute('''SELECT ID, firstname, lastname, name FROM users WHERE is_tutor=0''').fetchall()
 
     cur.close()
     con.close()
@@ -159,9 +159,11 @@ def get_tutees():
     for tutee in tutees:
         tuteeID = tutee[0]
 
-        tuteeName = " ".join([str(tutee[1]), str(tutee[2])])
+        tuteeName = tutee[3]
 
-        formattedTutees.append((tuteeID, tuteeName))
+        tuteeFullName = " ".join([str(tutee[1]), str(tutee[2])])
+
+        formattedTutees.append((tuteeID, tuteeFullName, tuteeName))
 
 
     #Hopefully sorts the record by alphabetical order

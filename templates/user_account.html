@@ -123,7 +123,7 @@
             <h1>Unenroll a Tutee</h1>
             <select name="tutee" id="tutee" required>
             {% for tutee in tutees %}
-                <option value={{tutee[0]}}>{{tutee[1]}}</option>
+                <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
             {% endfor %}
             </select>
             
