@@ -224,8 +224,8 @@ def user_timetable():
         else:
             print('Class details could not be found')
 
-
-    return render_template('user_timetable.html', class_dates=init_real_data())
+    tutees = functions.get_tutees()
+    return render_template('user_timetable.html', class_dates=init_real_data(), tutees=tutees)
 
 def format_calendar_data(subject, tutee, daymonthyear, time, notes):
     #store daymonthyear in 2 separate variables:
@@ -404,13 +404,16 @@ def get_link(page):
 
 @app.route("/user/account", methods=["GET", "POST"])
 @login_required
-def user_account():
+def user_account(): #A lot of the forms in here should be in their own "tutees" tab
     if request.method == "POST":
         print(request.form)
         if 'register' in request.form:
             print('Processing registration')
             register()
-    return render_template('user_account.html')
+
+    tutees=functions.get_tutees()
+
+    return render_template('user_account.html', tutees=tutees)
 
 def register():
         print('hello')

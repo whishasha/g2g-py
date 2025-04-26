@@ -122,10 +122,9 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <h1>Unenroll a Tutee</h1>
             <select name="tutee" id="tutee" required>
-                <option value="johnny">John Ben</option> <!--John Ben represents firstname lastname, value is username-->
-                <option value="TGVBHJJ">Litched Field</option>
-                <option value="mizi">Mizi the Cat</option> <!--utilise jinja for this-->
-
+            {% for tutee in tutees %}
+                <option value={{tutee[0]}}>{{tutee[1]}}</option>
+            {% endfor %}
             </select>
             
             <br><label>Are you sure?</label>

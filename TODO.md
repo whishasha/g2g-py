@@ -18,7 +18,7 @@
     - + account lockouts
     - linking to email for pwd recovery will be a later task
 
-[-] add hover div for class details in calendar
+[X] add hover div for class details in calendar
     - if click on date, then
         - div appears over
 
@@ -63,7 +63,7 @@
 [X] add + link homework page
 should be able to:
 [X] upload multiple files
-[ ] download, upload, & delete view files
+[X] download, upload, & delete view files
 
 [X] implement file uploads
 - store on local file system
