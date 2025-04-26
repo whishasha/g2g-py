@@ -207,8 +207,11 @@
                 <label>Tutee</label>
                 <br>
                 <select name="tutee" required> <!--value is username, text will be firstname lastname-->
-                    <option value="Johnathan">Johnathan</option>
-                    <option value="Apple">Apple</option>
+                    <!-- <option value="Johnathan">Johnathan</option>
+                    <option value="Apple">Apple</option> -->
+                    {% for tutee in tutees %}
+                        <option value={{tutee[0]}}>{{tutee[1]}}</option>
+                    {% endfor %}
                 </select>
                 <br>
 

@@ -144,8 +144,34 @@ def update_assignment_status(assignmentID: int, is_completed: int, grade: int):
     
     cur.close()
     con.close()
-    
+
+def get_tutees():
+
+    con = sqlite3.connect('database.db')
+    cur = con.cursor()
+
+    tutees = cur.execute('''SELECT ID, firstname, lastname FROM users WHERE is_tutor=0''').fetchall()
+
+    cur.close()
+    con.close()
+
+    formattedTutees = []
+    for tutee in tutees:
+        tuteeID = tutee[0]
+
+        tuteeName = " ".join([str(tutee[1]), str(tutee[2])])
+
+        formattedTutees.append((tuteeID, tuteeName))
+
+
+    #Hopefully sorts the record by alphabetical order
+    sorted(formattedTutees, key=lambda tutee: tutee[1].lower())
+
+
+    return formattedTutees
+
 
 if __name__ == '__main__':
     print('Running functions.py on main thread!')
-    print(dumps(get_assignment_details(1), indent=2))
+    # print(dumps(get_assignment_details(1), indent=2))
+    print(get_tutees())

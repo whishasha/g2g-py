@@ -391,7 +391,9 @@ def user_assignments():
             con.close()
             print(f'Assignment with ID {assignmentID} successfully deleted!')
     assignments = functions.get_assignment_details(current_user.id) # returns all assignments associated with the user's ID
-    return render_template('user_assignments.html', assignments=assignments)
+    tutees = functions.get_tutees()
+    
+    return render_template('user_assignments.html', assignments=assignments, tutees=tutees)
 
 
 @app.route('/static/<page>')
