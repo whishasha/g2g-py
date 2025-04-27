@@ -212,7 +212,3 @@ def get_home_details(tuteeID):
 if __name__ == '__main__':
     print('Running functions.py on main thread!')
     # print(dumps(get_assignment_details(1), indent=2))
-    if True:
-        print('yup')
-    if False:
-        print('nup')
