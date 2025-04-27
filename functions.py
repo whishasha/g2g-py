@@ -173,7 +173,46 @@ def get_tutees():
     return formattedTutees
 
 
+
+def get_home_details(tuteeID):
+
+    # show # of due assignments
+    # show duedate, title of due assignment, subject in scrollable div
+
+    # show enrolled classes
+    # show upcoming classes => date, subject, classtime
+
+    currentYearMonthDate = datetime.today().strftime('%Y-%m-%d')
+    
+    con = sqlite3.connect('database.db')
+    cur = con.cursor()
+    
+    # fetching assignment:
+        # number of due assignments
+        # duedate, title, subject
+    assignment_details = cur.execute('''SELECT duedate, title, subject FROM testAssignments WHERE tuteeID=? AND duedate > ?''', (tuteeID, currentYearMonthDate)).fetchall()
+
+
+    # fetching enrolled classes:
+        # enrolled classes
+    enrolled_classes = cur.execute('''SELECT is_english, is_maths FROM testClasses WHERE userID=?''', (tuteeID,)).fetchone()
+
+    # fetching class details:
+        # upcoming classes where:
+            # date > currentdate, subject, classtime
+    class_times = cur.execute('''SELECT classdate, subject, classtime FROM testDates WHERE tuteeID=? AND classdate > ?''', (tuteeID, currentYearMonthDate)).fetchall()
+
+    cur.close()
+    con.close()
+
+    return (assignment_details, enrolled_classes, class_times)
+    
+
+
 if __name__ == '__main__':
     print('Running functions.py on main thread!')
     # print(dumps(get_assignment_details(1), indent=2))
-    print(get_tutees())
+    if True:
+        print('yup')
+    if False:
+        print('nup')

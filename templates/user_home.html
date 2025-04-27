@@ -32,14 +32,48 @@
         
         <div id="wrapper">
             <div id="dueAssignments">
-                <h1>Due Assignments</h1>
-                <p>0</p>
+                <h1>Due Assignments</h1> 
+                <!--show number of due assignments-->
+                <!--show title of due assignment + duedate-->
+                <p>{{ assignmentDetails|length }}</p>
+                <div id="assignmentWrapper">
+                    {% for assignment in assignmentDetails %} <!--not sure if this work :/-->
+                        <div class="assignment">
+                            <div class="title">{{assignment[1]}}</div>
+                            <div class="duedate">{{assignment[0]}}</div>
+                            <div class="subject">{{assignment[2]}}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+
             </div>
             <div id="classes">
-                <h1>Classes</h1>
+                <h1>Classes</h1> <!--show the classes the user is enrolled in-->
+                <div id="displayClasses">
+                    <ul>
+                        {% if enrolledClasses[0] == 1 %} <!--untested :)-->
+                        <li>English</li>
+                        {% endif %}
+
+                        {% if enrolledClasses[1] == 1 %}
+                        <li>Mathematics</li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
             <div id="dates">
-                <h1>Upcoming Classes</h1>
+                <h1>Upcoming Classes</h1> <!--show upcoming classes-->
+                <div id="upcomingClasses">
+                    <p>:)</p>
+                    {% for class in classDates %}
+                    <div class="class">
+                        <div class="classdate">{{class[0]}}</div>
+                        <div class="subject">{{class[1]}}</div>
+                        <div class="classtime">{{class[2]}}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            
             </div>
         </div>
 

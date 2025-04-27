@@ -106,20 +106,21 @@ def init_real_data():
     from json import dumps
     events_data = defaultdict(lambda: defaultdict(list))
     for event in real_data:
-        subject = event[2]
-        date = event[3]
-        time = event[4]
-        note = event[5]
-        year_month = str(date[:7]) #isolates YYYY-MM [7 char long]
-        day = int(date[8:10])
+        if all(value is not None for value in event):
+            subject = event[2]
+            date = event[3]
+            time = event[4]
+            note = event[5]
+            year_month = str(date[:7]) #isolates YYYY-MM [7 char long]
+            day = int(date[8:10])
 
-        classtime = time[:5]
+            classtime = time[:5]
 
-        events_data[year_month][day].append({
-            "time": classtime,
-            "description": note,
-            "subject": subject
-        })
+            events_data[year_month][day].append({
+                "time": classtime,
+                "description": note,
+                "subject": subject
+            })
     return events_data
 
 # print(dumps(events_data, indent=3))    Hierarchy of events
@@ -193,7 +194,9 @@ def about():
 @app.route("/user/home")
 @login_required
 def user_home():
-    return render_template('user_home.html')
+    #retrieves info to display on the homepage for tutees
+    home_details = functions.get_home_details(current_user.id)
+    return render_template('user_home.html', assignmentDetails = home_details[0], enrolledClasses = home_details[1], classDates = home_details[2])
 
 @app.route("/user/timetable", methods=["GET","POST"])
 @login_required

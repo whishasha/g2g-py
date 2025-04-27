@@ -99,6 +99,7 @@ li a {
   display: block;
   text-decoration: none;
   padding: 10px 5px;
+  color:var(--textbar);
 }
 
 /* Change the link color on hover */
