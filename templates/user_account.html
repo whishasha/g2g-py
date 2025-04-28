@@ -120,6 +120,7 @@
         
         <form method="post" name="unenrollTutee">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="unenrollTutee" />
             <h1>Unenroll a Tutee</h1>
             <select name="tutee" id="tutee" required>
             {% for tutee in tutees %}

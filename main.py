@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash, url_for, send_file
+from flask import Flask, render_template, request, redirect, flash, url_for, send_file, send_from_directory, abort, session
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
@@ -60,7 +60,6 @@ def assign_int_boolean(var):
     else:
         var = 0 #False
     return var
-
 def init_test_data(): #replace with dbedit2.py version
     from collections import defaultdict
     from json import dumps
@@ -91,7 +90,6 @@ def init_test_data(): #replace with dbedit2.py version
             "subject": subject
         }) 
     return events_data
-
 def init_real_data():
     con = sqlite3.connect('database.db')
     cur = con.cursor()
@@ -132,6 +130,7 @@ login_manager = LoginManager()
 
 #Initialising the application
 app = Flask(__name__)
+
 login_manager.init_app(app)
 bcrypt = Bcrypt(app)
 
@@ -140,7 +139,6 @@ csrf = CSRFProtect(app)
 csrf.init_app(app)
 
 app.config["SECRET_KEY"] = encoded_secret_key
-
 
 
 @login_manager.user_loader
@@ -399,10 +397,13 @@ def user_assignments():
     return render_template('user_assignments.html', assignments=assignments, tutees=tutees)
 
 
-@app.route('/static/<page>')
-def get_link(page):
-    return f'{page}' #PLEASE ADD USER VERIFICATION FOR THIS OH MY GOD!!
-
+@app.route('/static/files/<path:filename>')
+@login_required
+def get_link(filename):
+    validated = functions.validate_file_access(filename, current_user.id)
+    if validated: #returns as the name of filepath, not jumbled
+        return send_from_directory(directory=app.config['UPLOAD_FOLDER'], path=filename)
+    redirect("/")
 
 
 @app.route("/user/account", methods=["GET", "POST"])

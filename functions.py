@@ -172,6 +172,29 @@ def get_tutees():
 
     return formattedTutees
 
+def validate_file_access(unique_filename, userID):
+    
+    con = sqlite3.connect('database.db')
+    cur = con.cursor()
+
+    assignmentID = cur.execute('''SELECT assignmentID from testFiles WHERE filepath=?''', (f'static/files\{unique_filename}',)).fetchone()
+    assignmentName = cur.execute('''SELECT name from testFiles WHERE filepath=?''', (f'static/files\{unique_filename}',)).fetchone()
+    
+    if assignmentID is not None and assignmentName is not None:
+        row = cur.execute('''SELECT tuteeID FROM testAssignments WHERE assignmentID=?''', (assignmentID)).fetchone()[0]
+        row1 = cur.execute('''SELECT tutorID FROM testAssignments WHERE assignmentID=?''', (assignmentID)).fetchone()[0]
+        
+        
+        if row == userID or row1 == userID:
+            return assignmentName[0]
+    
+
+
+    cur.close()
+    con.close()
+
+
+    return False
 
 
 def get_home_details(tuteeID):
@@ -211,4 +234,4 @@ def get_home_details(tuteeID):
 
 if __name__ == '__main__':
     print('Running functions.py on main thread!')
-    # print(dumps(get_assignment_details(1), indent=2))
+    
