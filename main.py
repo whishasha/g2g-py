@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, flash, url_for, send_file, send_from_directory, abort, session
+from flask import Flask, render_template, request, redirect, flash, url_for, send_file, send_from_directory
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, UserMixin, login_user, login_required, current_user
+from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 from flask_wtf.csrf import CSRFProtect
 from waitress import serve
 from uuid import uuid4
@@ -12,6 +12,7 @@ from werkzeug.utils import secure_filename
 import functions
 
 
+#----------------------------------------MISCELLANEOUS SECTION---------------------------------------------#
 load_dotenv(find_dotenv())
 encoded_secret_key = os.getenv("SECRET_KEY")
 
@@ -124,9 +125,12 @@ def init_real_data():
 # print(dumps(events_data, indent=3))    Hierarchy of events
 
 
-login_manager = LoginManager()
-#John, banana
+#----------------------------------------INITIALISATION SECTION---------------------------------------------#
 
+
+login_manager = LoginManager()
+# John, B@nan1aba => example tutor
+# Alex, B@nan1aba => example tutee
 
 #Initialising the application
 app = Flask(__name__)
@@ -145,7 +149,7 @@ app.config["SECRET_KEY"] = encoded_secret_key
 def load_user(user_id):
     return User.get(user_id)
 
-
+#----------------------------------------LANDING SECTION---------------------------------------------#
 @app.route("/")
 def hello_world():
     return render_template('index.html')
@@ -188,7 +192,7 @@ def about():
     return render_template('about.html')
 
 
-
+#----------------------------------------USER SECTION---------------------------------------------#
 @app.route("/user/home")
 @login_required
 def user_home():
@@ -397,30 +401,104 @@ def user_assignments():
     return render_template('user_assignments.html', assignments=assignments, tutees=tutees)
 
 
-@app.route('/static/files/<path:filename>')
-@login_required
-def get_link(filename):
-    validated = functions.validate_file_access(filename, current_user.id)
-    if validated: #returns as the name of filepath, not jumbled
-        return send_from_directory(directory=app.config['UPLOAD_FOLDER'], path=filename)
-    redirect("/")
-
-
 @app.route("/user/account", methods=["GET", "POST"])
 @login_required
 def user_account(): #A lot of the forms in here should be in their own "tutees" tab
+    tutees=functions.get_tutees()
     if request.method == "POST":
-        print(request.form)
+        print(request.form) #debug tool
         if 'register' in request.form:
             print('Processing registration')
             register()
+        if 'unenrolltutee' in request.form:
+            print('Unenrolling...')
+            if 'tutee' in request.form:
+                try:
+                    int(request.form['tutee'])
+                except TypeError as e:
+                    print(f'Error: {e}')
+                    redirect(request.url)
+                except:
+                    print('Other error')
+                    redirect(request.url)
+            tuteeID = request.form['tutee']
+            if 'unenrollCheck' in request.form:
+                if request.form['unenrollCheck'] == 'on':
+                    if functions.unenroll_tutee(tuteeID):
+                        print('Succcess!')
+                    else:
+                        print('Unsuccessful unenrolment')
+            else:
+                print('Request denied')
+                return redirect(request.url)
+        if 'changepassword' in request.form:
+            print('Changing password...')
+            if 'password' in request.form:
+                password = request.form['password']
+                print(password)
+                if 'confirmpassword' in request.form:
+                    confirmpassword = request.form['confirmpassword']
+                    print(confirmpassword)
+                    if password == confirmpassword:
+                        passwordcheck = bcrypt.check_password_hash(current_user.password, password)
+                        if not passwordcheck:
+                            strengthcheck = functions.check_password_strength(password)
+                            if strengthcheck[0]:
+                                encryptedpassword = bcrypt.generate_password_hash(password).decode('utf-8')
+                                con = sqlite3.connect('database.db')
+                                cur = con.cursor()
 
-    tutees=functions.get_tutees()
+                                cur.execute('''UPDATE users SET password = ? WHERE ID = ?''', (encryptedpassword, current_user.id))
+                                con.commit()
+                                cur.close()
+                                con.close()
+                                print('Success!')
+                                return redirect(request.url)
+                            else:
+                                print(strengthcheck[1])
+                        else:
+                            print('Password cannot be the same as your previous password')
+                        
+            print('Invalid request')
+            return redirect(request.url)
+        if 'changesubjects' in request.form:
+            if 'tutee' in request.form:  
+                if 'unenrollCheck' in request.form:
+                    if request.form['unenrollCheck'] == 'on':
+                        try:
+                            tuteeID = int(request.form['tutee'])
+                            if any(int(tutee[0]) == tuteeID for tutee in tutees): #checks if the tutee is REAL
+                                is_english = request.form.get('is_english')
+                                is_maths = request.form.get('is_maths')
+
+                                if is_english != None or is_english != 'on' or is_maths != None or is_maths != 'on': 
+                                    is_english = assign_int_boolean(is_english)
+                                    is_maths = assign_int_boolean(is_maths)
+
+                                    con = sqlite3.connect('database.db')
+                                    cur = con.cursor()
+
+                                    cur.execute('''UPDATE testClasses SET is_english = ?, is_maths = ? WHERE userID=? ''', (is_english, is_maths, tuteeID))
+                                    con.commit()
+
+                                    cur.close()
+                                    con.close()
+                                    print('Success!')
+                                else:
+                                    print('Invalid submission')
+                            else:
+                                print('Invalid request')
+                        except:
+                            print('Invalid ID!')
+                            return redirect(request.url)
+                    else:
+                        print('Request cancelled')
+            else:
+                print('Suspicious form submission')
 
     return render_template('user_account.html', tutees=tutees)
 
 def register():
-        print('hello')
         firstname = request.form.get('firstname')
         lastname = request.form.get('lastname')
         
@@ -435,7 +513,17 @@ def register():
         is_maths = assign_int_boolean(is_maths)
         is_tutor = assign_int_boolean(is_tutor)
 
-        print(f'{is_english} + {is_maths} + {is_tutor} + {current_user.is_tutor}')
+
+        #checking password strength
+        passwordCheck = functions.check_password_strength(password=password)
+        # returns a tuple, in which:
+        # [0] = boolean value
+        # [1] = error message
+
+        if not passwordCheck[0]:
+            print(passwordCheck[1])
+            return redirect(request.url)
+
         encryptedpassword = bcrypt.generate_password_hash(password).decode('utf-8')
         
         con = sqlite3.connect('database.db')
@@ -454,7 +542,12 @@ def register():
             con.commit()
             print("Account registered!")
 
-        registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck)).fetchone()[0]
+        registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck)).fetchone()
+        if registereduserID: #checking if this has type None
+            registereduserID = registereduserID[0]
+        else:
+            print('An unexpected error has occurred') #user doesn't exist????!?!?!?!?!?
+            return redirect(request.url)
         if is_tutor == 0:
             cur.execute('''INSERT INTO testClasses(userID, tutorID, is_english, is_maths) 
                         VALUES(?, ?, ?, ?)''',
@@ -466,8 +559,16 @@ def register():
 
         return redirect("/")
 
+@app.route("/user/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
 # Beginning of file upload part
 
+#----------------------------------------FILE UPLOAD SECTION---------------------------------------------#
 
 app.config['UPLOAD_FOLDER'] = 'static/files'
 ALLOWED_EXTENSIONS = {'pdf'} #allowed file extensions
@@ -518,6 +619,13 @@ def download_file(name):
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], name)
     return send_file(filepath)
 
+@app.route('/static/files/<path:filename>')
+@login_required
+def get_link(filename):
+    validated = functions.validate_file_access(filename, current_user.id)
+    if validated: #returns as the name of filepath, not jumbled
+        return send_from_directory(directory=app.config['UPLOAD_FOLDER'], path=filename)
+    redirect("/")
 
 
 mode = "dev"

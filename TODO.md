@@ -1,5 +1,5 @@
 # Long-Term Tasks
- [] create database tables for sql
+ [X] create database tables for sql
     - tutor: storing tutee names, primary key (tuteeID) username, password
     - tutee: storing tutee names, primary key (tutorID) username, password
     - preferences: colour scheme
@@ -15,7 +15,7 @@
     - do not forget to encrypt with python bcrypt
 
 [] add password restrictions and prevent SQL injections
-    - + account lockouts
+    - + account lockouts => HELLL NO
     - linking to email for pwd recovery will be a later task
 
 [X] add hover div for class details in calendar
@@ -38,7 +38,7 @@
     [X] cleanup + animations
     [ ] adding info about G2G
     [ ] remove login by Google bit from Login
-    [ ] LINK PAGES!!!
+    [X] LINK PAGES!!!
     [X] remake logo
 
 [X] login required thing
@@ -58,7 +58,6 @@
     [X] retrieve from SQL database [use RDBS to find all dates i guess]
     [X] send to template
 
-[ ] add unique pages depending on username
 
 [X] add + link homework page
 should be able to:
@@ -76,6 +75,9 @@ should be able to:
 [ ] format the nice dateInfo for the calendar
 
 [ ] fix double scrollbar issue [in the timetable page]
+
+[ ] make it so when you download files the name is nice, without the UUID
+--[ ] unique folder for each id to allow for DIFFERENTIATION
 
 [ ] graphic design for landing pages
 

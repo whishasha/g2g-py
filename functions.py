@@ -5,6 +5,35 @@ from json import dumps
 from datetime import datetime
 
 
+def check_password_strength(password):
+    message = ''
+    if password is not None:
+        if len(password) > 8 or len(password) < 128:
+            if any(letter.isalpha() for letter in password):
+                if any(letter.isnumeric() for letter in password):
+                    if not password.isalnum(): # checks for existence of special characters
+                        if any(letter.isupper() for letter in password):
+                            message = 'Password is valid'
+                            return (True, message)
+                        else:
+                            message = 'Password must contain at least 1 uppercase character'
+                            return (False, message)
+                    else:
+                        message = 'Password must contain a special character'
+                        return (False, message)
+                else:
+                    message = 'Password must contain at least 1 number'
+                    return (False, message)
+            else:
+                message = 'Password must contain at least 1 character'
+                return (False, message)
+        else:
+            message = 'Password out of bounds, please keep between 8 and 128 characters incl.'
+            return (False, message)
+    else:
+        message = 'Please enter a password'
+        return (False, message)
+
 def new_assignment_ID():
 
 
@@ -177,8 +206,8 @@ def validate_file_access(unique_filename, userID):
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    assignmentID = cur.execute('''SELECT assignmentID from testFiles WHERE filepath=?''', (f'static/files\{unique_filename}',)).fetchone()
-    assignmentName = cur.execute('''SELECT name from testFiles WHERE filepath=?''', (f'static/files\{unique_filename}',)).fetchone()
+    assignmentID = cur.execute('''SELECT assignmentID from testFiles WHERE filepath=?''', (fr'static/files\{unique_filename}',)).fetchone()
+    assignmentName = cur.execute('''SELECT name from testFiles WHERE filepath=?''', (fr'static/files\{unique_filename}',)).fetchone()
     
     if assignmentID is not None and assignmentName is not None:
         row = cur.execute('''SELECT tuteeID FROM testAssignments WHERE assignmentID=?''', (assignmentID)).fetchone()[0]
@@ -229,7 +258,34 @@ def get_home_details(tuteeID):
     con.close()
 
     return (assignment_details, enrolled_classes, class_times)
-    
+
+def unenroll_tutee(tuteeID):
+    con = sqlite3.connect('database.db')
+    cur = con.cursor()
+
+    #Validate that the tuteeID refers to an actual tutee
+    validateTutee = cur.execute('''SELECT ID FROM users WHERE ID=?''', (tuteeID)).fetchone()
+
+    if validateTutee is not None:
+        validateTutee = validateTutee[0]
+        try:
+            cur.execute('''DELETE FROM users WHERE ID=?''', (tuteeID))
+            
+            assignmentIDs = cur.execute('''SELECT assignmentID FROM testAssignments WHERE tuteeID=?''', (tuteeID)).fetchall()
+            for assignmentID in assignmentIDs:
+                cur.execute('''DELETE FROM testFiles WHERE assignmentID=?''', (assignmentID))
+
+            cur.execute('''DELETE FROM testAssignments WHERE tuteeID=?''', (tuteeID))
+            cur.execute('''DELETE FROM testClasses WHERE userID=?''', (tuteeID))
+            con.commit()
+            print('Successful deletion!')
+            return True
+        except:
+            print('An error has occurred')
+
+    cur.close()
+    con.close()
+    return False
 
 
 if __name__ == '__main__':
