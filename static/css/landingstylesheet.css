@@ -72,7 +72,8 @@ nav img {
 
 /* highlighting important buttons */
 nav .important:hover {
-    color: var(--accentalt);
+    color: var(--box);
+    padding: 15px 20px;
 }
 nav .important {
     /* Creates circular buttons for each thing there */
@@ -84,6 +85,47 @@ nav .important {
 
     color: var(--textalt2)
 }
+
+div#footer {
+    width: 100vw;
+    height: 200px;
+
+    position: relative;
+    bottom: 0;
+
+    color:var(--textalt2);
+
+    align-items: center;
+    font-weight: lighter;
+    background-color: var(--box);
+}
+
+
+img #logo {
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    height: fit-content;
+    margin: 10px;
+    
+}
+
+div .flexwrapper {
+    display: flex;
+    justify-content: baseline;
+    flex-direction: row;
+}
+
+div .text {
+    font-weight: 200;
+    font-size:xx-large;
+}
+
+div .img{
+    height: 300px;
+    width: auto;
+}
+
 hr {
     width:100vw;
     border: 1px solid var(--text);
