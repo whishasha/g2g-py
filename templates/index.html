@@ -51,7 +51,7 @@
         {% block main %}
             <div class="section">
                 <img src="{{url_for('static', filename='assets/g2glogo.jpg')}}" id="logo">
-                <h1>Graceful 2 God</h1>
+                <h1>Gifted 2 Greatness</h1>
                 <div class="flexwrapper">
                     <div class="text">
                         <p>Placeholder text Placeholder text Placeholder text Placeholder textPlaceholder text Placeholder text</p>
@@ -87,10 +87,6 @@
 
     </div>
 
-    <div id="main2"> <!--just in case for extra styling-->
-        {% block main2 %}{% endblock %}
-    </div>
-
         {% block js %}
             <script src="{{url_for('static', filename='js/landing.js')}}"></script>
             <script>
@@ -113,10 +109,12 @@
         {% endblock %}
 
 
+        
 {% block footer %}
-<div id="footer">
-    Copyright 2025 (c) G2G Tutoring
-
+<div id="footcontainer">
+    <div id="footer">
+        Copyright 2025 (c) G2G Tutoring
+    </div>
 </div>
 {% endblock %}
 

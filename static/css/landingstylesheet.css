@@ -60,8 +60,6 @@ nav a:hover {
     cursor: pointer;
 }
 /* handles vertical dropdown bar for small screens */
-
-
 nav img {
     margin-right: 20px; /* Add some space after the logo */
     width: 30px;
@@ -86,12 +84,24 @@ nav .important {
     color: var(--textalt2)
 }
 
+div#footcontainer{
+    min-height:100%;
+    position:relative;
+}
+
+div#main {
+    height:100vh;
+}
+
 div#footer {
     width: 100vw;
-    height: 200px;
+    height: 100px;
 
     position: relative;
-    bottom: 0;
+    top: 100%;
+    /* Height of the footer */
+    
+
 
     color:var(--textalt2);
 
@@ -110,11 +120,6 @@ img #logo {
     
 }
 
-div .flexwrapper {
-    display: flex;
-    justify-content: baseline;
-    flex-direction: row;
-}
 
 div .text {
     font-weight: 200;
@@ -137,6 +142,7 @@ a {
 body {
     overflow-x: hidden;
     font-family: sans-serif;
+    height: 100%;
 }
 
 div {
