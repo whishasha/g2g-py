@@ -127,16 +127,6 @@ img #logo {
 }
 
 
-div .text {
-    font-weight: 200;
-    font-size:xx-large;
-}
-
-div .img{
-    height: 300px;
-    width: auto;
-}
-
 hr {
     width:100vw;
     border: 1px solid var(--text);
