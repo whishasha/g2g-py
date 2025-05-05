@@ -60,8 +60,6 @@ nav a:hover {
     cursor: pointer;
 }
 /* handles vertical dropdown bar for small screens */
-
-
 nav img {
     margin-right: 20px; /* Add some space after the logo */
     width: 30px;
@@ -72,7 +70,8 @@ nav img {
 
 /* highlighting important buttons */
 nav .important:hover {
-    color: var(--accentalt);
+    color: var(--box);
+    padding: 15px 20px;
 }
 nav .important {
     /* Creates circular buttons for each thing there */
@@ -84,6 +83,50 @@ nav .important {
 
     color: var(--textalt2)
 }
+
+
+div#main {
+    min-height: fit-content;
+    min-width: fit-content;
+    max-width: 100%;
+    flex-grow: 1;
+    
+}
+
+div.section {
+    margin-bottom: auto;
+}
+
+div#footer {
+    width: 100vw;
+    height: 100px;
+
+    padding: 10px;
+    font-weight: bolder;
+    text-align: center;
+    margin-top: auto;
+    /* Height of the footer */
+    
+
+
+    color:var(--textalt2);
+
+    align-items: center;
+    font-weight: lighter;
+    background-color: var(--box);
+}
+
+
+img #logo {
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    height: fit-content;
+    margin: 10px;
+    
+}
+
+
 hr {
     width:100vw;
     border: 1px solid var(--text);
@@ -95,6 +138,11 @@ a {
 body {
     overflow-x: hidden;
     font-family: sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
 }
 
 div {

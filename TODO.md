@@ -82,3 +82,7 @@ should be able to:
 [ ] graphic design for landing pages
 
 [ ] graphic designs for icons
+
+[ ] implement footer:
+refer to this:
+https://stackoverflow.com/questions/15960290/css-footer-not-displaying-at-the-bottom-of-the-page

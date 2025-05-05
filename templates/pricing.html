@@ -15,7 +15,7 @@
                 }
                 .section{
                     text-align: center;
-                    width: 30%;
+                    width: 50%;
                     padding-right: 10px;
                     padding-left: 10px;
                     padding-bottom: 20px;
@@ -44,16 +44,6 @@
                 }
                 .section ul li{
                     margin: 10px;
-                }
-                
-                #main2 {
-                    text-align: center;
-                }
-                #main2 p{
-                    color: var(--text)
-                }
-                #main2 a{
-                    font-weight: 600;
                 }
 
                 @media (max-width: 768px) {
@@ -84,7 +74,6 @@
             <div class="section">
                 <img src="{{url_for('static', filename='assets/fumo.svg')}}">
                 <h1>Mathematics</h1>
-                <p>A tutor that will ensure you reach the pearly gates.</p>
                     <ul>
                         <li>Bananas</li>
                         <li>Bananas</li>
@@ -92,45 +81,23 @@
                         <li>Bananas</li>
                         <li>Bananas</li>
                     </ul>
+                <p>A tutor that will ensure you reach the pearly gates.</p>                    
             </div>
             <div class="section">
                 <img src="{{url_for('static', filename='assets/fumo.svg')}}">
                 <h1>English</h1>
+                <ul>
+                    <li>Bananas</li>
+                    <li>Bananas</li>
+                    <li>Bananas</li>
+                    <li>Bananas</li>
+                    <li>Bananas</li>
+                </ul>
                 <p>Elevate your connection with God's numbers through G2G's maths tutoring </p>
-
-                <ul>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                </ul>
-                
-            </div>
-            <div class="section">
-                <img src="{{url_for('static', filename='assets/fumo.svg')}}">
-                <h1>Bible Studies</h1>
-                <p>Learn to speak with the gravitas of God and learn about Him</p>
-
-                <ul>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                </ul>
             </div>
         {% endblock %}
     </div>
 
-
-    <div id="main2">
-        {% block main2 %}
-
-            <p>Please <a href="/inquire">inquire</a> to discuss enrolment</p>
-
-        {% endblock %}
-    </div>
 
 
     {% block js %}

@@ -26,6 +26,19 @@
                     border-bottom: 1px solid var(--line)
                 }
 
+                div .text {
+                    font-weight: 200;
+                    font-size:xx-large;
+                    width: 80%;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+
+                div .img{
+                    height: 300px;
+                    width: auto;
+                }
+
             </style>
         {% endblock %}
     {% endblock %}
@@ -50,47 +63,71 @@
     <div id="main">
         {% block main %}
             <div class="section">
-                <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
-                <h1>Graceful 2 God</h1>
-                <p>A tutor that will ensure you reach the pearly gates.</p>
-                <button onclick="showSidebar()">hi</button>
+                <img src="{{url_for('static', filename='assets/g2glogo.jpg')}}" id="logo">
+                <h1>Gifted 2 Greatness</h1>
+                <div class="flexwrapper">
+                    <div class="text">
+                        <p>Placeholder text Placeholder text Placeholder text Placeholder textPlaceholder text Placeholder text</p>
+                    </div>
+                    <div class="img">
+                        <img src="{{url_for('static', filename='assets/fumo.svg')}}">
+                    </div>
+                </div>
             </div>
             <div class="section">
                 <h1>Become One with Mathematics</h1>
-                <p> Elevate your connection with God's numbers through G2G's maths tutoring </p>
+                <div class="flexwrapper">
+                    <div class="text">
+                        <p>Placeholder text Placeholder text Placeholder text Placeholder textPlaceholder text Placeholder text</p>
+                    </div>
+                    <div class="img">
+                        <img src="{{url_for('static', filename='assets/fumo.svg')}}">
+                    </div>
+                </div>
             </div>
             <div class="section">
                 <h1>Intertwine yourself with English</h1>
-                <p>Learn to speak with the gravitas of God and learn about Him</p>
+                <div class="flexwrapper">
+                    <div class="img">
+                        <img src="{{url_for('static', filename='assets/fumo.svg')}}">
+                    </div>
+                    <div class="text">
+                        <p>Placeholder text Placeholder text Placeholder text Placeholder textPlaceholder text Placeholder text</p>
+                    </div>
+                </div>
             </div>
         {% endblock %}
 
-    </div>
-
-    <div id="main2"> <!--just in case for extra styling-->
-        {% block main2 %}{% endblock %}
     </div>
 
         {% block js %}
             <script src="{{url_for('static', filename='js/landing.js')}}"></script>
             <script>
-                function showSidebar() {
-                    const sidebar = document.querySelector('.sidebar');
-                    const topbar = document.querySelector('.topbar');
-                    const nav = document.querySelector('nav');
-        
-                    sidebar.style.display = 'flex';
-                    topbar.style.display = 'none';
-        
-                    nav.style.position = 'relative';
+//                function showSidebar() {
+//                    const sidebar = document.querySelector('.sidebar');
+//                    const topbar = document.querySelector('.topbar');
+  //                  const nav = document.querySelector('nav');
+    //    
+      ////              sidebar.style.display = 'flex';
+          //          topbar.style.display = 'none';
+        //
+          //          nav.style.position = 'relative';
                     
-                }
-                function hideSidebar() {
-                    const sidebar = document.querySelector('.sidebar');
-                    sidebar.style.display = 'none';
-                }
+            //    }
+              //  function hideSidebar() {
+                //    const sidebar = document.querySelector('.sidebar');
+                  //  sidebar.style.display = 'none';
+                //}
             </script>
         {% endblock %}
+
+
+        
+{% block footer %}
+    <div id="footer">
+        Copyright 2025 (c) G2G Tutoring
+    </div>
+{% endblock %}
 
 </body>
 </html>
