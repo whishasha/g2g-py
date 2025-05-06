@@ -91,12 +91,11 @@ def init_test_data(): #replace with dbedit2.py version
             "subject": subject
         }) 
     return events_data
-def init_real_data():
+def init_real_data(ID): #fetches all events relevant to a user
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    real_data = cur.execute('''SELECT * FROM testDates''').fetchall()
-    
+    real_data = cur.execute('''SELECT * FROM testDates WHERE tutorID =? OR tuteeID =?''', (int(ID), int(ID))).fetchall()
     cur.close()
     con.close()
 
@@ -106,23 +105,30 @@ def init_real_data():
     events_data = defaultdict(lambda: defaultdict(list))
     for event in real_data:
         if all(value is not None for value in event):
-            subject = event[2]
-            date = event[3]
-            time = event[4]
-            note = event[5]
+            subject = str(event[2])
+            date = str(event[3])
+            time = str(event[4])
+            note = str(event[5])
             year_month = str(date[:7]) #isolates YYYY-MM [7 char long]
-            day = int(date[8:10])
-
-            classtime = time[:5]
+            day = str(date[8:10])
+            id = int(event[7])
+            title = str(event[6])
+            classtime = str(time[:5])
 
             events_data[year_month][day].append({
                 "time": classtime,
+                "title": title,
                 "description": note,
-                "subject": subject
+                "subject": subject,
+                "id": id
             })
+
+    print(dumps(events_data, indent=3))    #Hierarchy of events / debugging
+    for event in events_data:
+        print(event)
     return events_data
 
-# print(dumps(events_data, indent=3))    Hierarchy of events
+
 
 
 #----------------------------------------INITIALISATION SECTION---------------------------------------------#
@@ -150,6 +156,7 @@ def load_user(user_id):
     return User.get(user_id)
 
 #----------------------------------------LANDING SECTION---------------------------------------------#
+
 @app.route("/")
 def hello_world():
     return render_template('index.html')
@@ -203,34 +210,107 @@ def user_home():
 @app.route("/user/timetable", methods=["GET","POST"])
 @login_required
 def user_timetable():
-    if request.method == "POST":
-        tutee = request.form['tutee']
-        daymonthyear = request.form['classdate']
-        time = request.form['classtimebegin']
-        notes = request.form['classnotes']
-        subject = request.form['subject']
-        print(f'{tutee}, {daymonthyear}, {time}, {notes}')
-        print(time[0:2])
-        print(time[3:5])
-        formattedData = format_calendar_data(subject, tutee, daymonthyear, time, notes)
+    if request.method == "POST": # for changing classdates => add verification for setting classes and changing classes
 
-        if formattedData:
-            con = sqlite3.connect('database.db')
-            cur = con.cursor()
+        if current_user.is_tutor == 1:
+            if 'set' in request.form:  
+                # Verifying user input
+                if 'tutee' not in request.form or 'classdate' not in request.form or 'classtimebegin' not in request.form or 'title' not in request.form or 'subject' not in request.form or 'classnotes' not in request.form:
+                    print('Invalid information in form')
+                    return redirect(request.url)
+                else:
+                    try:
+                        tutee = str(request.form['tutee'])
+                        classdate = str(request.form['classdate'])
+                        classtime = str(request.form['classtimebegin'])
+                        title = str(request.form['title'])
+                        classnotes = str(request.form['classnotes'])
+                        subject = str(request.form['subject'])                 
+                    except:
+                        print('Invalid request')
+                        return redirect(request.url)
+                    
+                    # check for length of title, then restrict length
+                    if len(title) > 50:
+                        print('Title too long. Restricted to 50 characters')
+                        redirect(request.url)
 
-            # the below statement will either overrwrite class dates or add a new class date
-            cur.execute('''INSERT OR REPLACE INTO testDates(tuteeID, tutorID, subject, classdate, classtime, classnotes)
-                        VALUES(?, ?, ?, ?, ?, ?)''', formattedData)
-            con.commit()
+                    con = sqlite3.connect('database.db')
+                    cur = con.cursor()
 
-            cur.close()
-            con.close()
-            print('Class details updated')
-        else:
-            print('Class details could not be found')
+                    # details = cur.execute('''SELECT classdate, classtime FROM testDates WHERE tutorID=?''', (str(current_user.id))).fetchall()
+                    details = cur.execute('''SELECT classdate, classtime FROM testDates WHERE tutorID=? AND classdate=? AND classtime=?''', (current_user.id, classdate, classtime)).fetchall()
+                    if details:
+                        print('Date and time already in use. Please choose another.')
+                        return redirect(request.url)                     
+ # print(details)
+#                    print(current_user.id)
+                    # for record in details:
+                    #     if record[0] == classdate: 
+                    #         if record[1] == classtime:
+                    #             print('Date and time already in use. Please choose another.')
+                    #             return redirect(request.url) 
 
+                    cur.execute('''INSERT INTO testDates(tuteeID, tutorID, subject, classdate, classtime, classnotes, title) VALUES(?, ?, ?, ?, ?, ?, ?)''',
+                                (tutee, current_user.id, subject, classdate, classtime, classnotes, title))
+                    con.commit()
+
+                    cur.close()
+                    con.close()
+                    print('Assignment successfully set!')
+            if 'change' in request.form:    #tutor-only function
+
+                if 'class' not in request.form or 'classdate' not in request.form or 'classtimebegin' not in request.form or 'title' not in request.form or 'subject' not in request.form or 'classnotes' not in request.form:
+                    print('Invalid information in form')
+                    return redirect(request.url)
+                else:
+                    try:
+                        classID = str(request.form['class'])
+                        classdate = str(request.form['classdate'])
+                        classtime = str(request.form['classtimebegin'])
+                        title = str(request.form['title'])
+                        classnotes = str(request.form['classnotes'])
+                        subject = str(request.form['subject'])                  
+                    except:
+                        print('Invalid request')
+                        return redirect(request.url)
+                                    
+
+
+                if len(title) > 50:
+                    print('Title too long. Restricted to 50 characters')
+                    redirect(request.url)
+
+                # get classID, then see if it exists. 
+                # if exists:
+                #   update the record with new information
+                # alter calendar dates to hold ID as data
+                con = sqlite3.connect('database.db')
+                cur = con.cursor()
+                # verify that class date exists for updating
+                details = cur.execute('''SELECT classdate, classtime, tuteeID FROM testDates WHERE classdate=? AND classtime=? AND tutorID=? AND classID !=?''',(classdate, classtime, current_user.id, classID)).fetchone()
+
+                if details:
+                    print('Invalid date to change. Class does not exist')
+                    return redirect(request.url)
+
+                # the below statement will either overrwrite class dates or add a new class date
+                # cur.execute('''INSERT OR REPLACE INTO testDates(tuteeID, tutorID, subject, classdate, classtime, classnotes)
+                #             VALUES(?, ?, ?, ?, ?, ?)''', formattedData)
+
+                cur.execute('''UPDATE testDates SET subject=?, classdate=?, classtime=?, classnotes=?, title=? WHERE classID=?''',
+                            (subject, classdate, classtime, classnotes, title, classID))
+
+                con.commit()
+
+                cur.close()
+                con.close()
+                print('Class details updated')
+
+    print(current_user.id)
     tutees = functions.get_tutees()
-    return render_template('user_timetable.html', class_dates=init_real_data(), tutees=tutees)
+    from json import dumps
+    return render_template('user_timetable.html', class_dates=init_real_data(current_user.id), tutees=tutees)
 
 def format_calendar_data(subject, tutee, daymonthyear, time, notes):
     #store daymonthyear in 2 separate variables:
@@ -250,7 +330,7 @@ def format_calendar_data(subject, tutee, daymonthyear, time, notes):
             classTime = ":".join([hours, minutes, seconds]) #in form HH:MM:SS
             
             #will return a valid tuple which can be uploaded to the database
-            return (subject, tuteeID, tutorID, daymonthyear, classTime, notes)
+            return (tuteeID, tutorID, subject, daymonthyear, classTime, notes)
         else:
             print('User cannot be found.')
     print('Invalid request.')
@@ -613,11 +693,11 @@ def file_upload():
         
     return render_template('FileUpload.html')
 
-@app.route('/<name>')
-@login_required
-def download_file(name):
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], name)
-    return send_file(filepath)
+# @app.route('/<name>') #accessing files
+# @login_required
+# def download_file(name):
+#     filepath = os.path.join(app.config['UPLOAD_FOLDER'], name)
+#     return send_file(filepath)
 
 @app.route('/static/files/<path:filename>')
 @login_required

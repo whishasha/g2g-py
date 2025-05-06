@@ -8,8 +8,8 @@ cur = con.cursor()
 
 # cur.execute('''CREATE TABLE testClasses(userID, tutorID, is_english BOOL, is_maths BOOL)''')
 
-# cur.execute('''DROP TABLE testDates''')
-# cur.execute('''CREATE TABLE testDates(tuteeID, tutorID, subject TEXT, classdate DATE, classtime TIME, classnotes TEXT, UNIQUE(classdate, classtime))''')
+cur.execute('''DROP TABLE testDates''')
+cur.execute('''CREATE TABLE testDates(tuteeID, tutorID, subject TEXT, classdate DATE, classtime TIME, classnotes TEXT, title TEXT, classID INTEGER PRIMARY KEY, UNIQUE(classdate, classtime))''')
 
 
 # cur.execute('''DROP TABLE testAssignments''')
@@ -25,7 +25,6 @@ cur = con.cursor()
 # if grade's value is NULL, then the assignment is not marked yet
 
 cur.execute('''DROP TABLE testFiles''')
-
 cur.execute('''CREATE TABLE testFiles(assignmentID INTEGER, status INTEGER, name, filepath, CONSTRAINT check_status CHECK(status BETWEEN -1 AND 3))''')
 
 
