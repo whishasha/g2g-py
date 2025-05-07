@@ -12,7 +12,36 @@
                 justify-content: space-evenly;
                 flex-direction: row;
             }
-        </style>
+            #main {
+                min-height: 100vh;
+            }
+            .section {
+                border: 1px solid black;
+                border-radius: 5px;
+
+                min-width: 30%;
+                text-align: center;
+                height: 40vh;
+            }
+            .section h1 {
+                font-weight: bold;
+            }
+
+            .scroll {
+                margin-left: auto;
+                margin-right: auto;
+;
+                scrollbar-width: 2px;
+
+                height: 80%;
+
+                width: 90%;
+                border: 1px solid black;
+                border-radius: 5px;
+
+                background-color: var(--bgbar);
+            }
+    </style>
     {% endblock %}
     {%endblock%}
 </head>
@@ -31,12 +60,12 @@
         <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
         
         <div id="wrapper">
-            <div id="dueAssignments">
+            <div class="section">
                 <h1>Due Assignments</h1> 
                 <!--show number of due assignments-->
                 <!--show title of due assignment + duedate-->
-                <p>{{ assignmentDetails|length }}</p>
-                <div id="assignmentWrapper">
+                <div class="scroll">
+                    <p>{{ assignmentDetails|length }}</p>
                     {% for assignment in assignmentDetails %} <!--not sure if this work :/-->
                         <div class="assignment">
                             <div class="title">{{assignment[1]}}</div>
@@ -47,9 +76,9 @@
                 </div>
 
             </div>
-            <div id="classes">
+            <div class="section">
                 <h1>Classes</h1> <!--show the classes the user is enrolled in-->
-                <div id="displayClasses">
+                <div class="scroll">
                     <ul>
                         {% if enrolledClasses[0] == 1 %} <!--untested :)-->
                         <li>English</li>
@@ -61,9 +90,9 @@
                     </ul>
                 </div>
             </div>
-            <div id="dates">
+            <div class="section">
                 <h1>Upcoming Classes</h1> <!--show upcoming classes-->
-                <div id="upcomingClasses">
+                <div class="scroll">
                     {% for class in classDates %}
                     <div class="class">
                         <div class="classdate">{{class[0]}}</div>
@@ -81,6 +110,10 @@
 
 {% block js %}
 {{super()}}
+<script>
+        const sidebarItems = document.querySelector('#topbar').getElementsByTagName('li');
+        sidebarItems[1].classList.toggle('active'); //toggling home tab
+</script>
 {% endblock %}
 
 </body>

@@ -100,14 +100,23 @@ li a {
   text-decoration: none;
   padding: 10px 5px;
   color:var(--textbar);
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 /* Change the link color on hover */
 li a:hover {
   background-color: var(--accentbar);
+
   transition: 0.3s;
   color: var(--accentalt);
 }
+
+.active a{ /*for selected tabs */
+  background-color: var(--accentbar);
+  color: var(--accentalt);
+}
+
 
 hr {
     width:100%;

@@ -160,6 +160,10 @@
 
 {% block js %}
 {{super()}}
+<script>
+    const sidebarItems = document.querySelector('#topbar').getElementsByTagName('li');
+    sidebarItems[2].classList.toggle('active');    
+</script>
 {% endblock %}
 
 </body>

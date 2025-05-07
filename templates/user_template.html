@@ -23,13 +23,13 @@
     <nav>
         {%block topbar%}
         <ul id="topbar">
-            <li><a href="/user/home">{{current_user.username}}</a></li>
+            <li style="text-align: center;"><a href="/user/home">{{current_user.username}}</a></li>
             <li><a href="/user/home"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Home</a></li>
             <li><a href="/user/account"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Account</a></li>            
-            {% if current_user.is_tutor %}
+            <!-- {% if current_user.is_tutor %}
             <li><a href="/user/tutee"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Students</a></li>
-            {% endif %}
-            <li>User Information</li>
+            {% endif %} -->
+            <li style="text-align: center;">User Information</li>
             <li><hr class="line"></li>
             <li><a href="/user/assignments"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Assignments</a></li>
             <li><a href="/user/timetable"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Timetable</a></li>   
@@ -47,7 +47,6 @@
         <p style="padding-left: 50px;font-weight: bold;">Hello. Fumo. Fumo. Test.</p>        
        {% endblock %}
     </div>
-
     {% block js %}
     <script>
         function hideSidenav() {

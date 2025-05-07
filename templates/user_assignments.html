@@ -329,6 +329,11 @@
 {% block js %}
 {{super()}}
 <script>
+    const sidebarItems = document.querySelector('#topbar').getElementsByTagName('li');
+    sidebarItems[6].classList.toggle('active');
+</script>
+<script>
+
     const dueAssignmentsEl = document.getElementById('dueAssignments');
     const completedAssignmentsEl = document.getElementById('completedAssignments');
     const unmarkedAssignmentsEl = document.getElementById('unmarkedAssignments');
