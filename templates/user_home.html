@@ -16,30 +16,56 @@
                 min-height: 100vh;
             }
             .section {
-                border: 1px solid black;
+                border: 1px solid var(--accentbar);
                 border-radius: 5px;
+
 
                 min-width: 30%;
                 text-align: center;
+
                 height: 40vh;
+                margin-top: 20px;
+                
             }
             .section h1 {
                 font-weight: bold;
+                font-size: 30px;
             }
 
             .scroll {
                 margin-left: auto;
                 margin-right: auto;
-;
+
                 scrollbar-width: 2px;
 
                 height: 80%;
-
                 width: 90%;
-                border: 1px solid black;
+                margin-top: 10px;
+
+                border: 1px solid var(--accentbar);
                 border-radius: 5px;
 
+                text-align: center;
+
                 background-color: var(--bgbar);
+            }
+            .scroll p {
+                margin: 20px;
+            }
+            .scroll b {
+                font-weight: bolder;
+                font-size: large;
+            }
+            #title {
+                background-color: var(--accent);
+                margin-bottom: auto;
+                
+            }
+            #menu {
+                top: 50%;
+            }
+            #menu img {
+                margin: 10px;
             }
     </style>
     {% endblock %}
@@ -55,9 +81,11 @@
 
     <div id="main">
         {% block main %}
-        <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
+        <div id="title">
+            <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
+            <h1 style="padding: 50px;font-weight: bold;font-size: 50px;color:var(--bg);">Welcome, {{current_user.username}}</h1>
+        </div>
         
-        <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
         
         <div id="wrapper">
             <div class="section">
@@ -65,7 +93,7 @@
                 <!--show number of due assignments-->
                 <!--show title of due assignment + duedate-->
                 <div class="scroll">
-                    <p>{{ assignmentDetails|length }}</p>
+                    <p><b># of Due Assignments:</b> {{ assignmentDetails|length }}</p>
                     {% for assignment in assignmentDetails %} <!--not sure if this work :/-->
                         <div class="assignment">
                             <div class="title">{{assignment[1]}}</div>

@@ -35,7 +35,7 @@ body {
   margin-left: 20vw;
   overflow-x: hidden;
   word-wrap: break-word;
-  transition: 1s ease;
+  transition: 1s ease-in-out;
 }
 
 #main.hide {
@@ -56,7 +56,7 @@ nav {
     overflow-y: auto;
 
     scrollbar-color: var(--accentbar) var(--bgbar);
-
+    transform: translateX(0);
     position: fixed;
     left:0;
     top:0;
@@ -64,12 +64,11 @@ nav {
     height:100vh;
     display: flex;
     /*test anim*/
-    transition: 1s ease;
-
+    transition: 1s ease-in-out;
 }
 
 nav.hide { /* neat javascript stuff */
-  width: 0;
+  /* width: 0; */
   transform: translateX(-100%);
 }
 
@@ -127,12 +126,12 @@ hr {
   border-top: 0.2px solid var(--textbar);
 }
 
-#menu {
+#menu img{
   background-color: var(--bgbar);
   border-radius: 5px;
   width: fit-content;
   
-  margin: 10px;
+  margin: 0 10px;
 }
 
 #menu:hover{
