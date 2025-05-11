@@ -22,12 +22,16 @@
 
             .assignmentWrapper{
                 width: 100%;
-                display: flex;
+                /* display: flex; */
+                display:none;
                 justify-content: center;
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
+            
+                
             }
+            
 
             #dueAssignments{
                 width: 80%;
@@ -182,6 +186,91 @@
             #setAssignment button {
                 /*i will beautify you later...*/
             }
+
+
+            /* Style the tab  courtesy of: https://www.w3schools.com/howto/howto_js_tabs.asp*/
+            .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            }
+
+            /* Style the buttons that are used to open the tab content */
+            .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+            background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+            background-color: #ccc;
+            }
+
+            form {
+                margin-left: auto;
+                margin-right: auto;
+
+                padding: 10px;
+
+                background-color: var(--bgbar);
+                border-radius: 15px;
+
+                text-align: center;
+
+                display: flex;
+                justify-content: baseline; /* Aligns from top */
+                flex-direction: column;
+                align-items: center;
+
+                width: 50%;
+            }
+
+            form input{
+                border-radius: 5px;
+                border: 1px solid var(--accentbar);
+                
+                margin: 10px;
+                background-color: var(--forminput);
+            }
+
+            form select {
+                border-radius: 5px;
+                border: 1px solid var(--accentbar);
+                
+                margin: 10px;
+                background-color: var(--forminput);
+            }
+
+            form h1{
+                font-weight: bold;
+                font-size: large;
+
+                margin-bottom: 20px;
+                border-bottom: 2px solid var(--accentbar);
+                padding-bottom: 10px;
+                
+                width: 100%;
+            }
+
+            form #submit{
+                background-color: var(--accent);
+                font-weight: lighter;
+                font-size: 20px;
+                border-radius: 15px;
+                border: 1px solid var(--accent);
+                padding: 10px 30px;
+            }
+
         </style>
     {% endblock %}
     {%endblock%}
@@ -239,10 +328,18 @@
 
                 <input name="setassignment" type="hidden">
 
-                <br><button type="submit">Set Assignment</button>
+                <br><button id="submit" type="submit">Set Assignment</button>
             </form>
         
-            <div class="assignmentWrapper">
+        <div class="tab">
+            <button class="tablinks" onclick="openAssignments(event, 'due')">Due</button>
+            <button class="tablinks" onclick="openAssignments(event, 'assigned')">Assigned</button>
+            <button class="tablinks" onclick="openAssignments(event, 'completed')">Completed</button>
+            <button class="tablinks" onclick="openAssignments(event, 'awaiting')">Awaiting</button>
+            <button class="tablinks" onclick="openAssignments(event, 'marked')">Marked</button>
+        </div>
+
+            <div class="assignmentWrapper" id="due">
                 <h1>Due Assignments [tutee]</h1>
                 <p>Sort by: <button onclick="filterByDate(document.getElementById('dueAssignments'))">Date</button> 
                     Subject:<button value="English" onclick="filterBySubject(document.getElementById('dueAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('dueAssignments'), this.value)">Maths</button> 
@@ -259,7 +356,7 @@
                 </div>
             </div>
 
-            <div class="assignmentWrapper">
+            <div class="assignmentWrapper" id="assigned">
                 <h1>Assigned Assignments [tutor]</h1>
                 <p>Sort by: <button onclick="filterByDate(document.getElementById('assignedAssignments'))">Date</button> 
                     Subject:<button value="English" onclick="filterBySubject(document.getElementById('assignedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('assignedAssignments'), this.value)">Maths</button> 
@@ -277,7 +374,7 @@
                 </div>
             </div>
 
-            <div class="assignmentWrapper">
+            <div class="assignmentWrapper" id="completed">
                 <h1>Completed Assignments [tutee + tutor]</h1>
                 <p>Sort by: <button onclick="filterByDate(document.getElementById('completedAssignments'))">Date</button> 
                     Subject:<button value="English" onclick="filterBySubject(document.getElementById('completedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('completedAssignments'), this.value)">Maths</button> 
@@ -291,7 +388,7 @@
                 </div>
             </div>
 
-            <div class="assignmentWrapper">
+            <div class="assignmentWrapper" id="awaiting">
                 <h1>Awaiting Assignments [tutor]</h1>
                 <p>Sort by: <button onclick="filterByDate(document.getElementById('unmarkedAssignments'))">Date</button> 
                     Subject:<button value="English" onclick="filterBySubject(document.getElementById('unmarkedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('unmarkedAssignments'), this.value)">Maths</button> 
@@ -307,7 +404,7 @@
                 </div>
             </div>
 
-            <div class="assignmentWrapper">
+            <div class="assignmentWrapper" id="marked">
                 <h1>Marked Assignments [tutee + tutor]</h1>
                 <p>Sort by: <button onclick="filterByDate(document.getElementById('markedAssignments'))">Date</button> 
                     Subject:<button value="English" onclick="filterBySubject(document.getElementById('markedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('markedAssignments'), this.value)">Maths</button> 
@@ -330,9 +427,10 @@
 {{super()}}
 <script>
     const sidebarItems = document.querySelector('#topbar').getElementsByTagName('li');
-    sidebarItems[6].classList.toggle('active');
+    sidebarItems[5].classList.toggle('active');
 </script>
 <script>
+
 
     const dueAssignmentsEl = document.getElementById('dueAssignments');
     const completedAssignmentsEl = document.getElementById('completedAssignments');
@@ -549,7 +647,9 @@
                         </div>
                         <div class="submitbox">
                             <h1>Marked Files</h1>
-
+                            <ul>
+                                ${markedFilelist}
+                            </ul>
                         </div>
                         <div class="duedate">Grade (%): ${assignmentDict[assignmentID][0].grade}</div>
                     </div>` ;    
@@ -621,10 +721,28 @@
         }// NOTE: the onkeypress function in the input here still allows copy and pasting! Please validate the grade in the backend or otherwise. 
     }      
 }
-
 displayAssignments()
 
+    function openAssignments(evt, assignmentName) {
+  // Declare all variables
+        var i, tabcontent, tablinks;
 
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("assignmentWrapper");
+        for (let i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (let i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(assignmentName).style.display = "flex";
+        evt.currentTarget.className += " active";
+        } 
 function filterBySubject(assignmentEl, subject) {
     console.log('banana');
     const assignments = Array.from(assignmentEl.querySelectorAll('.assignment'));
@@ -664,6 +782,10 @@ function resetFilters(assignmentEl) {
         assignment.style.display = '';
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => { //load first tab on page load, courtesy of chatgpt
+    document.querySelector('.tablinks').click();
+});
 
 </script>
 {% endblock %}

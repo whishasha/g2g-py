@@ -3,7 +3,7 @@
 /* colourscheme */
 :root {
   /* text in sidebar */
-  --textbar: #8f9c9c;
+  --textbar: #768080;
   /* accent background colour */
   --accentbar: #8f9c9c;
   /* sidebar bg colour */
@@ -19,6 +19,8 @@
   --accent: #2bacff;
   /* alternative highlight colour */
   --accentalt: white;
+
+  --forminput: #e0dcdc; /*to be changed*/
 }
 
 /* handles left sticky navbar in the landing page */
@@ -30,16 +32,15 @@ body {
 #main {
   display:block;
   height: 100vh;
-  width: 80vw; /* this somehow makes it so that the div stays the same shape, even if you close sidebar*/
+  width: 100%; /* this somehow makes it so that the div stays the same shape, even if you close sidebar*/
   /* border-top: 1px solid black; */
-  margin-left: 20vw;
+  margin-left: 15vw;
   overflow-x: hidden;
   word-wrap: break-word;
   transition: 1s ease-in-out;
 }
 
 #main.hide {
-  width: 100vw;
   margin-left: 0;
 }
 
@@ -49,7 +50,7 @@ body {
 }
 
 nav {
-    font-weight: bold;
+    font-weight: 200;
     background-color: var(--bgbar);
     border-right: 1px solid var(--textbar);
     
@@ -60,7 +61,7 @@ nav {
     position: fixed;
     left:0;
     top:0;
-    width:20vw;
+    width:15vw;
     height:100vh;
     display: flex;
     /*test anim*/
@@ -82,16 +83,17 @@ nav ul {
     margin: 0;
     padding: 0;
     width: 20vw;
-    
+    height: 100%;
     /* background-color: black; */
   }
   
 nav li {
-  margin-top: 10px;
   display: block;
   color: var(--textbar);
   padding: 8px 12px;
   text-decoration: none;
+
+  /* border: 1px solid black; */
 }
 
 li a {
@@ -131,7 +133,7 @@ hr {
   border-radius: 5px;
   width: fit-content;
   
-  margin: 0 10px;
+  margin: 10px;
 }
 
 #menu:hover{

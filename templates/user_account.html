@@ -7,30 +7,102 @@
     {{super()}}
         {% block css %}
         <style>
+            div#title {
+                border-bottom: 1px solid var(--accentbar);
+            }
+            div#title h1 {
+                padding: 20px;
+                font-weight: bold;
+                font-size: 50px;
+                color:var(--text);
+            }
+            div#container {
+                display: grid;
+                grid-template-areas:
+                'form1 form2 form3 form4';
+                grid-row-gap: 5px;
+                margin-top: 50px;
+            }
+            div#changePassword {grid-area: form1;}
+            div#register {grid-area: form2;}
+            div#unenrollTutee {grid-area: form3;}
+            div#changeSubjects {grid-area: form4;}
+            {% if current_user.is_tutor %}
+            form#register {
+                display: grid;
+                grid-template-areas:
+                'title title title'
+                'lbluser inputuser'
+                'lblpass inputpass'
+                'lblfname inputfname'
+                'lbllname inputlname'
+                'lbltutor inputtutor'
+                'lblsubject inputsubjects'
+                'register register register';
+                /* Have 2 columns => 1 joined, then have
+                title
+                label: input, etc.
+                submit*/
+            }
+            form#register#title {grid-area: title;}
+            form#register#lbluser {grid-area: lbluser;}
+            form#register#inputuser {grid-area: inputuser;}
+            form#register#lblpass {grid-area: lblpass;}
+            form#register#inputpass {grid-area: inputpass;}
+            form#register#lblfname {grid-area: lblfname;}
+            form#register#inputfname {grid-area: inputfname;}
+            form#register#lbllname {grid-area: lbllname;}
+            form#register#inputlname {grid-area: inputlname;}
+            form#register#lbltutor {grid-area: lbltutor;}
+            form#register#inputtutor {grid-area: inputtutor;}
+            form#register#subject {grid-area: lblsubject;}
+            form#register#subjects {grid-area: inputsubjects;}
+            form#register#submit {grid-area: register;}
+            {% endif %}
             form {
                 margin-left: auto;
                 margin-right: auto;
 
+                padding: 10px;
+
+                background-color: var(--bgbar);
+                border-radius: 15px;
+
+                text-align: center;
 
                 display: flex;
-                justify-content: center;
+                justify-content: baseline; /* Aligns from top */
                 flex-direction: column;
                 align-items: center;
 
-                width: 50%;
-                margin-bottom: 50px;
+                width: 90%;
             }
 
             form input{
                 border-radius: 5px;
                 border: 1px solid var(--accentbar);
+                
                 margin: 10px;
+                background-color: var(--forminput);
+            }
+
+            form select {
+                border-radius: 5px;
+                border: 1px solid var(--accentbar);
+                
+                margin: 10px;
+                background-color: var(--forminput);
             }
 
             form h1{
                 font-weight: bold;
                 font-size: large;
+
                 margin-bottom: 20px;
+                border-bottom: 2px solid var(--accentbar);
+                padding-bottom: 10px;
+                
+                width: 100%;
             }
 
             form #submit{
@@ -64,96 +136,105 @@
 
     <div id="main">
         {% block main %}
-        <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
-        <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
-        <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" padding: 50px;>
-        <p style="padding-left: 50px;font-weight: bold;">Hello. Fumo. Fumo. Test.</p>
+        <div id="title">
+            <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
+            <h1>Account Settings :3</h1>
+        </div>
+        <div id="container">    
+            <form method="post" id="changePassword">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" name="changepassword"/>
+                <h1>Change Password</h1>
+                <br><label>Password</label>
+                <input type="text" name="password" required>
+                
+                <br><label>Confirm Password</label>
+                <input type="text" name="confirmpassword" required>
+
+                <br><button type="submit" id="submit">Change Password</button>
+            </form>
+
+            {% if current_user.is_tutor %}
+            <form method="post" id="register" onkeydown="return event.key != 'Enter';">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <h1 id="title">Register a Tutee</h1>
+                <label id="lbluser">Username</label>
+                <input id="inputuser" type="text" name="username" required>
+                
+                <br><label id="lblpass">Password</label>
+                <input id="inputpass" type="text" name="password" required>
+                
+                <br><label id="lblfname">First Name</label>
+                <input id="inputfname" type="text" name="firstname" required>
+                
+                <br><label id="lbllname">Last Name</label>
+                <input id="inputlname" type="text" name="lastname" required>
+                
+                <br><label id="lbltutor">Are they a tutor?</label>
+                <input id="inputtutor" type="checkbox" id="checkbox" name="is_tutor">
+
+                <br><label id="subject">What subjects are they taking?</label> <!--make this disappear if is_tutor is checked-->
+                
+                <div id="subjects">
+                    <label>English</label><label>Mathematics</label>
+                    <input type="checkbox" id="checkbox" name="is_english">
+
+                    <input type="checkbox" id="checkbox" name="is_maths">
 
 
-        <form method="post" name="changePassword">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="changepassword"/>
-            <h1>Change Password</h1>
-            <br><label>Password</label>
-            <input type="text" name="password" required>
-            
-            <br><label>Confirm Password</label>
-            <input type="text" name="confirmpassword" required>
+                </div>
 
-            <br><button type="submit" id="submit">Change Password</button>
-        </form>
-
-        <form method="post" name="register" onkeydown="return event.key != 'Enter';">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <h1>Register a Tutee</h1>
-            <label>Username</label>
-            <input type="text" name="username" required>
-            
-            <br><label>Password</label>
-            <input type="text" name="password" required>
-            
-            <br><label>First Name</label>
-            <input type="text" name="firstname" required>
-            
-            <br><label>Last Name</label>
-            <input type="text" name="lastname" required>
-            
-            <br><label>Are they a tutor?</label>
-            <input type="checkbox" id="checkbox" name="is_tutor">
-
-            <br><label>What subjects are they taking?</label> <!--make this disappear if is_tutor is checked-->
-            
-            <div id="subjects">
-                <label>English</label><label>Mathematics</label>
-                <input type="checkbox" id="checkbox" name="is_english">
-
-                <input type="checkbox" id="checkbox" name="is_maths">
+                <input type="hidden" name="register">
+                <br><button type="submit" id="submit">Register</button>
+            </form>
+            {% endif %}
 
 
-            </div>
-
-            <input type="hidden" name="register">
-            <br><button type="submit" id="submit">Register</button>
-        </form>
-        
-        <form method="post" name="unenrollTutee">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="unenrolltutee" />
-            <h1>Unenroll a Tutee</h1>
-            <select name="tutee" id="tutee" required>
-            {% for tutee in tutees %}
-                <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
-            {% endfor %}
-            </select>
-            
-            <br><label>Are you sure?</label>
-            <input type="checkbox" name="unenrollCheck">
-            <br><button type="submit" id="submit">Unenroll Tutee</button>
-        </form>
-
-        <form method="post" name="changeSubjects">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="changesubjects"/>
-            <h1>Change Tutee's Subjects</h1>
-            <select name="tutee" id="tutee" required>
+            {% if current_user.is_tutor %}
+            <form method="post" id="unenrollTutee">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" name="unenrolltutee" />
+                <h1>Unenroll a Tutee</h1>
+                <select name="tutee" id="tutee" required>
                 {% for tutee in tutees %}
                     <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
                 {% endfor %}
-            </select>
-            
-            <br><label>Subjects Taken</label>
-            
-            <div id="subjects">
-                <label>English</label><label>Mathematics</label>
-                <input type="checkbox" id="checkbox" name="is_english" checked> <!--use this to auto check using if statements in jinja-->
+                </select>
+                
+                <br><label>Are you sure?</label>
+                <input type="checkbox" name="unenrollCheck">
+                <br><button type="submit" id="submit">Unenroll Tutee</button>
+            </form>
+            {% endif %}
 
-                <input type="checkbox" id="checkbox" name="is_maths">
-            </div>
+            {% if current_user.is_tutor %}
+            <form method="post" id="changeSubjects">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" name="changesubjects"/>
+                <h1>Change Tutee's Subjects</h1>
+                <select name="tutee" id="tutee" required>
+                    {% for tutee in tutees %}
+                        <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
+                    {% endfor %}
+                </select>
+                
+                <br><label>Subjects Taken</label>
+                
+                <div id="subjects">
+                    <label>English</label><label>Mathematics</label>
+                    <input type="checkbox" id="checkbox" name="is_english" checked> <!--use this to auto check using if statements in jinja-->
 
-            <br><label>Are you sure?</label>
-            <input type="checkbox" name="changeClassCheck">
-            <br><button type="submit" id="submit">Change Classes</button>
-        </form>
+                    <input type="checkbox" id="checkbox" name="is_maths">
+                </div>
+
+                <br><label>Are you sure?</label>
+                <input type="checkbox" name="changeClassCheck">
+                <br><button type="submit" id="submit">Change Classes</button>
+            </form>
+            {% endif %}
+        </div>
+
+
 
         {% endblock %}
     </div>

@@ -30,6 +30,8 @@
             .section h1 {
                 font-weight: bold;
                 font-size: 30px;
+                
+                margin:10px;
             }
 
             .scroll {
@@ -39,8 +41,9 @@
                 scrollbar-width: 2px;
 
                 height: 80%;
-                width: 90%;
-                margin-top: 10px;
+                width: 95%;
+
+                margin-bottom: 5px;
 
                 border: 1px solid var(--accentbar);
                 border-radius: 5px;
@@ -61,12 +64,12 @@
                 margin-bottom: auto;
                 
             }
-            #menu {
-                top: 50%;
+            #title h1 {
+                padding: 20px;
+                font-weight: bold;
+                font-size: 50px;color:var(--bg);
             }
-            #menu img {
-                margin: 10px;
-            }
+
     </style>
     {% endblock %}
     {%endblock%}
@@ -83,7 +86,7 @@
         {% block main %}
         <div id="title">
             <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
-            <h1 style="padding: 50px;font-weight: bold;font-size: 50px;color:var(--bg);">Welcome, {{current_user.username}}</h1>
+            <h1>Welcome, {{current_user.username}}</h1>
         </div>
         
         

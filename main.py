@@ -349,19 +349,19 @@ def user_assignments():
                 return redirect(request.url)
             subject = request.form['subject']
 
-            tuteeName = request.form['tutee']
             if not request.form['date']:
                 print('Invalid date')
                 return redirect(request.url)
             duedate = str(request.form['date'])
 
-            if not request.form['tutee']:
-                print('Invalid tutee') #change this to flash later
+            tuteeID = request.form['tutee']
+            if User.get(tuteeID) is None:
+                print('Invalid tutee ID!')
                 return redirect(request.url)
             
-            if not User.find_by_username(tuteeName):
-                print('Invalid tutee')
-                return redirect(request.url)
+            if User.get(tuteeID).is_tutor != 0:
+                print('Invalid tutee ID! Please contact system admin.')
+                return redirect(request.url)                
 
             if not request.form['title']:
                 print('Title not set')
@@ -395,7 +395,6 @@ def user_assignments():
 
             # after the files have been uploaded, we will now upload assignment details concerning the involved tutor, tutee, 
             # assignment, and name of the task
-            tuteeID = User.find_by_username(tuteeName).id
             print(duedate)
             functions.set_assignment_details(assignmentID=assignmentID, tuteeID=tuteeID, tutorID=current_user.id, title=title, duedate=duedate, subject=subject)
         if 'submitassignment' in request.form:
@@ -438,8 +437,15 @@ def user_assignments():
             if 'grade' not in request.form:
                 print('No grade submitted!')
                 return redirect(request.url)
-
-            grade = int(request.form['grade'])
+            try:
+                grade = int(request.form['grade'])
+                if grade < 0 or grade > 100:
+                    print('Invalid grade entered!')
+                    return redirect(request.url)
+            except:
+                print('Invalid grade entered!')
+                return redirect(request.url)
+            
             assignmentID = request.form['markassignment']
             for file in request.files.getlist('file'):
                 if file.filename == '':
