@@ -494,8 +494,11 @@ def user_account(): #A lot of the forms in here should be in their own "tutees" 
     if request.method == "POST":
         print(request.form) #debug tool
         if 'register' in request.form:
-            print('Processing registration')
+            print('Processing tutee registration')
             register()
+        if 'registertutor' in request.form:
+            print('Processing tutor registration...')
+            register_tutor()
         if 'unenrolltutee' in request.form:
             print('Unenrolling...')
             if 'tutee' in request.form:
@@ -593,12 +596,22 @@ def register():
 
         is_english = request.form.get('is_english')
         is_maths = request.form.get('is_maths')
-        is_tutor = request.form.get('is_tutor')
 
         is_english = assign_int_boolean(is_english) #Turns str value of checkbox to boolean integer (1: True, 2: False)
         is_maths = assign_int_boolean(is_maths)
-        is_tutor = assign_int_boolean(is_tutor)
 
+        if not firstname: #input validation
+            print('Empty first name field!')
+            return redirect(request.url)
+        elif not lastname:
+            print('Empty last name field!')
+            return redirect(request.url)
+        elif not username:
+            print('Empty username')
+            return redirect(request.url)
+        elif not password:
+            print('Invalid password')
+            return redirect(request.url)
 
         #checking password strength
         passwordCheck = functions.check_password_strength(password=password)
@@ -624,7 +637,7 @@ def register():
         else:
             cur.execute('''INSERT INTO users(name, firstname, lastname, password, is_tutor) 
                         VALUES(?, ?, ?, ?, ?)''', 
-                        (username, firstname, lastname, encryptedpassword, is_tutor))
+                        (username, firstname, lastname, encryptedpassword, 0))
             con.commit()
             print("Account registered!")
 
@@ -634,16 +647,75 @@ def register():
         else:
             print('An unexpected error has occurred') #user doesn't exist????!?!?!?!?!?
             return redirect(request.url)
-        if is_tutor == 0:
-            cur.execute('''INSERT INTO testClasses(userID, tutorID, is_english, is_maths) 
-                        VALUES(?, ?, ?, ?)''',
-                        (registereduserID, current_user.id, is_english, is_maths))
-            con.commit()
+        
+        cur.execute('''INSERT INTO testClasses(userID, tutorID, is_english, is_maths) 
+                    VALUES(?, ?, ?, ?)''',
+                    (registereduserID, current_user.id, is_english, is_maths))
+        con.commit()
 
         cur.close()
         con.close()
 
         return redirect("/")
+
+def register_tutor():
+    firstname = request.form.get('firstname')
+    lastname = request.form.get('lastname')
+    
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    if not firstname: #input validation
+        print('Empty first name field!')
+        return redirect(request.url)
+    elif not lastname:
+        print('Empty last name field!')
+        return redirect(request.url)
+    elif not username:
+        print('Empty username')
+        return redirect(request.url)
+    elif not password:
+        print('Invalid password')
+        return redirect(request.url)
+
+    #checking password strength
+    passwordCheck = functions.check_password_strength(password=password)
+    # returns a tuple, in which:
+    # [0] = boolean value
+    # [1] = error message
+
+    if not passwordCheck[0]:
+        print(passwordCheck[1])
+        return redirect(request.url)
+
+    encryptedpassword = bcrypt.generate_password_hash(password).decode('utf-8')
+    
+    con = sqlite3.connect('database.db')
+    cur = con.cursor()
+
+    usernameCheck = cur.execute('''SELECT name FROM users WHERE name=?''', (username,)).fetchone()
+    print(usernameCheck)
+
+
+    if usernameCheck:
+        print(f"Error: Account with {username} already exists")
+    else:
+        cur.execute('''INSERT INTO users(name, firstname, lastname, password, is_tutor) 
+                    VALUES(?, ?, ?, ?, ?)''', 
+                    (username, firstname, lastname, encryptedpassword, 0))
+        con.commit()
+        print("Account registered!")
+
+    registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck,)).fetchone()
+
+    if registereduserID: #checking if this has type None
+        registereduserID = registereduserID[0]
+    else:
+        print('An unexpected error has occurred') #user doesn't exist????!?!?!?!?!?
+        return redirect(request.url)
+    
+    cur.close()
+    con.close()
 
 @app.route("/user/logout")
 @login_required

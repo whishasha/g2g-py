@@ -7,6 +7,16 @@
     {{super()}}
     {% block css %}
         <style>
+            div#title {
+                border-bottom: 1px solid var(--accentbar);
+                margin-bottom: 20px;
+            }
+            div#title h1 {
+                padding: 20px;
+                font-weight: bold;
+                font-size: 50px;
+                color:var(--text);
+            }
             #wrapper{
                 display: flex;
                 justify-content: center;
@@ -22,13 +32,18 @@
 
             .assignmentWrapper{
                 width: 100%;
+                height: 500px;
+                
                 /* display: flex; */
                 display:none;
-                justify-content: center;
+                justify-content: baseline;
                 flex-direction: column;
+            
                 align-items: center;
                 text-align: center;
             
+                margin-bottom: 10px;
+                border-bottom: 1px solid var(--accentbar);
                 
             }
             
@@ -43,21 +58,25 @@
 
             #completedAssignments{
                 width: 100%;
+                height: 60vh;
                 margin-bottom: 20px;
             }
 
             #unmarkedAssignments{
                 width: 100%;
+                height: 60vh;
                 margin-bottom: 20px;
             }
 
             #markedAssignments{
                 width: 100%;
+                height: 60vh;
                 margin-bottom: 20px;             
             }
 
             #assignedAssignments{
                 width: 100%;
+                height: 60vh;
                 margin-bottom: 20px;             
             }
             .assignment {
@@ -167,26 +186,6 @@
                 border: 1px solid black;
             }
 
-            #setAssignment{
-                padding: 10px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            #setAssignment input {
-                padding: 10px;
-            }
-
-            #setAssignment label {
-                padding: 10px;
-                font-weight: bold;
-            }
-
-            #setAssignment button {
-                /*i will beautify you later...*/
-            }
-
 
             /* Style the tab  courtesy of: https://www.w3schools.com/howto/howto_js_tabs.asp*/
             .tab {
@@ -239,7 +238,7 @@
                 border-radius: 5px;
                 border: 1px solid var(--accentbar);
                 
-                margin: 10px;
+                /* margin: 10px 0; */
                 background-color: var(--forminput);
             }
 
@@ -247,7 +246,7 @@
                 border-radius: 5px;
                 border: 1px solid var(--accentbar);
                 
-                margin: 10px;
+                /* margin: 10px 0; */
                 background-color: var(--forminput);
             }
 
@@ -285,51 +284,11 @@
 
     <div id="main">
         {% block main %}
-        <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
+        <div id="title">
+            <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
+            <h1>Assignments</h1>
+        </div>
         <div id="wrapper">        
-
-            
-            <form id="setAssignment" method="post" enctype=multipart/form-data>
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                
-                <h1>Set an Assignment</h1>
-                <label>Tutee</label>
-                <br>
-                <select name="tutee" required> <!--value is username, text will be firstname lastname-->
-                    <!-- <option value="Johnathan">Johnathan</option>
-                    <option value="Apple">Apple</option> -->
-                    {% for tutee in tutees %}
-                        <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
-                    {% endfor %}
-                </select>
-                <br>
-
-                <label>Title</label>
-                <br>
-                <textarea name="title" placeholder="What is the title of your assignment?"></textarea>
-
-                <br><label>Date</label><br>
-                <input type="date" name="date" required>
-                <br>
-
-                <br>
-                <label>Assignment File</label>
-                <br>
-                <input type=file name=file accept="application/pdf" multiple>
-
-
-                <br>
-                <label>Subject</label>
-                <select name="subject" required>
-                    <option value="English">English</option>
-                    <option value="Maths">Maths</option>
-                </select>
-                <br>
-
-                <input name="setassignment" type="hidden">
-
-                <br><button id="submit" type="submit">Set Assignment</button>
-            </form>
         
         <div class="tab">
             <button class="tablinks" onclick="openAssignments(event, 'due')">Due</button>
@@ -419,6 +378,48 @@
                     </div>
                 </div>
             </div>
+
+            <form id="setAssignment" method="post" enctype=multipart/form-data>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                
+                <h1>Set an Assignment</h1>
+                <label>Tutee</label>
+                <br>
+                <select name="tutee" required> <!--value is username, text will be firstname lastname-->
+                    <!-- <option value="Johnathan">Johnathan</option>
+                    <option value="Apple">Apple</option> -->
+                    {% for tutee in tutees %}
+                        <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
+                    {% endfor %}
+                </select>
+                <br>
+
+                <label>Title</label>
+                <br>
+                <textarea name="title" placeholder="What is the title of your assignment?"></textarea>
+
+                <br><label>Date</label><br>
+                <input type="date" name="date" required>
+                <br>
+
+                <br>
+                <label>Assignment File</label>
+                <br>
+                <input type=file name=file accept="application/pdf" multiple>
+
+
+                <br>
+                <label>Subject</label>
+                <select name="subject" required>
+                    <option value="English">English</option>
+                    <option value="Maths">Maths</option>
+                </select>
+                <br>
+
+                <input name="setassignment" type="hidden">
+
+                <br><button id="submit" type="submit">Set Assignment</button>
+            </form>
         </div>   
         {% endblock %}
     </div>

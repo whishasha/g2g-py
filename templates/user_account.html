@@ -27,24 +27,27 @@
             div#register {grid-area: form2;}
             div#unenrollTutee {grid-area: form3;}
             div#changeSubjects {grid-area: form4;}
-            {% if current_user.is_tutor %}
+            /* form.register {
+                display: block;
+            } */
+            /* {% if current_user.is_tutor %}
             form#register {
                 display: grid;
                 grid-template-areas:
-                'title title title'
+                'title title'
                 'lbluser inputuser'
                 'lblpass inputpass'
                 'lblfname inputfname'
                 'lbllname inputlname'
                 'lbltutor inputtutor'
                 'lblsubject inputsubjects'
-                'register register register';
+                'register register';
                 /* Have 2 columns => 1 joined, then have
                 title
                 label: input, etc.
                 submit*/
-            }
-            form#register#title {grid-area: title;}
+            /*}
+            form#register#title {grid-area: title; border: 1px solid black;}
             form#register#lbluser {grid-area: lbluser;}
             form#register#inputuser {grid-area: inputuser;}
             form#register#lblpass {grid-area: lblpass;}
@@ -58,11 +61,12 @@
             form#register#subject {grid-area: lblsubject;}
             form#register#subjects {grid-area: inputsubjects;}
             form#register#submit {grid-area: register;}
-            {% endif %}
+            {% endif %} */
             form {
                 margin-left: auto;
                 margin-right: auto;
 
+                margin-top: 20px;
                 padding: 10px;
 
                 background-color: var(--bgbar);
@@ -70,12 +74,8 @@
 
                 text-align: center;
 
-                display: flex;
-                justify-content: baseline; /* Aligns from top */
-                flex-direction: column;
-                align-items: center;
-
-                width: 90%;
+                display: block;
+                width: 50%;
             }
 
             form input{
@@ -85,7 +85,10 @@
                 margin: 10px;
                 background-color: var(--forminput);
             }
-
+            form label {
+                display: inline-block;
+                width: 50%;
+            }
             form select {
                 border-radius: 5px;
                 border: 1px solid var(--accentbar);
@@ -122,6 +125,39 @@
                 '. .';
                 column-gap: 10px;
             }
+            .tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+        /* Style the buttons that are used to open the tab content */
+        .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        }
+        .tab .tutorlinks {
+            float:right;
+        }
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+        background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+        background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+        display: none;
+        }
         </style>
         {% endblock %}
     {%endblock%}
@@ -140,8 +176,15 @@
             <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
             <h1>Account Settings :3</h1>
         </div>
-        <div id="container">    
-            <form method="post" id="changePassword">
+        <div class="tab">
+            <button class="tablinks" onclick="openForm(event, 'changePassword')">Change Password</button>
+            <button class="tablinks" onclick="openForm(event, 'changeSubjects')">Change Subjects</button>
+            <button class="tablinks tutorlinks" onclick="openForm(event, 'registertutee')">Register Tutee</button>
+            <button class="tablinks tutorlinks" onclick="openForm(event, 'registertutor')">Register Tutor</button>
+            <button class="tablinks tutorlinks" onclick="openForm(event, 'unenrollTutee')">Unenroll Tutee</button>
+          </div>
+        <!-- <div id="container">     -->
+            <form method="post" id="changePassword" class="tabcontent">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="hidden" name="changepassword"/>
                 <h1>Change Password</h1>
@@ -155,7 +198,7 @@
             </form>
 
             {% if current_user.is_tutor %}
-            <form method="post" id="register" onkeydown="return event.key != 'Enter';">
+            <form method="post" id="registertutee" class="tabcontent" onkeydown="return event.key != 'Enter';">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <h1 id="title">Register a Tutee</h1>
                 <label id="lbluser">Username</label>
@@ -169,9 +212,6 @@
                 
                 <br><label id="lbllname">Last Name</label>
                 <input id="inputlname" type="text" name="lastname" required>
-                
-                <br><label id="lbltutor">Are they a tutor?</label>
-                <input id="inputtutor" type="checkbox" id="checkbox" name="is_tutor">
 
                 <br><label id="subject">What subjects are they taking?</label> <!--make this disappear if is_tutor is checked-->
                 
@@ -187,11 +227,31 @@
                 <input type="hidden" name="register">
                 <br><button type="submit" id="submit">Register</button>
             </form>
+
+            <form method="post" id="registertutor" class="tabcontent" onkeydown="return event.key != 'Enter';">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <h1 id="title">Register a Tutor</h1>
+                <label id="lbluser">Username</label>
+                <input id="inputuser" type="text" name="username" required>
+                
+                <br><label id="lblpass">Password</label>
+                <input id="inputpass" type="text" name="password" required>
+                
+                <br><label id="lblfname">First Name</label>
+                <input id="inputfname" type="text" name="firstname" required>
+                
+                <br><label id="lbllname">Last Name</label>
+                <input id="inputlname" type="text" name="lastname" required>
+
+                <input type="hidden" name="registertutor">
+                <br><button type="submit" id="submit">Register</button>
+            </form>
+
             {% endif %}
 
 
             {% if current_user.is_tutor %}
-            <form method="post" id="unenrollTutee">
+            <form method="post" id="unenrollTutee" class="tabcontent">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="hidden" name="unenrolltutee" />
                 <h1>Unenroll a Tutee</h1>
@@ -208,7 +268,7 @@
             {% endif %}
 
             {% if current_user.is_tutor %}
-            <form method="post" id="changeSubjects">
+            <form method="post" id="changeSubjects" class="tabcontent">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="hidden" name="changesubjects"/>
                 <h1>Change Tutee's Subjects</h1>
@@ -232,7 +292,7 @@
                 <br><button type="submit" id="submit">Change Classes</button>
             </form>
             {% endif %}
-        </div>
+        <!-- </div> -->
 
 
 
@@ -244,6 +304,32 @@
 <script>
     const sidebarItems = document.querySelector('#topbar').getElementsByTagName('li');
     sidebarItems[2].classList.toggle('active');    
+
+    function openForm(evt, formName) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
+
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(formName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    document.addEventListener('DOMContentLoaded', () => { //load first tab on page load, courtesy of chatgpt
+    document.querySelector('.tablinks').click();
+    });
+
 </script>
 {% endblock %}
 

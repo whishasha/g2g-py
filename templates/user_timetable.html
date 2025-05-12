@@ -13,7 +13,16 @@
     --box: #737373;
     --text: black;
 }
-
+div#title {
+                border-bottom: 1px solid var(--accentbar);
+                margin-bottom: 20px;
+            }
+            div#title h1 {
+                padding: 20px;
+                font-weight: bold;
+                font-size: 50px;
+                color:var(--text);
+            }
 .calendar{
     border: 1px solid black;
     border-radius: 5px;
@@ -225,6 +234,10 @@ textarea {
 
     <div id="main">
         {%block main%}
+        <div id="title">
+            <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
+            <h1>Assignments</h1>
+        </div>
         <div id="dateInfo">
             hi ;3
         </div>
@@ -259,9 +272,9 @@ textarea {
                 <br><button type="submit" id="submit">Change Details</button>
             </form>
         </div>
-        <h1 style="padding: 50px;font-weight: bold;font-size: 100px;">Do Good. Do Bad Business.</h1>
-        <button onclick="hideSidenav()">hi</button>
-        <button onclick="displayDateInfo(this)">hi again</button>
+        <div id="overview">
+            classes yo
+        </div>
         <div class="calendar">
             <div class="calendar-inner">
                 <div class="calendar-controls">
