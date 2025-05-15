@@ -111,6 +111,8 @@ def init_real_data(ID): #fetches all events relevant to a user
             note = str(event[5])
             year_month = str(date[:7]) #isolates YYYY-MM [7 char long]
             day = str(date[8:10])
+            if day[0] == '0':
+                day = day[1]
             id = int(event[7])
             title = str(event[6])
             classtime = str(time[:5])

@@ -36,7 +36,7 @@
 [ ] make it so when you download files the name is nice, without the UUID
 --[ ] unique folder for each id to allow for DIFFERENTIATION
 
-
+[ ] bug for calendars where information for single digit days does not display
 
 [ ] calendar mobile responsivity
 
