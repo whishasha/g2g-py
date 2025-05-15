@@ -309,8 +309,14 @@ def user_timetable():
 
     print(current_user.id)
     tutees = functions.get_tutees()
-    from json import dumps
-    return render_template('user_timetable.html', class_dates=init_real_data(current_user.id), tutees=tutees)
+    
+    con = sqlite3.connect('database.db')
+    cur = con.cursor()
+
+    overview = cur.execute('''SELECT subject, classdate, classtime, title FROM testDates WHERE tuteeID=? OR tutorID=?''', (current_user.id, current_user.id)).fetchall()
+    print(overview)
+
+    return render_template('user_timetable.html', class_dates=init_real_data(current_user.id), tutees=tutees, overview=overview)
 
 def format_calendar_data(subject, tutee, daymonthyear, time, notes):
     #store daymonthyear in 2 separate variables:
@@ -641,7 +647,7 @@ def register():
             con.commit()
             print("Account registered!")
 
-        registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck)).fetchone()
+        registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck,)).fetchone()
         if registereduserID: #checking if this has type None
             registereduserID = registereduserID[0]
         else:

@@ -14,20 +14,19 @@
     --text: black;
 }
 div#title {
-                border-bottom: 1px solid var(--accentbar);
-                margin-bottom: 20px;
-            }
-            div#title h1 {
-                padding: 20px;
-                font-weight: bold;
-                font-size: 50px;
-                color:var(--text);
-            }
+    border-bottom: 1px solid var(--accentbar);
+    margin-bottom: 20px;
+}
+div#title h1 {
+    padding: 20px;
+    font-weight: bold;
+    font-size: 50px;
+    color:var(--text);
+}
 .calendar{
     border: 1px solid black;
     border-radius: 5px;
     background-color: var(--background);
-    max-width:98vw; /* makes calendar span the width of the content div */
     width: 100%;
     height:500px;
 }
@@ -131,7 +130,9 @@ div#title {
     position: absolute;
     overflow: scroll;
     overflow-x:hidden;
-    display: flex; /*ultimate div centering technique */
+
+
+    display: none; /* code turns this to display flex */
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
@@ -149,36 +150,20 @@ div#title {
     word-wrap: break-word;
 }
 
-#changeClassDetails{
-    background-color: black;
-    height: 80vh;
-    width: 30vw;
-    z-index: 99999;
-    position: absolute;
-    overflow: scroll;
-    overflow-x:hidden;
-    display: flex; /*ultimate div centering technique */
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
-    
-    border-radius: 5px;
-
-    opacity: 1;
-    color: white;
-    border: 1px solid var(--accent);
-}
 
 form {
     margin: 50px auto;
 
-    border: 1px solid orange;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
 
-    width: 50%;
+    width: fit-content;
+
+    background-color: var(--bgbar);
+    border-radius: 15px;
+    padding: 10px;
 }
 
 form input{
@@ -208,13 +193,99 @@ form #submit{
     padding: 10px 30px;
 }
 
+#changeClassDetails #setClass{
+    background-color: var(--bgbar);
+    
+    height: 80vh;
+    width: 100%;
+    
+    margin: 10px auto;
+    display: inline-block;
+    border: 1px solid black;
+
+    /* justify-content: flex-start; */
+    /* align-items: center; */
+    /* flex-direction: row; */
+    
+    border-radius: 5px;
+
+    opacity: 1;
+    color: white;
+    border: 1px solid var(--accent);
+    border-radius: 15px;
+}
+
+
+
 textarea {
     border-radius: 5px;
     border: 1px solid var(--accent);
     margin: 10px;
 }
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
 
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
 
+.tab button.options{
+    float: right;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+.tabcontent {
+    display: none;
+}
+
+.class {
+    margin: 10px auto;
+
+    display: flex;
+    flex-direction: column;
+    
+    background-color: var(--bgbar);
+
+    text-align: center;
+    width: 50%;
+}
+
+#overview .container {
+    width: 48%;
+    /* float:left; */
+    border: 1px solid black;
+
+    border-radius: 5px;
+
+    margin-left: 1%;
+    margin-top: 20px;
+}
+#overview .calendar {
+    width: 48%;
+    /* float: right; */
+
+    margin-right: 1%;
+    margin-top: 20px;
+}
 
 </style>
 {% endblock %}
@@ -241,7 +312,14 @@ textarea {
         <div id="dateInfo">
             hi ;3
         </div>
-        <div id="changeClassDetails"> <!--only visible to tutors-->
+        <div class="tab">
+            <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'overview')">Overview</button>
+            <button class="tablinks options" onclick="openCity(event, 'setclass')">Set New Class</button>
+            <button class="tablinks options" onclick="openCity(event, 'changeClassDetails')">Change Details</button>
+        </div>
+
+
+        <div id="changeClassDetails" class="tabcontent"> <!--only visible to tutors-->
             <form method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="hidden" name="change"/>
@@ -272,10 +350,17 @@ textarea {
                 <br><button type="submit" id="submit">Change Details</button>
             </form>
         </div>
-        <div id="overview">
-            classes yo
-        </div>
-        <div class="calendar">
+        <div id="overview" class="tabcontent">
+            <div class="container">
+            {% for class in overview %} <!--not sure if this work :/-->
+                <div class="class">
+                    <div class="title">{{class[1]}}</div>
+                    <div class="duedate">{{class[0]}}</div>
+                    <div class="subject">{{class[2]}}</div>
+                </div>
+            {% endfor %}
+            </div>
+            <div class="calendar" id="calendar">
             <div class="calendar-inner">
                 <div class="calendar-controls">
                     <div class="calendar-headings">
@@ -333,8 +418,10 @@ textarea {
                     </div>
                 </div>
             </div>
+            </div>
         </div>
-        <form method="post" name="setClass">
+        <div id="setclass" class="tabcontent">
+            <form method="post" name="setClass">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="hidden" name="set"/>
 
@@ -368,7 +455,9 @@ textarea {
             <textarea name="classnotes"></textarea>
 
             <br><button type="submit" id="submit">Set Class</button>
-        </form>
+            </form>
+        </div>
+
         {%endblock%}
     </div>
 
@@ -539,7 +628,7 @@ const displayDateInfo = (El) => { //display class details for each date
     //event.stopPropagation();
     const offset = 200;
     var ElRect = El.getBoundingClientRect();
-    
+    console.log('displaying date info');
     dateInfoEl.innerHTML = "";
 
     const infoData = JSON.parse(decodeURIComponent(El.dataset.info));
@@ -579,7 +668,7 @@ const displayDateInfo = (El) => { //display class details for each date
         topPosition = windowHeight - (dateInfoHeight + 30);
     }
 
-    dateInfoEl.style.left = leftPosition + 'px'; //makes it APPEAR real SNAZZY!
+    dateInfoEl.style.left = leftPosition + 'px';
     dateInfoEl.style.top = topPosition + 'px';
     dateInfoEl.style.display = 'relative';
 }
@@ -594,16 +683,19 @@ function changeClassDetails() {
     changeClassDetailsEl.style.left = '10px';
     changeClassDetailsEl.style.top = "20px";
 }
-document.addEventListener('click', (e) => { //Listener which closes the dateInfoElement when cursor clicks away
+document.addEventListener('click', (e) => { //Listener which closes the dateInfoElement and changeClassDetailsEl when cursor clicks away
     if (!e.target.classList.contains('date') && !dateInfoEl.contains(e.target)) {
         dateInfoEl.style.left = '-9999px';
         dateInfoEl.style.top = '-9999px';
     }
 
-    if (!changeClassDetailsEl.contains(e.target)) {
-        changeClassDetailsEl.style.left = '-9999px';
-        changeClassDetailsEl.style.top = '-9999px';
-    }
+
+    // Make it so you have to click an X button to close this
+    // if (!changeClassDetailsEl.contains(e.target)) {
+    //     changeClassDetailsEl.style.left = '-9999px';
+    //     changeClassDetailsEl.style.top = '-9999px';
+    // }
+//
 });
 
 
@@ -622,7 +714,7 @@ const changeClassNotes = document.querySelector('#changeClassDetails #classnotes
 const selectDates = document.getElementById('date'); //Date picker for change class form
 
 
-selectDates.innerHTML='';
+selectDates.innerHTML=''; // For populating the change class details form
 for (const [month, date] of Object.entries(class_dates)) {
     // date is a nested DICTIONARY containing events which are lists
     console.log(month);
@@ -659,6 +751,29 @@ function populateForm(event) {
 }
 
 
+    </script>
+    <script>
+                function openCity(evt, tabName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+            }
+    document.getElementById("defaultOpen").click();
     </script>
 {% endblock %}
 

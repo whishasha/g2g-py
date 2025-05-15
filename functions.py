@@ -242,7 +242,7 @@ def get_home_details(tuteeID):
     # fetching assignment:
         # number of due assignments
         # duedate, title, subject
-    assignment_details = cur.execute('''SELECT duedate, title, subject FROM testAssignments WHERE tuteeID=? AND duedate > ?''', (tuteeID, currentYearMonthDate)).fetchall()
+    assignment_details = cur.execute('''SELECT duedate, title, subject FROM testAssignments WHERE tuteeID=? AND duedate > ? OR tutorID=?''', (tuteeID, currentYearMonthDate, tuteeID)).fetchall()
 
 
     # fetching enrolled classes:
