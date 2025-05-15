@@ -13,16 +13,6 @@
     --box: #737373;
     --text: black;
 }
-div#title {
-    border-bottom: 1px solid var(--accentbar);
-    margin-bottom: 20px;
-}
-div#title h1 {
-    padding: 20px;
-    font-weight: bold;
-    font-size: 50px;
-    color:var(--text);
-}
 .calendar{
     border: 1px solid black;
     border-radius: 5px;
@@ -134,7 +124,7 @@ div#title h1 {
     overflow-x:hidden;
 
 
-    display: flex; /* code turns this to display flex */
+    display: none; /* code turns this to display flex */
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
@@ -239,6 +229,8 @@ textarea {
   cursor: pointer;
   padding: 14px 16px;
   transition: 0.3s;
+
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .tab button.options{
@@ -308,8 +300,8 @@ textarea {
     <div id="main">
         {%block main%}
         <div id="title">
-            <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
-            <h1>Timetable</h1>
+            <div id="menu"><i class="fa-solid fa-bars" onclick="hideSidenav()"></i></div>
+            <h1><i class="fa-solid fa-calendar"></i><br>Timetable</h1>
         </div>
         <div id="dateInfo">
             hi ;3
@@ -470,8 +462,8 @@ textarea {
     <script src="{{url_for('static', filename='js/g2g.js')}}"></script>
     <script>
         "use strict";
-    const sidebarItems = document.querySelector('#topbar').getElementsByTagName('li');
-    sidebarItems[6].classList.toggle('active');
+    const sidebarItems = document.querySelectorAll('.topbar')[1].getElementsByTagName('li');
+    sidebarItems[2].classList.toggle('active');
 // credit: https://www.youtube.com/watch?v=ZBJ44LrmwDI
 console.log('Calendar script running.')
 
@@ -521,6 +513,22 @@ let date = dateObj.getDate(); // gets current day of the month
 console.log(`The date is: ${date}/${month}/${year} `); // remove soon
 
 datetxtEl.innerHTML = `${dayName}, ${date}, ${dmObj.months[month]}, ${year}`;
+const changeMonth = (El) => { //change the displayed month
+    if(El.id === "prev") {
+        month -= 1;
+    } else if(El.id === "next") {
+        month += 1;
+    }
+    if (month < 0 || month > 11){
+        date = new Date(year, month, new Date().getDate());
+        year = date.getFullYear();
+        month = date.getMonth();
+
+    } else {
+        date = new Date();
+    }
+    displayCalendar();
+}
 
 const displayCalendar = () => {
     // Grabbing class data
@@ -605,22 +613,6 @@ const displayCalendar = () => {
 displayCalendar();
 
 
-const changeMonth = (El) => { //change the displayed month
-    if(El.id === "prev") {
-        month -= 1;
-    } else if(El.id === "next") {
-        month += 1;
-    }
-    if (month < 0 || month > 11){
-        date = new Date(year, month, new Date().getDate());
-        year = date.getFullYear();
-        month = date.getMonth();
-
-    } else {
-        date = new Date();
-    }
-    displayCalendar();
-}
 
 const dateInfoEl = document.getElementById('dateInfo');
 const changeClassDetailsEl = document.getElementById('changeClassDetails');
@@ -672,7 +664,7 @@ const displayDateInfo = (El) => { //display class details for each date
 
     dateInfoEl.style.left = leftPosition + 'px';
     dateInfoEl.style.top = topPosition + 'px';
-    dateInfoEl.style.display = 'relative';
+    dateInfoEl.style.display = 'flex';
 }
 
 
@@ -690,8 +682,6 @@ document.addEventListener('click', (e) => { //Listener which closes the dateInfo
         dateInfoEl.style.left = '-9999px';
         dateInfoEl.style.top = '-9999px';
     }
-
-
     // Make it so you have to click an X button to close this
     // if (!changeClassDetailsEl.contains(e.target)) {
     //     changeClassDetailsEl.style.left = '-9999px';

@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>G2G</title>
+    <!-- Custom icons from Font Awesome -->
+    <link href="{{url_for('static', filename='assets/fontawesome/css/fontawesome.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='assets/fontawesome/css/brands.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='assets/fontawesome/css/solid.css')}}" rel="stylesheet" />
+
     <link rel="icon" href="{{url_for('static', filename='assets/favicon.ico')}}" type="image/x-icon">
     <link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/g2gstylesheet.css')}}">
@@ -22,19 +27,20 @@
     
     <nav>
         {%block topbar%}
-        <ul id="topbar">
+        <ul class="topbar" id="top">
             <li style="text-align: center;font-size:larger;font-weight:bold;"><a href="/user/home">{{current_user.username}}</a></li>
-            <li><a href="/user/home"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Home</a></li>
-            <li><a href="/user/account"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Account</a></li>            
-            <!-- {% if current_user.is_tutor %}
-            <li><a href="/user/tutee"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Students</a></li>
-            {% endif %} -->
-            <li style="text-align: center;font-weight:bold;">User Information</li>
-            <li><hr class="line"></li>
-            <li><a href="/user/assignments"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Assignments</a></li>
-            <li><a href="/user/timetable"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Timetable</a></li>   
-            <li><hr class="line"></li>            
-            <li><a href="/user/logout"><img src="{{url_for('static', filename='assets/fumo.svg')}}" width="20px" height="20px"> Logout</a></li>
+            <hr class="line">
+            <li><a href="/user/home"><i width="20px" height="20px" class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="/user/account"><i width="20px" height="20px" class="fa-solid fa-gear"></i> Account</a></li>            
+            <hr class="line">
+        </ul>
+        <ul class="topbar" id="bottom">
+            <li style="text-align: center;font-weight:bold;font-size:1vw;">User Information</li>
+            <hr class="line">
+            <li><a href="/user/assignments"><i width="20px" height="20px" class="fa-solid fa-folder-open"></i> Assignments</a></li>
+            <li><a href="/user/timetable"><i width="20px" height="20px" class="fa-solid fa-calendar"></i> Timetable</a></li>   
+            <hr class="line">           
+            <li><a href="/user/logout"><i width="20px" height="20px" class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
         </ul> 
         {% endblock %}
     </nav>

@@ -7,16 +7,6 @@
     {{super()}}
     {% block css %}
         <style>
-            div#title {
-                border-bottom: 1px solid var(--accentbar);
-                margin-bottom: 20px;
-            }
-            div#title h1 {
-                padding: 20px;
-                font-weight: bold;
-                font-size: 50px;
-                color:var(--text);
-            }
             #wrapper{
                 display: flex;
                 justify-content: center;
@@ -204,6 +194,8 @@
             cursor: pointer;
             padding: 14px 16px;
             transition: 0.3s;
+
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             }
 
             /* Change background color of buttons on hover */
@@ -286,8 +278,8 @@
     <div id="main">
         {% block main %}
         <div id="title">
-            <div id="menu"><a onclick="hideSidenav()"><img src="{{url_for('static', filename='assets/menu.svg')}}"></a></div>
-            <h1>Assignments</h1>
+            <div id="menu"><i class="fa-solid fa-bars" onclick="hideSidenav()"></i></div>
+            <h1><i class="fa-solid fa-folder-open"></i><br>Assignments</h1>
         </div>
         <div id="wrapper">        
         
@@ -428,8 +420,8 @@
 {% block js %}
 {{super()}}
 <script>
-    const sidebarItems = document.querySelector('#topbar').getElementsByTagName('li');
-    sidebarItems[5].classList.toggle('active');
+    const sidebarItems = document.querySelectorAll('.topbar')[1].getElementsByTagName('li');
+    sidebarItems[1].classList.toggle('active');
 </script>
 <script>
 

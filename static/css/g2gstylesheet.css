@@ -7,9 +7,13 @@
   /* accent background colour */
   --accentbar: #8f9c9c;
   /* sidebar bg colour */
-  --bgbar: #d3d3d3;
+  --bgbar: #cddcdf;
   
+
+  --border: #679494;
   
+  --txttab: rgb(42, 47, 51);
+
   /* text colour */
   --text: black; 
   /* bg colour */
@@ -28,6 +32,7 @@ body {
     display: flex;
     font-family: sans-serif;
     scrollbar-color: red;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 #main {
   display:block;
@@ -37,7 +42,28 @@ body {
   margin-left: 15vw;
   overflow-x: hidden;
   word-wrap: break-word;
-  transition: 1s ease-in-out;
+
+  background-color: #ffffff;
+
+  transition: 0.5s ease-in-out;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+
+div#title {
+    /* background-color:  var(--accent); */
+    background-image: linear-gradient(to right, var(--accent), #4f8cb3);
+    margin-bottom: auto;
+    
+}
+div#title h1 {
+    padding: 20px;
+    font-weight: bold;
+    font-size: 30px;color:var(--bg);
+}
+div#title i {
+  margin-bottom: 10px;
+  font-size: 50px;
 }
 
 #main.hide {
@@ -64,8 +90,9 @@ nav {
     width:15vw;
     height:100vh;
     display: flex;
+    flex-direction: column;
     /*test anim*/
-    transition: 1s ease-in-out;
+    transition: 0.5s ease-in-out;
 }
 
 nav.hide { /* neat javascript stuff */
@@ -87,12 +114,20 @@ nav ul {
     /* background-color: black; */
   }
   
+  nav ul#top {
+    height:70%;
+    width: 100%;
+  }
+  nav ul#bottom {
+    height:30%;
+    width: 100%;
+  }
+
 nav li {
   display: block;
   color: var(--textbar);
-  padding: 8px 12px;
+  padding: 4px 12px;
   text-decoration: none;
-
   /* border: 1px solid black; */
 }
 
@@ -101,8 +136,10 @@ li a {
   text-decoration: none;
   padding: 10px 5px;
   color:var(--textbar);
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
+  border-radius: 15px;
+
+  font-size: 1vw;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 /* Change the link color on hover */
@@ -125,24 +162,31 @@ hr {
 .line {
   width: 80%;
   margin: auto;
-  border-top: 0.2px solid var(--textbar);
+  border-top: 0.1px solid var(--textbar);
+  border-bottom: 0.1px transparent;
+  opacity: 0.9;
 }
 
-#menu img{
-  background-color: var(--bgbar);
+
+div#menu i{
   border-radius: 5px;
-  width: fit-content;
-  
+
+  font-size: 20px;
+
+  color: black;
   margin: 10px;
+  text-align: center;
+  align-content: center;
+  padding: 5px;
+
+  transition: 0.15s ease-in-out;
 }
 
-#menu:hover{
+div#menu i:hover{
   cursor: pointer;
+  color: var(--bg);
 }
 
-#menu.img {
-  color:#2bacff;
-}
 
 @media only screen and (max-width: 768px) {
   body {
@@ -157,7 +201,7 @@ hr {
   nav ul{
     width: 100vw;
   }
-  
+
   nav.hide{
     height: 0;
     width: 100%;
