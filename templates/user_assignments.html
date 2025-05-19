@@ -15,11 +15,48 @@
                 text-align: center;
             }
 
-            h1 {
-                font-weight: bold;
-                font-size: large;
+            div.filters {
+                border-top: 1px solid var(--border);
+                border-bottom: 1px solid var(--border);
+                padding: .1rem;
+                
+                margin: .6em;
             }
 
+            div.filters button {
+                margin: 5px 10px;
+                background-color: var(--button);
+                border: 1px solid var(--border);
+
+                border-radius: 10px;
+
+                font-size: 15px;
+                font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+                transition: .1s;
+            }
+
+            div.filters button.active {
+                background-color: var(--buttonhover);
+            }
+
+            div.filters button:hover {
+                cursor: pointer;
+                background-color: var(--buttonhover);
+            }
+
+            
+            div.assignmentWrapper h1 {
+                font-weight: bold;
+                font-size: 30px;
+            }
+
+            h2 {
+                font-weight: 700;
+                margin: 10px 10px;
+                
+                border-bottom: 1px solid var(--border);
+            }
             .assignmentWrapper{
                 width: 100%;
                 height: 500px;
@@ -37,36 +74,43 @@
                 
             }
             
+            .assignmentWrapper p.msg {
+                font-size: 20px;
+                margin: 50px;
+                font-weight: 50;
+
+                color: var(--txtlight);
+            }
 
             #dueAssignments{
                 width: 80%;
                 margin-bottom: 20px;
 
-                height: 60vh;
+                height: 80%;
                 overflow: auto;
             }
 
             #completedAssignments{
                 width: 100%;
-                height: 60vh;
+                height: 80%;
                 margin-bottom: 20px;
             }
 
             #unmarkedAssignments{
                 width: 100%;
-                height: 60vh;
+                height: 80%;
                 margin-bottom: 20px;
             }
 
             #markedAssignments{
                 width: 100%;
-                height: 60vh;
+                height: 80%;
                 margin-bottom: 20px;             
             }
 
             #assignedAssignments{
                 width: 100%;
-                height: 60vh;
+                height: 80%;
                 margin-bottom: 20px;             
             }
             .assignment {
@@ -84,7 +128,7 @@
                 grid: 
                 'title files submitbox'
                 'duedate files submitbox';
-                border: 1px solid black;
+                border: 1px solid var(--border);
                 gap: 10px;
                 background-color: var(--bgbar);
                 border-radius: 10px;
@@ -98,7 +142,9 @@
             }
             .assignment > div.submitbox {
                 grid-area: submitbox;
-                border: 1px solid black;
+                border: 1px solid var(--border);
+
+                border-top-left-radius: 10px;
 
                 overflow-y: scroll;
                 height: 100%;
@@ -109,11 +155,58 @@
                 align-items: center;
                 text-align: center;
             }
+
+            div.submitbox form input{
+                margin: 10px;
+
+            }
+
+            /* Styling the inputs: https://stackoverflow.com/questions/572768/styling-an-input-type-file-button */
+            div.submitbox input[type=file]::file-selector-button {
+                border: 1px solid var(--border);
+                padding: .2em .4em;
+                border-radius: .2em;
+                background-color: var(--accent);
+                color: var(--bg);
+                transition: .5s;
+
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            }
+            div.submitbox input[type=file]::file-selector-button:hover {
+                background-color: #81ecec;
+                border: 1px solid #00cec9;
+                color: var(--text);
+
+            }
+            /* Credits end here */
+
+            .assignmentWrapper form button {
+                background-color: var(--accent);
+                padding: 5px 10px;
+                border-radius: 10px;
+
+                border: 1px solid var(--border);
+                color: var(--bg);
+
+                font-size: 15px;
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+                transition: .5s;
+            }
+
+            .assignmentWrapper form button:hover {
+                background-color: #81ecec;
+                color: var(--text);
+            }
+
             .assignment > div.files {
                 grid-area: files;
                 height: 100%;
                 overflow-y: scroll;
-                border: 1px solid black;
+                border: 1px solid var(--border);
+
+                border-top-left-radius: 10px;
+                border-bottom-left-radius: 10px;
             }
 
             .markAssignment {
@@ -198,9 +291,13 @@
             font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             }
 
+            .tab button.right {
+                float:right;
+            }
+
             /* Change background color of buttons on hover */
             .tab button:hover {
-            background-color: #ddd;
+            background-color: var(--buttonhover);
             }
 
             /* Create an active/current tablink class */
@@ -225,8 +322,13 @@
                 align-items: center;
 
                 width: 50%;
+
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             }
 
+            form#set {
+                display: none;
+            }
             form input{
                 border-radius: 5px;
                 border: 1px solid var(--accentbar);
@@ -289,79 +391,80 @@
             <button class="tablinks" onclick="openAssignments(event, 'completed')">Completed</button>
             <button class="tablinks" onclick="openAssignments(event, 'awaiting')">Awaiting</button>
             <button class="tablinks" onclick="openAssignments(event, 'marked')">Marked</button>
+            <button class="tablinks right" onclick="openAssignments(event, 'set')">Set Assignment</button>
         </div>
 
             <div class="assignmentWrapper" id="due">
                 <h1>Due Assignments [tutee]</h1>
-                <p>Sort by: <button onclick="filterByDate(document.getElementById('dueAssignments'))">Date</button> 
-                    Subject:<button value="English" onclick="filterBySubject(document.getElementById('dueAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('dueAssignments'), this.value)">Maths</button> 
-                    <button onclick="resetFilters(document.getElementById('dueAssignments'))">Reset</button>
+                <div class="filters">
+                <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('dueAssignments'))">Date</button> 
+                    Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('dueAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('dueAssignments'), this.value)">Maths</button> 
+                    <button class="filter" onclick="resetFilters(document.getElementById('dueAssignments'))">Reset</button>
+                </div>
                 <div id="dueAssignments">
-                    <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
-                        <div class="title">English Essay Writing</div>
-                        <div class="files">
-                            hi
-                        </div>
-                        <div class="submitbox">2</div>
-                        <div class="duedate">Due by:</div>
+                    <div class="assignment">
+                        <!--contains assignments-->
                     </div>
                 </div>
             </div>
 
             <div class="assignmentWrapper" id="assigned">
                 <h1>Assigned Assignments [tutor]</h1>
-                <p>Sort by: <button onclick="filterByDate(document.getElementById('assignedAssignments'))">Date</button> 
-                    Subject:<button value="English" onclick="filterBySubject(document.getElementById('assignedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('assignedAssignments'), this.value)">Maths</button> 
-                    <button onclick="resetFilters(document.getElementById('assignedAssignments'))">Reset</button>
+                <div class="filters">
+                <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('assignedAssignments'))">Date</button> 
+                    Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('assignedAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('assignedAssignments'), this.value)">Maths</button> 
+                    <button class="filter" onclick="resetFilters(document.getElementById('assignedAssignments'))">Reset</button>                    
+                </div>
+
                 <div id="assignedAssignments">
 
-                    <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
-                        <div class="title">English Essay Writing</div>
-                        <div class="files">
-                            hi
-                        </div>
-                        <div class="submitbox">2</div>
-                        <div class="duedate">Due by:</div>
+                    <div class="assignment">
+                        <!--contains assignments-->
                     </div>
                 </div>
             </div>
 
             <div class="assignmentWrapper" id="completed">
                 <h1>Completed Assignments [tutee + tutor]</h1>
-                <p>Sort by: <button onclick="filterByDate(document.getElementById('completedAssignments'))">Date</button> 
-                    Subject:<button value="English" onclick="filterBySubject(document.getElementById('completedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('completedAssignments'), this.value)">Maths</button> 
-                    <button onclick="resetFilters(document.getElementById('completedAssignments'))">Reset</button>
+                <div class="filters">
+                <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('completedAssignments'))">Date</button> 
+                    Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('completedAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('completedAssignments'), this.value)">Maths</button> 
+                    <button class="filter" onclick="resetFilters(document.getElementById('completedAssignments'))">Reset</button>                    
+                </div>
+
                 <div id="completedAssignments">
-                    <div class="assignment"> <!--will need to add Jinja here in future for due assignments-->
-                        <div class="title">Maths 12/02/25</div>
-                        <div class="submitbox">2</div>
-                        <div class="duedate">Due by:</div>
+                    <div class="assignment">
+                        <!--contains assignments-->
                     </div>
                 </div>
             </div>
 
             <div class="assignmentWrapper" id="awaiting">
                 <h1>Awaiting Assignments [tutor]</h1>
-                <p>Sort by: <button onclick="filterByDate(document.getElementById('unmarkedAssignments'))">Date</button> 
-                    Subject:<button value="English" onclick="filterBySubject(document.getElementById('unmarkedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('unmarkedAssignments'), this.value)">Maths</button> 
-                    <button onclick="resetFilters(document.getElementById('unmarkedAssignments'))">Reset</button>
-                </p>
+                <div class="filters">
+                <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('unmarkedAssignments'))">Date</button> 
+                    Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('unmarkedAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('unmarkedAssignments'), this.value)">Maths</button> 
+                    <button class="filter" onclick="resetFilters(document.getElementById('unmarkedAssignments'))">Reset</button>
+                </p>                    
+                </div>
+
                 <div id="unmarkedAssignments">
 
-                    <div class="markAssignment"> <!--will need to add Jinja here in future for due assignments-->
-                        <div class="title">English Essay Writing</div>
-                        <div class="submitbox">2</div>
-                        <div class="duedate">Due by:</div>
+                    <div class="markAssignment">
+                        <!--contains assignments-->
                     </div>
                 </div>
             </div>
 
             <div class="assignmentWrapper" id="marked">
                 <h1>Marked Assignments [tutee + tutor]</h1>
-                <p>Sort by: <button onclick="filterByDate(document.getElementById('markedAssignments'))">Date</button> 
-                    Subject:<button value="English" onclick="filterBySubject(document.getElementById('markedAssignments'), this.value)">English</button><button value="Maths" onclick="filterBySubject(document.getElementById('markedAssignments'), this.value)">Maths</button> 
-                    <button onclick="resetFilters(document.getElementById('markedAssignments'))">Reset</button>
-                </p>        
+                <div class="filters">
+                    <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('markedAssignments'))">Date</button> 
+                        Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('markedAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('markedAssignments'), this.value)">Maths</button> 
+                        <button class="filter" onclick="resetFilters(document.getElementById('markedAssignments'))">Reset</button>
+                    </p>                    
+                </div>
+        
                 <div id="markedAssignments">
 
                     <div class="markAssignment"> <!--will need to add Jinja here in future for due assignments-->
@@ -372,7 +475,7 @@
                 </div>
             </div>
 
-            <form id="setAssignment" method="post" enctype=multipart/form-data>
+            <form id="set" method="post" enctype=multipart/form-data>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 
                 <h1>Set an Assignment</h1>
@@ -435,12 +538,13 @@
     
     console.log(assignmentDict); //for debugging purposes
 
+    message = `<p class="msg">No assignments</p>`;
 
-    dueAssignmentsEl.innerHTML = '';
-    completedAssignmentsEl.innerHTML = '';
-    unmarkedAssignmentsEl.innerHTML = '';
-    markedAssignmentsEl.innerHTML = '';
-    assignedAssignmentsEl.innerHTML = '';
+    dueAssignmentsEl.innerHTML = message;
+    completedAssignmentsEl.innerHTML = message;
+    unmarkedAssignmentsEl.innerHTML = message;
+    markedAssignmentsEl.innerHTML = message;
+    assignedAssignmentsEl.innerHTML = message;
 
     function displayAssignments() {
     for (const assignmentID in assignmentDict) {
@@ -448,6 +552,7 @@
 
         //for due assignments [tutee]
         if (assignmentDict[assignmentID][0].is_completed == String(0)) {
+            dueAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
             let fileList = ``;
@@ -462,12 +567,12 @@
                     `<div class="assignment" id="${assignmentID}" data-due-date="${assignmentDict[assignmentID][0].duedate}" data-subject="${assignmentDict[assignmentID][0].subject}">
                         <div class="title">
                             <ul>
-                                <li>${assignmentDict[assignmentID][0].title}</li>
+                                <li><h2>${assignmentDict[assignmentID][0].title}</h2></li>
                                 <li>${assignmentDict[assignmentID][0].subject}</li>
                             </ul>
                         </div>
                         <div class="submitbox">
-                            <h1>Submission Box</h1>
+                            <h2>Submission Box</h2>
                                 <form enctype="multipart/form-data" method="post">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                     <button type="submit">Turn in</button><br>
@@ -476,7 +581,7 @@
                                 </form>
                             </div>
                             <div class="files">
-                                <h1>Assignment Attachments</h1>
+                                <h2>Assignment Attachments</h2>
                                 <ul>
                                     ${fileList}
                                 </ul>
@@ -486,6 +591,7 @@
         }
         // for submitted assignments [tutee]
         if (assignmentDict[assignmentID][0].is_completed == String(1)) {
+            completedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
 
@@ -517,7 +623,7 @@
                     `<div class="assignment" id="${assignmentID}" data-due-date="${assignmentDict[assignmentID][0].duedate}" data-subject="${assignmentDict[assignmentID][0].subject}">
                         <div class="title">
                             <ul>
-                                <li>${assignmentDict[assignmentID][0].title}</li>
+                                <li><h2>${assignmentDict[assignmentID][0].title}</h2></li>
                                 <li>${assignmentDict[assignmentID][0].subject}</li>
                             </ul>
                         </div>
@@ -533,7 +639,7 @@
                                 </ul>
                             </div>
                             <div class="files">
-                                <h1>Assignment Attachments</h1>
+                                <h2>Assignment Attachments</h2>
                                 <ul>
                                     ${fileList}
                                 </ul>
@@ -543,6 +649,7 @@
         }      
         // for viewing assigned & unmarked assignments [tutor]
         if (assignmentDict[assignmentID][0].is_completed == String(0)) {
+            assignedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
             let fileList = ``;
@@ -557,12 +664,12 @@
                     `<div class="assignment" id="${assignmentID}" data-due-date="${assignmentDict[assignmentID][0].duedate}" data-subject="${assignmentDict[assignmentID][0].subject}">
                         <div class="title">
                             <ul>
-                                <li>${assignmentDict[assignmentID][0].title}</li>
+                                <li><h2>${assignmentDict[assignmentID][0].title}</h2></li>
                                 <li>${assignmentDict[assignmentID][0].subject}</li>
                             </ul> 
                         </div>
                         <div class="submitbox">
-                            <h1>Student</h1>
+                            <h2>Student</h2>
                                 ${assignmentDict[assignmentID][0].tutee}
                                 <form method="post">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -571,7 +678,7 @@
                                 </form>
                             </div>
                             <div class="files">
-                                <h1>Assignment Attachments</h1>
+                                <h2>Assignment Attachments</h2>
                                 <ul>
                                     ${fileList}
                                 </ul>
@@ -582,6 +689,7 @@
             
         // put one here for marked assignments [tutee + tutor]
         if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade != null) {
+            markedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
             
@@ -623,7 +731,7 @@
                     `<div class="markAssignment" id="${assignmentID}" data-due-date="${assignmentDict[assignmentID][0].duedate}" data-subject="${assignmentDict[assignmentID][0].subject}">
                         <div class="title">
                             <ul>
-                                <li>${assignmentDict[assignmentID][0].title}</li>
+                                <li><h2>${assignmentDict[assignmentID][0].title}</h2></li>
                                 <li>${assignmentDict[assignmentID][0].subject}</li>
                             </ul> 
                         </div>
@@ -634,7 +742,7 @@
                                 </ul>
                         </div>
                         <div class="files">
-                            <h1>Assignment Attachments</h1>
+                            <h2>Assignment Attachments</h2>
                             <ul>
                                 ${fileList}
                             </ul>
@@ -650,6 +758,7 @@
         }// NOTE: the onkeypress function in the input here still allows copy and pasting! Please validate the grade in the backend or otherwise.
         // for assignments awaiting marking [tutor]
         if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade == null) {
+            unmarkedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
             
@@ -683,7 +792,7 @@
                     `<div class="markAssignment" id="${assignmentID}" data-due-date="${assignmentDict[assignmentID][0].duedate}" data-subject="${assignmentDict[assignmentID][0].subject}">
                         <div class="title">
                             <ul>
-                                <li>${assignmentDict[assignmentID][0].title}</li>
+                                <li><h2>${assignmentDict[assignmentID][0].title}</h2></li>
                                 <li>${assignmentDict[assignmentID][0].subject}</li>
                             </ul> 
                         </div>
@@ -694,7 +803,7 @@
                                 </ul>
                         </div>
                         <div class="files">
-                            <h1>Assignment Attachments</h1>
+                            <h2>Assignment Attachments</h2>
                             <ul>
                                 ${fileList}
                             </ul>
@@ -711,7 +820,7 @@
                                 </form>
                         </div>
                         <div class="duedate">${lateMessage}</div>
-                    </div>` ;    
+                    </div>` ;  
         }// NOTE: the onkeypress function in the input here still allows copy and pasting! Please validate the grade in the backend or otherwise. 
     }      
 }
@@ -737,7 +846,7 @@ displayAssignments()
         document.getElementById(assignmentName).style.display = "flex";
         evt.currentTarget.className += " active";
         } 
-function filterBySubject(assignmentEl, subject) {
+function filterBySubject(event, assignmentEl, subject) {
     console.log('banana');
     const assignments = Array.from(assignmentEl.querySelectorAll('.assignment'));
 
@@ -757,7 +866,7 @@ function filterBySubject(assignmentEl, subject) {
 
 
 
-function filterByDate(assignmentEl) {
+function filterByDate(event, assignmentEl) {
     const assignments = Array.from(assignmentEl.querySelectorAll('.assignment'));
     assignments.sort((a, b) => {
         const dateA = new Date(a.getAttribute('data-due-date'));
@@ -768,13 +877,14 @@ function filterByDate(assignmentEl) {
 
     assignments.forEach(assignment =>  assignmentEl.appendChild(assignment));
 
-} //thanks chatGPT!
+}
 
 function resetFilters(assignmentEl) {
     const assignments = assignmentEl.querySelectorAll('.assignment');
     assignments.forEach(assignment => {
         assignment.style.display = '';
     });
+
 }
 
 document.addEventListener('DOMContentLoaded', () => { //load first tab on page load, courtesy of chatgpt

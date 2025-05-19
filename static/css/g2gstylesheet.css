@@ -10,8 +10,14 @@
   --bgbar: #cddcdf;
   
 
+  --button: #b9dddd;
+  --buttonhover: #80dddd;
+
+
   --border: #679494;
+
   
+  --txtlight: #5b7575;
   --txttab: rgb(42, 47, 51);
 
   /* text colour */
