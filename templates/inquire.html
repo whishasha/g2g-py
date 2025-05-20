@@ -12,24 +12,56 @@
                 #main {
                     display: flex;
                     flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
+                    justify-content: space-evenly;
+
+                    width: 100%;
+
+
+                    /* background-image: linear-gradient(to right, var(--bg), var(--box)); */
+
                 }
+
+                /* #main div {
+                    border: 1px solid black;
+                } */
+
                 #content {
-                    max-width: 50%;
-                    min-width: 40%;
+                    height: 100%;
+
+                    width: 30%;
                     display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    align-items:flex-start;
                     flex-direction: column;
-                    text-align: center;
+
+                    font-size: 20px;
                 }
+
+                #content h1 {
+
+                    padding-left: 10px;
+                    padding-right: 100px;
+                    padding-bottom: 20px;
+                    border-bottom: 1px solid var(--line);
+
+                    margin: 0;
+
+                    font-size: 100px;
+                }
+
+                #content p {
+                    margin: 10px;
+
+                }
+
                 #banner {
-                    max-width: 30vw;
+                    width: 49%;
+
+                    
+                    /* margin: 20px; */
                 }
                 textarea {
                     margin-top: 20px;
-                    height:200px;
+                    height: 200px;
                     width: 20vw;
                     padding: 15px 20px;
                     border: 2px solid #2bacff;
@@ -38,6 +70,28 @@
                     font-family: sans-serif;
                 }
 
+                ul#contacts {
+
+                    margin-top: 50px;
+
+
+                    border-top: 1px solid var(--line);
+                    border-bottom: 1px solid var(--line);
+
+                    padding: 20px 45px 0 0;
+                }
+
+                ul#contacts li {
+                    text-align: left;
+
+                    margin-right: 10px;
+                    margin-bottom: 20px;
+
+                }
+
+                ul#contacts i {
+                    margin: 0 10px;
+                }
 
                 @media (max-width: 768px) {
                 #main {
@@ -69,30 +123,25 @@
 
     <div id="main">
         {% block main %}
-            <div id="banner">
+            <!-- <div id="banner">
                 <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
-            </div>
+            </div> -->
 
             <div id="content">
                 <h1>Inquire</h1>
-                <hr class="line">
                 
-                <form>
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                    <input type="text" placeholder="Enter email here..." style="width: 20vw;">
-                    <br>
-                    
-                    <textarea placeholder="Enter inquiry here..."></textarea>
-                    <br>
-                    <submit><button>SEND</button></submit>
-                </form>
+                <p>Interested in enrolling? Contact us through our phone number and email!</p>
+
+                <ul id="contacts">
+                    <li><i class="fa-solid fa-envelope"></i> g2gtutoring@gmail.com</li>
+                    <li><i class="fa-solid fa-street-view" i></i> Sydney, NSW, Australia</li>
+                    <li><i class="fa-solid fa-phone-volume" i></i> +61 XX XXX XXXX</li>
+                </ul>
                 
-                <p>Hello. Fumo. Fumo.</p>
-                <button onclick="showSidebar()">hi</button>
             </div>
 
             <div id="banner">
-                <img src="{{url_for('static', filename='assets/inquire.png')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
+                <img src="{{url_for('static', filename='assets/inquire2.png')}}" width="400px" height="400px" style="margin-left: auto;margin-right: auto;display: block;">
             </div>
         {% endblock %}
     </div>

@@ -8,6 +8,8 @@
     --textalt: #7e929c;
 
     --textalt2: white;
+
+    --textalt3: rgb(169, 174, 175);
     /* background colour */
     --bg: white;
     /* accent colour */
@@ -18,6 +20,7 @@
     --line: #ced6d6;
 
     --box: #9dd2ed;
+
 }
 
 
@@ -143,6 +146,7 @@ body {
     flex-direction: column;
     align-items: center;
 
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 div {
@@ -174,6 +178,10 @@ h1 {
     margin: 15px;
     font-weight: bolder;
     font-size: 50px;            
+}
+
+body p {
+    color: var(--textalt3);
 }
 
 /* for separating text within a div */
