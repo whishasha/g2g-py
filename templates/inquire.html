@@ -28,12 +28,18 @@
                 #content {
                     height: 100%;
 
-                    width: 30%;
+                    width: fit-content;
                     display: flex;
                     align-items:flex-start;
                     flex-direction: column;
+                    justify-content: space-between;
 
                     font-size: 20px;
+
+                    border-left:5px solid var(--box);
+
+                    margin-top: .5rem;
+                    margin-left: 2rem;
                 }
 
                 #content h1 {
@@ -54,8 +60,8 @@
                 }
 
                 #banner {
-                    width: 49%;
-
+                    width: 100%;
+                    
                     
                     /* margin: 20px; */
                 }
@@ -86,11 +92,18 @@
 
                     margin-right: 10px;
                     margin-bottom: 20px;
+                    margin-top: 20px;
 
                 }
 
                 ul#contacts i {
                     margin: 0 10px;
+                }
+
+                @media (max-width: 1000px) {
+                    #main {
+                        flex-direction: column;
+                    }
                 }
 
                 @media (max-width: 768px) {
@@ -134,7 +147,9 @@
 
                 <ul id="contacts">
                     <li><i class="fa-solid fa-envelope"></i> g2gtutoring@gmail.com</li>
+                    <hr class="line">
                     <li><i class="fa-solid fa-street-view" i></i> Sydney, NSW, Australia</li>
+                    <hr class="line">
                     <li><i class="fa-solid fa-phone-volume" i></i> +61 XX XXX XXXX</li>
                 </ul>
                 

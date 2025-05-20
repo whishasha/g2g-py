@@ -12,20 +12,23 @@
             #main {
                 display: flex;
                 flex-direction: row;
-                justify-content: center;
-                align-items: center;
+                justify-content: space-between;
+                align-items: start;
+
+                width: 100%;
             }
             /* for graphic divs */
             .banner {
                 display: flex;
                 justify-content: center; /* Center content horizontally */
-                align-items: center;    /* Center content vertically */
-                max-width: 100%;        /* Ensure the banner doesn't stretch beyond container */
+
+                align-items:center;    /* Center content vertically */
+                width: 65%;        /* Ensure the banner doesn't stretch beyond container */
+
             }
 
             .banner img {
-                max-width: 200px;
-                height: auto; /* maintains constant aspect ratio*/
+                width: 600px; /* maintains constant aspect ratio*/
 
                 margin-left: auto;
                 margin-right: auto;
@@ -34,17 +37,42 @@
 
             /* for content divs */
             #content {
-                max-width: 40%;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
                 text-align: center; /* optional: centers inline text content */
+
+                padding-left: 50px;
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+                margin-top: .5rem;
+                margin-right: 2rem;
+                border-right:5px solid var(--box);
             }
         
+            #content a, #content a:visited {
+                color: #2bacff;
+            }
 
+            #content i {
+                margin-left: 10px;
+            }
+            #content h1 {
+                font-size: 100px;
+                padding-left: 50px;
+                border-bottom: 1px solid var(--border);
+            }
 
-            @media (max-width: 768px) {
+            #content form {
+                width: 100%;
+                text-align: right;
+                margin-right: 50px;
+            }
+            hr.line {
+                width: 90%;
+            }
+            @media (max-width: 800px) {
                 #main {
                     display: flex;
                     justify-content: center;
@@ -75,9 +103,12 @@
 
     <div id="main">
     {% block main %}
-        <div class="banner">
+        <!-- <div class="banner">
             <img src="{{url_for('static', filename='assets/login.png')}}">
-        </div>
+        </div> -->
+        <div class="banner">
+            <img src="{{url_for('static', filename='assets/login2.png')}}">
+        </div>  
         <div id="content">
             <h1>Log In</h1>
             <hr class="line">
@@ -85,20 +116,16 @@
 
             <form action="{{ url_for('login') }}" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <input type="text" name="name" placeholder="Username">
+                <input type="text" name="name" placeholder="Username"> <i class="fa-solid fa-user"></i>
                 <br>
-                <input type="password" name="password" placeholder="Password">
+                <input type="password" name="password" placeholder="Password"> <i class="fa-solid fa-lock"></i>
                 <br>
-                <button type="submit">Login</button>
+                <button type="submit" style="margin-right: 30px;">Login</button>
             </form>
-            <p style="margin-top:20px;">Having trouble? Send an <a href="/inquire" style="font-weight: 600;">inquiry</a> <br><br> or <a href="/passwordreset" style="font-weight: 600;">reset your password</a></p>
-            <hr>
-            <button onclick="showSidebar()">hi</button>
-            <p>Hello. Fumo. Fumo.</p>
+            <p style="margin-top:20px;margin-bottom:10px;">Having trouble? Send an <a href="/inquire" style="font-weight: 600;">inquiry</a></p>
+            <hr class="line">
         </div>
-        <div class="banner">
-            <img src="{{url_for('static', filename='assets/login2.png')}}">
-        </div>   
+ 
     {% endblock %}   
     
     
