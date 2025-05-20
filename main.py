@@ -176,15 +176,24 @@ def login():
         userRecord = cur.execute('''SELECT ID, name, password, is_tutor FROM users WHERE name=?''', (name,)).fetchone()
         cur.close()
         con.close()
-        passwordValidated = bcrypt.check_password_hash(userRecord[2], password)
-        print(passwordValidated)
-        if passwordValidated:
-            #userRecord[0] = ID, [1] = username, [2] = encrypted password, [3] = is_tutor as a 1(TRUE) or 0 (FALSE)
-            userID = str(userRecord[0])
-            user = User(userID, userRecord[1], userRecord[2], userRecord[3])
-            login_user(user) #from Flask_Login
-            print('Successfully logged in')
-            return redirect(url_for('user_home')) #add username as a parameter
+        if userRecord is None:
+            flash('Invalid username')
+            flash('Please try again')
+            return redirect(request.url)
+        if userRecord:
+            passwordValidated = bcrypt.check_password_hash(userRecord[2], password)
+            print(passwordValidated)
+            if passwordValidated:
+                #userRecord[0] = ID, [1] = username, [2] = encrypted password, [3] = is_tutor as a 1(TRUE) or 0 (FALSE)
+                userID = str(userRecord[0])
+                user = User(userID, userRecord[1], userRecord[2], userRecord[3])
+                login_user(user) #from Flask_Login
+                print('Successfully logged in')
+                return redirect(url_for('user_home')) #add username as a parameter
+            else: 
+                flash('Invalid password')
+                flash('Please try again')
+                return redirect(request.url)
     return render_template('login.html')
 
 @app.route("/inquire")
@@ -513,10 +522,11 @@ def user_account(): #A lot of the forms in here should be in their own "tutees" 
                 try:
                     int(request.form['tutee'])
                 except TypeError as e:
-                    print(f'Error: {e}')
+                    print(f'Attempted removal of invalid tutee | ID: {current_user.id}')
+                    flash(f'Error: {e}')
                     redirect(request.url)
                 except:
-                    print('Other error')
+                    flash('Please contact system admin.')
                     redirect(request.url)
             tuteeID = request.form['tutee']
             if 'unenrollCheck' in request.form:
@@ -552,16 +562,18 @@ def user_account(): #A lot of the forms in here should be in their own "tutees" 
                                 print('Success!')
                                 return redirect(request.url)
                             else:
-                                print(strengthcheck[1])
+                                flash(strengthcheck[1])
+                                return redirect(request.url)
                         else:
-                            print('Password cannot be the same as your previous password')
+                            flash('Password cannot be the same as your previous password')
+                            return redirect(request.url)
                         
-            print('Invalid request')
+            flash('Invalid request')
             return redirect(request.url)
         if 'changesubjects' in request.form:
             if 'tutee' in request.form:  
-                if 'unenrollCheck' in request.form:
-                    if request.form['unenrollCheck'] == 'on':
+                if 'changeClassCheck' in request.form:
+                    if request.form['changeClassCheck'] == 'on':
                         try:
                             tuteeID = int(request.form['tutee'])
                             if any(int(tutee[0]) == tuteeID for tutee in tutees): #checks if the tutee is REAL
@@ -582,16 +594,22 @@ def user_account(): #A lot of the forms in here should be in their own "tutees" 
                                     con.close()
                                     print('Success!')
                                 else:
-                                    print('Invalid submission')
+                                    flash('Invalid submission')
+                                    return redirect(request.url)
                             else:
-                                print('Invalid request')
+                                flash('Invalid request')
+                                return redirect(request.url)
                         except:
                             print('Invalid ID!')
                             return redirect(request.url)
                     else:
-                        print('Request cancelled')
+                        flash('Request cancelled')
+                        return redirect(request.url)
             else:
-                print('Suspicious form submission')
+                print(f'Suspicious class change form submission | ID: {current_user.id}') #Logging suspicious form submission
+                flash('Invalid request')
+                return redirect(request.url)
+
 
     return render_template('user_account.html', tutees=tutees)
 

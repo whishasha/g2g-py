@@ -23,7 +23,7 @@
                 justify-content: center; /* Center content horizontally */
 
                 align-items:center;    /* Center content vertically */
-                width: 65%;        /* Ensure the banner doesn't stretch beyond container */
+                width: 60%;        /* Ensure the banner doesn't stretch beyond container */
 
             }
 
@@ -44,10 +44,13 @@
                 text-align: center; /* optional: centers inline text content */
 
                 padding-left: 50px;
+                padding-right: 10px;
+
+
                 padding-bottom: 20px;
                 margin-bottom: 20px;
                 margin-top: .5rem;
-                margin-right: 2rem;
+                margin-right: 3rem;
                 border-right:5px solid var(--box);
             }
         
@@ -68,6 +71,15 @@
                 width: 100%;
                 text-align: right;
                 margin-right: 50px;
+            }
+            #content ul.flashes {
+                text-align: center;
+                width: 70%;
+                float: right;
+                margin-top: 1rem;
+            }
+            #content ul.flashes li {
+                color: var(--warning);
             }
             hr.line {
                 width: 90%;
@@ -116,10 +128,19 @@
 
             <form action="{{ url_for('login') }}" method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <input type="text" name="name" placeholder="Username"> <i class="fa-solid fa-user"></i>
+                <input type="text" name="name" placeholder="Username"><i class="fa-solid fa-user"></i>
                 <br>
-                <input type="password" name="password" placeholder="Password"> <i class="fa-solid fa-lock"></i>
+                <input type="password" name="password" placeholder="Password"><i class="fa-solid fa-lock"></i>
                 <br>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
                 <button type="submit" style="margin-right: 30px;">Login</button>
             </form>
             <p style="margin-top:20px;margin-bottom:10px;">Having trouble? Send an <a href="/inquire" style="font-weight: 600;">inquiry</a></p>

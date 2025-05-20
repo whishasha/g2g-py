@@ -122,6 +122,10 @@
   background-color: #f1f1f1;
 }
 
+button {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
         /* Style the buttons that are used to open the tab content */
         .tab button {
         background-color: inherit;
@@ -132,7 +136,6 @@
         cursor: pointer;
         padding: 14px 16px;
         transition: 0.3s;
-        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
         }
         .tab .tutorlinks {
             float:right;
@@ -152,7 +155,18 @@
         .tabcontent {
         display: none;
         }
-        </style>
+
+            ul.flashes {
+                text-align: center;
+                width: 70%;
+                margin-top: 1rem;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            ul.flashes li {
+                color: var(--warning);
+            }
+            </style>
         {% endblock %}
     {%endblock%}
 </head>
@@ -168,7 +182,7 @@
         {% block main %}
         <div id="title">
             <div id="menu"><i class="fa-solid fa-bars" onclick="hideSidenav()"></i></div>
-            <h1><i class="fa-solid fa-gear"></i><br>Account Settings :3</h1>
+            <h1><i class="fa-solid fa-gear"></i><br>Account Settings</h1>
         </div>
         <div class="tab">
             <button class="tablinks" onclick="openForm(event, 'changePassword')">Change Password</button>
@@ -187,8 +201,17 @@
                 
                 <br><label>Confirm Password</label>
                 <input type="text" name="confirmpassword" required>
-
                 <br><button type="submit" id="submit">Change Password</button>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+                
             </form>
 
             {% if current_user.is_tutor %}
@@ -214,12 +237,20 @@
                     <input type="checkbox" id="checkbox" name="is_english">
 
                     <input type="checkbox" id="checkbox" name="is_maths">
-
-
                 </div>
 
                 <input type="hidden" name="register">
                 <br><button type="submit" id="submit">Register</button>
+
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
             </form>
 
             <form method="post" id="registertutor" class="tabcontent" onkeydown="return event.key != 'Enter';">
@@ -239,6 +270,15 @@
 
                 <input type="hidden" name="registertutor">
                 <br><button type="submit" id="submit">Register</button>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
             </form>
 
             {% endif %}
@@ -258,6 +298,15 @@
                 <br><label>Are you sure?</label>
                 <input type="checkbox" name="unenrollCheck">
                 <br><button type="submit" id="submit">Unenroll Tutee</button>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
             </form>
             {% endif %}
 
@@ -284,6 +333,15 @@
                 <br><label>Are you sure?</label>
                 <input type="checkbox" name="changeClassCheck">
                 <br><button type="submit" id="submit">Change Classes</button>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
             </form>
             {% endif %}
         <!-- </div> -->
