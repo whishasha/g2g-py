@@ -821,7 +821,7 @@ if mode == "prod":
         print(f'Error: {e}')
 elif mode == "dev":
     print('Development server running!')
-    app.run(host="0.0.0.0", port=10000, debug=True) 
+    app.run(host="127.0.0.1", port=10000, debug=True) 
 # host="0.0.0.0"
 # host="127.0.0.1"
 

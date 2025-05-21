@@ -28,14 +28,14 @@
     <nav>
         {%block topbar%}
         <ul class="topbar" id="top">
-            <li style="text-align: center;font-size:larger;font-weight:bold;"><a href="/user/home">{{current_user.username}}</a></li>
+            <li><a href="/user/home"><h1>{{current_user.username}}</h1></a></li>
             <hr class="line">
             <li><a href="/user/home"><i width="20px" height="20px" class="fa-solid fa-house"></i> Home</a></li>
             <li><a href="/user/account"><i width="20px" height="20px" class="fa-solid fa-gear"></i> Account</a></li>            
             <hr class="line">
         </ul>
         <ul class="topbar" id="bottom">
-            <li style="text-align: center;font-weight:bold;font-size:1vw;">User Information</li>
+            <li><h1>User Information</h1></li>
             <hr class="line">
             <li><a href="/user/assignments"><i width="20px" height="20px" class="fa-solid fa-folder-open"></i> Assignments</a></li>
             <li><a href="/user/timetable"><i width="20px" height="20px" class="fa-solid fa-calendar"></i> Timetable</a></li>   

@@ -129,7 +129,7 @@ nav ul {
     width: 100%;
   }
 
-nav li {
+nav ul li {
   display: block;
   color: var(--textbar);
   padding: 4px 12px;
@@ -137,15 +137,36 @@ nav li {
   /* border: 1px solid black; */
 }
 
-li a {
+nav ul li h1 {
+  font-size: 18px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+nav ul li a {
   display: block;
   text-decoration: none;
   padding: 10px 5px;
   color:var(--textbar);
   border-radius: 15px;
 
-  font-size: 1vw;
+  font-size: 12px;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+nav ul hr.line {
+  padding-left: 10px;
+}
+
+hr {
+    width:100%;
+}
+.line {
+  width: 80%;
+  margin: auto;
+  border-top: 0.1px solid var(--textbar);
+  border-bottom: 0.1px transparent;
+  opacity: 0.9;
 }
 
 /* Change the link color on hover */
@@ -160,19 +181,6 @@ li a:hover {
   background-color: var(--accentbar);
   color: var(--accentalt);
 }
-
-
-hr {
-    width:100%;
-}
-.line {
-  width: 80%;
-  margin: auto;
-  border-top: 0.1px solid var(--textbar);
-  border-bottom: 0.1px transparent;
-  opacity: 0.9;
-}
-
 
 div#menu i{
   border-radius: 5px;
@@ -208,6 +216,13 @@ div#menu i:hover{
     width: 100vw;
   }
 
+  nav ul li a {
+    font-size: 15px;
+  }
+  hr.line {
+    float:left;
+    margin-left: 10px;
+  }
   nav.hide{
     height: 0;
     width: 100%;
