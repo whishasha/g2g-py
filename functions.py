@@ -42,7 +42,7 @@ def new_assignment_ID():
     cur = con.cursor()
 
     # retrieves a list of all unique assignment IDs from the database
-    assignmentIDs = cur.execute('''SELECT DISTINCT assignmentID FROM testFiles''').fetchall()
+    assignmentIDs = cur.execute('''SELECT DISTINCT assignmentID FROM testAssignments''').fetchall()
 
     formattedIDs = []
     for _ in assignmentIDs:
