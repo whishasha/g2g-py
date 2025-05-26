@@ -548,8 +548,6 @@
 
     function displayAssignments() {
     for (const assignmentID in assignmentDict) {
-        console.log(assignmentDict[assignmentID][0].is_completed);
-
         //for due assignments [tutee]
         if (assignmentDict[assignmentID][0].is_completed == String(0)) {
             dueAssignmentsEl.innerHTML = '';
