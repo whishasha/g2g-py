@@ -130,7 +130,7 @@ def init_real_data(ID): #fetches all events relevant to a user
         print(event)
     return events_data
 
-
+allowed_subjects = ['english', 'maths']
 
 
 #----------------------------------------INITIALISATION SECTION---------------------------------------------#
@@ -238,29 +238,45 @@ def user_timetable():
                         classnotes = str(request.form['classnotes'])
                         subject = str(request.form['subject'])                 
                     except:
-                        print('Invalid request')
+                        flash('Invalid request')
                         return redirect(request.url)
                     
+                    try:
+                        tutee = int(tutee)
+                    except:
+                        flash('Invalid ID submitted')
+                        return redirect(request.url)
+
                     # check for length of title, then restrict length
                     if len(title) > 50:
-                        print('Title too long. Restricted to 50 characters')
-                        redirect(request.url)
+                        flash('Title too long. Restricted to 50 characters')
+                        return redirect(request.url)
+
+                    if len(classnotes) > 250:
+                        flash('Notes too long. Restricted to 250 characters')
+                        return redirect(request.url)
+
+                    if subject not in allowed_subjects:
+                        flash('Error. Please contact system administrator')
+                        return redirect(request.url)
 
                     con = sqlite3.connect('database.db')
                     cur = con.cursor()
 
+
+                    if not functions.is_valid_time(classtime, "%H:%M") or not functions.is_valid_time(classdate, "%Y-%m-%d"):
+                        flash('Invalid date and time')
+                        return redirect(request.url)
+
                     # details = cur.execute('''SELECT classdate, classtime FROM testDates WHERE tutorID=?''', (str(current_user.id))).fetchall()
                     details = cur.execute('''SELECT classdate, classtime FROM testDates WHERE tutorID=? AND classdate=? AND classtime=?''', (current_user.id, classdate, classtime)).fetchall()
                     if details:
-                        print('Date and time already in use. Please choose another.')
-                        return redirect(request.url)                     
- # print(details)
-#                    print(current_user.id)
-                    # for record in details:
-                    #     if record[0] == classdate: 
-                    #         if record[1] == classtime:
-                    #             print('Date and time already in use. Please choose another.')
-                    #             return redirect(request.url) 
+                        flash('Date and time already in use. Please choose another.')
+                        return redirect(request.url)                
+
+
+
+
 
                     cur.execute('''INSERT INTO testDates(tuteeID, tutorID, subject, classdate, classtime, classnotes, title) VALUES(?, ?, ?, ?, ?, ?, ?)''',
                                 (tutee, current_user.id, subject, classdate, classtime, classnotes, title))
@@ -329,7 +345,10 @@ def user_timetable():
 
     return render_template('user_timetable.html', class_dates=init_real_data(current_user.id), tutees=tutees, overview=overview)
 
-def format_calendar_data(subject, tutee, daymonthyear, time, notes):
+
+
+# -------------------------------------------------------MISC. FUNCTION THAT I DON'T KNOW WHAT IT IS -------------------------------------------------------
+def format_calendar_data(subject, tutee, daymonthyear, time, notes): #due for deletion
     #store daymonthyear in 2 separate variables:
     # DATE (YYYY-MM-DD)
     # TIME (HH:MM:SS)
