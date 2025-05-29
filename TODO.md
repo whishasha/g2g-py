@@ -19,12 +19,16 @@
 # UI DEISNG FIRST!! DO UI DEIGNS!! 
 [ ] UI DEISNG
     [ ] adding info about G2G
-    [ ] remove login by Google bit from Login
+    [X] remove login by Google bit from Login
+
+[ ] add functional change class details button for dateInfo
+    [ ] opens changeDetails tab
+    [ ] autofills the form
 
 
 [ ] invalid login redirect
 
-[ ] displaying date info is broken, fix it
+[X] displaying date info is broken, fix it
 
 
 **Non-Functional**
@@ -36,13 +40,13 @@
 [ ] make it so when you download files the name is nice, without the UUID
 --[ ] unique folder for each id to allow for DIFFERENTIATION
 
-[ ] bug for calendars where information for single digit days does not display
+[X] bug for calendars where information for single digit days does not display
 
 [ ] calendar mobile responsivity
 
-[ ] graphic design for landing pages
+[X] graphic design for landing pages
 
-[ ] graphic designs for icons
+[X] graphic designs for icons
 
 [X] implement footer:
 refer to this:
