@@ -385,10 +385,18 @@ def user_assignments():
                 return redirect(request.url)
             subject = request.form['subject']
 
+            if subject not in allowed_subjects:
+                flash('Invalid subject. Please try again.')
+                return redirect(request.url)
+
             if not request.form['date']:
                 print('Invalid date')
                 return redirect(request.url)
             duedate = str(request.form['date'])
+
+            if functions.is_valid_time(duedate, '%Y-%m-%d'):
+                flash('Invalid time. Please try again')
+                return redirect(request.url)
 
             tuteeID = request.form['tutee']
             if User.get(tuteeID) is None:
@@ -403,6 +411,10 @@ def user_assignments():
                 print('Title not set')
                 return redirect(request.url)
             title = str(request.form['title'])
+
+            if len(title) > 250:
+                flash('Title is too long.')
+                return redirect(request.url)
 
             # If no file is uploaded, cancel request
             if 'file' not in request.files:
