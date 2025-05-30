@@ -775,9 +775,10 @@ const changeClassDetailsEl = document.getElementById('changeClassDetails');
 const calendar = document.getElementById('calendar');
 // datesEl selects all elements with class dates
 
+
 const displayDateInfo = (El) => { //display class details for each date
     //event.stopPropagation();
-    const offset = calendar.innerWidth / 2 ;
+    // const offset = calendar.getBoundingClientRect().innerWidth / 2 ;
     var ElRect = El.getBoundingClientRect();
     console.log('displaying date info');
     dateInfoEl.innerHTML = "";
@@ -799,37 +800,77 @@ const displayDateInfo = (El) => { //display class details for each date
 
     // dateInfoEl.innerHTML += `<button onclick="changeClassDetails()">Change Details</button>`
 
+    // waits for frames to load first before displaying info
+    requestAnimationFrame(() => {
+        const ElRect = El.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 
-    const calendarRect = calendar.getBoundingClientRect();
+        const dateInfoWidth = dateInfoEl.offsetWidth;
+        const dateInfoHeight = dateInfoEl.offsetHeight;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+        // Default position: right and slightly below the element
+        let leftPosition = ElRect.left + scrollLeft + 30;
+        let topPosition = ElRect.top + scrollTop;
+
+        // Prevent overflowing off the right side
+        if (leftPosition + dateInfoWidth > scrollLeft + windowWidth) {
+            leftPosition = scrollLeft + windowWidth - dateInfoWidth - 20;
+        }
+
+        // Prevent overflowing off the bottom
+        if (topPosition + dateInfoHeight > scrollTop + windowHeight) {
+            topPosition = scrollTop + windowHeight - dateInfoHeight - 30;
+        }
+
+        // Prevent going above the top
+        if (topPosition < scrollTop + 10) {
+            topPosition = scrollTop + 10;
+        }
+
+        dateInfoEl.style.position = 'absolute';
+        dateInfoEl.style.left = leftPosition + 'px';
+        dateInfoEl.style.top = topPosition + 'px';
+        dateInfoEl.style.display = 'flex';
+    });
+    // const calendarRect = calendar.getBoundingClientRect();
 
 
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
+    // const windowWidth = window.innerWidth;
+    // const windowHeight = window.innerHeight;
 
-    const dateInfoWidth = dateInfoEl.offsetWidth;
-    const dateInfoHeight = dateInfoEl.offsetHeight;
+    // const dateInfoWidth = dateInfoEl.offsetWidth;
+    // const dateInfoHeight = dateInfoEl.offsetHeight;
 
-    const calendarHeight = calendar.offsetHeight;
+    // let leftPosition = Math.min(windowWidth - dateInfoWidth, ElRect.left + 30);
+    // let topPosition = ElRect.top;
 
-    let leftPosition = ElRect.left + 30;
-    let topPosition = ElRect.top;
+    // const dateInfoWidth = dateInfoEl.offsetWidth;
+    // const dateInfoHeight = dateInfoEl.offsetHeight;
 
-    if (ElRect.left + dateInfoWidth > windowWidth) { //checking for the RIGHT 
-        leftPosition -= 2 * offset;
-    }
-    if (ElRect.top < 0) { //move ack up
-        topPosition = 10; 
-        //calendarHeight + calendar.getBoundingClientRect.top;
-    }
-    if (ElRect.top + dateInfoHeight > windowHeight) { //move back down
-        topPosition = windowHeight - (dateInfoHeight + 30);
-    }
+    // const calendarHeight = calendar.offsetHeight;
 
-    dateInfoEl.style.left = calendarRect.left + 'px';
-    dateInfoEl.style.top = calendarRect.top + 'px';
-    console.log(dateInfoEl.style.top);
-    console.log(calendarRect.top);
-    dateInfoEl.style.display = 'flex';
+    // let leftPosition = ElRect.left + 30;
+    // let topPosition = ElRect.top;
+
+    // if (ElRect.left + dateInfoWidth > windowWidth) { //checking for the RIGHT 
+    //     leftPosition -= 2 * offset;
+    // }
+    // if (ElRect.top < 0) { //move ack up
+    //     topPosition = 10; 
+    //     //calendarHeight + calendar.getBoundingClientRect.top;
+    // }
+    // if (ElRect.top + dateInfoHeight > windowHeight) { //move back down
+    //     topPosition = windowHeight - (dateInfoHeight + 30);
+    // }
+
+    // dateInfoEl.style.left = calendarRect.left + 'px';
+    // dateInfoEl.style.top = calendarRect.top + 'px';
+    // console.log(dateInfoEl.style.top);
+    // console.log(calendarRect.top);
+    // dateInfoEl.style.display = 'flex';
 }
 
 
