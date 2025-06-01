@@ -15,13 +15,22 @@
 ## Short-Term Tasks
 
 **Functional**
+[ ] send emails or reminders to users in home page
+    [ ] assignments to be marked
+
+[ ] fix dateInfo bug
+    - first click on right side displays offset too much bug
+
+[ ] add dateInfo draggable
 
 # UI DEISNG FIRST!! DO UI DEIGNS!! 
 [ ] UI DEISNG
     [ ] adding info about G2G
     [X] remove login by Google bit from Login
 
-[ ] add functional change class details button for dateInfo
+[ ] form beautifucation
+
+[] add functional change class details button for dateInfo
     [ ] opens changeDetails tab
     [ ] autofills the form
 
@@ -33,7 +42,7 @@
 
 **Non-Functional**
 
-[ ] format the nice dateInfo for the calendar
+[X] format the nice dateInfo for the calendar
 
 [ ] fix double scrollbar issue [in the timetable page]
 

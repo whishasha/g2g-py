@@ -10,7 +10,7 @@ from dotenv import load_dotenv, find_dotenv
 from werkzeug.utils import secure_filename
 
 import functions
-
+from datetime import datetime
 
 #----------------------------------------MISCELLANEOUS SECTION---------------------------------------------#
 load_dotenv(find_dotenv())
@@ -340,7 +340,7 @@ def user_timetable():
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    overview = cur.execute('''SELECT subject, classdate, classtime, title FROM testDates WHERE tuteeID=? OR tutorID=?''', (current_user.id, current_user.id)).fetchall()
+    overview = cur.execute('''SELECT subject, classdate, classtime, title FROM testDates WHERE tuteeID=? OR tutorID=? AND classdate >= ?''', (current_user.id, current_user.id, datetime.today().strftime('%Y-%m-%d'))).fetchall()
     print(overview)
 
     return render_template('user_timetable.html', class_dates=init_real_data(current_user.id), tutees=tutees, overview=overview)

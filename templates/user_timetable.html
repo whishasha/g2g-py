@@ -119,6 +119,14 @@
 .days-date .dates li.classes {
     background-color: var(--border);
     color: var(--background);
+    transition: .5s ease-in-out;
+}
+
+.days-date .dates li.classes:hover {
+    background-color: var(--border);
+    color: var(--background);
+
+    box-shadow: .5rem 0 var(--border);
 }
 
 .days-date .dates li.active {
@@ -127,7 +135,9 @@
 }
 
 .days-date .dates li.classes.active {
-    background-color: green;
+    /* background-color: green; */
+    background-color: var(--accent);
+    box-shadow: .5rem 0 var(--border);
     color: var(--background);
 }
 
@@ -176,7 +186,6 @@
     margin: 10px;
     align-items: center;
     word-wrap: break-word;
-    border:1px solid black;
 }
 
 #dateInfo button {
@@ -239,13 +248,13 @@ form {
 
 form input{
     border-radius: 5px;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--border);
     margin: 10px;
 }
 
 form select{
     border-radius: 5px;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--border);
     margin: 10px;    
 }
 
@@ -253,14 +262,27 @@ form h1{
     font-weight: bold;
     font-size: large;
     margin-bottom: 20px;
+
+    border-bottom: 2px solid var(--border);
+    padding: 0 5rem;
+    padding-bottom: .2rem;
+}
+
+form label {
+    padding: 0 1rem;
+    padding-bottom: .2rem;
+    border-bottom: 2px solid var(--border);  
 }
 
 form #submit{
-    background-color: var(--accent);
-    font-weight: lighter;
+    background-color: var(--border);
+    
+    color: white;
+
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 20px;
     border-radius: 15px;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--border);
     padding: 10px 30px;
 }
 
@@ -372,9 +394,15 @@ textarea {
 }
 
 #overview .container #scroll {
-    overflow-y: scroll;
-    
+    overflow-y: scroll;    
 }
+
+#overview .container #scroll p{
+    text-align: center;
+    margin: 20px;
+    color: var(--box);
+}
+
 
 .container h1 {
     margin-left: auto;
@@ -482,13 +510,17 @@ textarea {
             <div class="container">
                 <h1>Class Overview</h1>
             <div id="scroll">
-                {% for class in overview %} <!--not sure if this work :/-->
-                    <div class="class">
-                        <div class="title">Title: {{class[3]}}</div>
-                        <div class="duedate">Date: {{class[1]}}</div>
-                        <div class="subject">Time: {{class[2]}}</div>
-                    </div>
-                {% endfor %}
+                {% if overview is defined %}
+                    {% for class in overview %} <!--not sure if this work :/-->
+                        <div class="class">
+                            <div class="title">Title: {{class[3]}}</div>
+                            <div class="duedate">Date: {{class[1]}}</div>
+                            <div class="subject">Time: {{class[2]}}</div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                        <p>No classes upcoming<p>
+                {% endif %}
             </div>
             </div>
             <div class="calendar" id="calendar">
@@ -672,9 +704,9 @@ const displayCalendar = () => {
     const year_month = `${year}-${String(month + 1).padStart(2, '0')}`;
     const classes = class_dates[year_month] || {}; // || means logical OR
 
-    let lastmonth = month - 1;
+    let lastmonth = month;
     let lastyear = year;
-    let nextmonth = month + 1;
+    let nextmonth = month + 2;
 
     if (month == 1) { //adding edge cases
         lastmonth = 12;
@@ -699,6 +731,10 @@ const displayCalendar = () => {
     const lastyear_month = `${lastyear}-${String(lastmonth).padStart(2, '0')}`;
     const nextyear_month = `${lastyear}-${String(nextmonth).padStart(2, '0')}`;
     
+    console.log(`Last year-month: ${lastyear_month}`);
+    console.log(`Current year-month: ${year_month}`);
+    console.log(`Next year-month: ${nextyear_month}`);
+
     // dates must be added to align with the week
     for( let i = firstDayofMonth; i > 0; i--){// add overflow dates of the last month
         const overflowDate = lastDateofLastMonth - i + 1;
@@ -751,7 +787,8 @@ const displayCalendar = () => {
             class1 = dayEvents;
         }
         let checkClass;
-        if (classes.hasOwnProperty(i)) {
+        console.log(classes);
+        if (classes.hasOwnProperty(i) && nextyear_month == overflowDate) {
             checkClass = " classes";
         } else {
             checkClass = "";
@@ -817,7 +854,7 @@ const displayDateInfo = (El) => { //display class details for each date
 
         // Prevent overflowing off the right side
         if (leftPosition + dateInfoWidth > scrollLeft + windowWidth) {
-            leftPosition = scrollLeft + windowWidth - dateInfoWidth - 20;
+            leftPosition = scrollLeft + windowWidth - dateInfoWidth - 50;
         }
 
         // Prevent overflowing off the bottom
