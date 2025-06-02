@@ -32,7 +32,9 @@
 [ ] add colour schemes
     -add variables as :root { et.c et.c. e.t.ec}
 
-
+[ ] add functional change class details button for dateInfo
+    [ ] opens changeDetails tab
+    [ ] autofills the form
 
 # UI DEISNG FIRST!! DO UI DEIGNS!! 
 [ ] UI DEISNG
@@ -40,11 +42,6 @@
     [X] remove login by Google bit from Login
 
 [ ] form beautifucation
-
-[] add functional change class details button for dateInfo
-    [ ] opens changeDetails tab
-    [ ] autofills the form
-
 
 [ ] invalid login redirect
 

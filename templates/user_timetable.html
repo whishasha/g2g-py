@@ -159,7 +159,7 @@
 #dateInfo {
     background-color: var(--bgbar);
     height: 40vh;
-    width: 30%;
+    width: 20%;
 
     z-index: 9999;
 
@@ -182,7 +182,7 @@
 
 #dateInfo div {
     height: 100%;
-    width: 70%;
+    width: 90%;
     margin: 10px;
     align-items: center;
     word-wrap: break-word;
@@ -231,49 +231,23 @@ button:hover {
     font-size: large;
 }
 
-form {
-    margin: 50px auto;
 
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
 
-    width: fit-content;
 
-    background-color: var(--bgbar);
-    border-radius: 15px;
-    padding: 10px;
-}
 
-form input{
-    border-radius: 5px;
-    border: 1px solid var(--border);
-    margin: 10px;
-}
 
-form select{
-    border-radius: 5px;
-    border: 1px solid var(--border);
-    margin: 10px;    
-}
-
-form h1{
-    font-weight: bold;
-    font-size: large;
-    margin-bottom: 20px;
-
-    border-bottom: 2px solid var(--border);
-    padding: 0 5rem;
-    padding-bottom: .2rem;
-}
 
 form label {
     padding: 0 1rem;
     padding-bottom: .2rem;
     border-bottom: 2px solid var(--border);  
 }
-
+form option { 
+    background-color: var(--option);
+}
+    form option:hover{
+        background-color: var(--optionhover)
+    }
 form #submit{
     background-color: var(--border);
     
@@ -309,6 +283,94 @@ form #submit{
 }
 
 
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    
+    width: 50%;
+
+    background-color: var(--bgbar);
+    border-radius: 15px;
+    padding: 10px;
+    
+    margin: 50px auto;
+}
+    form h1 {
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+        font-size: large;
+        margin-bottom: 20px;
+
+        border-bottom: 2px solid var(--border);
+        padding: 0 5rem;
+        padding-bottom: .2rem;
+    }
+    form input, form textarea, form select {
+        border: 1px solid var(--border);
+        font-size: 12px;
+        font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+        text-align: center;
+        background-color: var(--inputbackground);
+        cursor: pointer;
+        color: var(--txtlight);
+        
+        border-radius: 5px;
+        border: 1px solid var(--border);
+        margin: 10px;
+    }
+
+    form div {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+
+        /* border: 1px solid black; */
+    }
+    #changeClassDetails form div.form-change-class{
+        width: 100%;
+    }
+        #changeClassDetails form div.form-change-class select{
+            height: 40px;
+            width: 60%;
+        }
+    form div.form-dates{
+        width: 49%;
+        margin: 0;
+        border-right: 2px solid var(--border);
+        border-left: 2px solid var(--border);
+    }
+    form div.form-details{
+        width: 49%;
+        margin: 0;
+        border-right: 2px solid var(--border);
+        border-left: 2px solid var(--border);
+    }
+        form div.form-details input {
+            word-wrap: break-word;
+        }
+    form div.form-notes{
+        width: 100%;
+
+    }
+    form button {
+        margin-left: auto;
+        margin-right: auto;
+
+        transition: .2s ease-in-out;
+    }
+        form button:hover {
+            background-color: var(--formhover);
+        }
+
+    #setclass .form-set-tutee {
+        width: 100%;
+    }
+
+
 
 textarea {
     border-radius: 5px;
@@ -340,7 +402,7 @@ textarea {
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-  background-color: #ddd;
+  background-color: var(--buttonhover);
 }
 
 /* Create an active/current tablink class */
@@ -441,6 +503,10 @@ textarea {
     #overview .container {
         width: 100%;
     }
+    #changeClassDetails form div.form-dates, #changeClassDetails form div.form-details{
+        margin-left:auto;margin-right: auto;
+    }
+
 }
 
 </style>
@@ -469,8 +535,8 @@ textarea {
             hi ;3
         </div>
         <div class="tab">
-            <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'overview')">Overview</button>
-            <button class="tablinks options" onclick="openCity(event, 'setclass')">Set New Class</button>
+            <button class="tablinks" onclick="openCity(event, 'overview')">Overview</button>
+            <button class="tablinks options"id="defaultOpen" onclick="openCity(event, 'setclass')">Set New Class</button>
             <button class="tablinks options" onclick="openCity(event, 'changeClassDetails')">Change Details</button>
         </div>
 
@@ -480,30 +546,39 @@ textarea {
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="hidden" name="change"/>
                 <h1>Change Class Details</h1>
-                <label>Class</label>
-                <select name="class" id="date" required onchange="populateForm(event)"> <!--use jinja for options-->
-                            <option value=boop>1</option> <!--filled dynamically using code-->
-                </select>
                 
-                <br><label>Date</label>
-                <input type="date" name="classdate" id="classdate" required>
-    
-                <br><label>Time</label>
-                <input type="time" name="classtimebegin" id="classtimebegin" required>
+                
+                <div class="form-change-class">    
+                    <label>Class</label>
+                    <select name="class" id="date" required onchange="populateForm(event)"> <!--use jinja for options-->
+                                <option value=boop>1</option> <!--filled dynamically using code-->
+                    </select>
+                </div>
+                <div class="form-dates">
+                    <label>New Date</label>
+                    <input type="date" name="classdate" id="classdate" required>
+                </div>
+                <div class="form-dates">
+                    <label>New Time</label>
+                    <input type="time" name="classtimebegin" id="classtimebegin" required>
+                </div>
+                <div class="form-details">
+                    <label>New Title</label>
+                    <input type="text" name="title" id="title" required>                    
+                </div>
+                <div class="form-details">
+                    <label>New Subject</label>
+                    <select name="subject" id="subject" id="subject" required> <!--use jinja for options-->
+                        <option value="english">English</option>
+                        <option value="maths">Mathematics</option>
+                    </select>
+                </div>
 
-                <br><label>Title</label>
-                <input type="text" name="title" id="title" required>
-
-                <br><label>Subject</label>
-                <select name="subject" id="subject" id="subject" required> <!--use jinja for options-->
-                    <option value="english">English</option>
-                    <option value="maths">Mathematics</option>
-                </select>
-
-                <br><label>Additional Notes</label>
-                <textarea name="classnotes" id="classnotes" ></textarea>
-    
-                <br><button type="submit" id="submit">Change Details</button>
+                <div class="form-notes">
+                    <label>Additional Notes</label>
+                    <textarea name="classnotes" id="classnotes"></textarea>
+                </div>
+                <button type="submit" id="submit">Change Details</button>
             </form>
         </div>
         <div id="overview" class="tabcontent">
@@ -589,35 +664,46 @@ textarea {
             <input type="hidden" name="set"/>
 
             <h1>Set Class</h1>
-            <label>Tutee</label>
-            <select name="tutee" id="tutee" required> <!--use jinja for options-->
-            {% for tutee in tutees %}
-                <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
-            {% endfor %}
+            <div class="form-set-tutee">
+                <label>Tutee</label>
+                <select name="tutee" id="tutee" required> <!--use jinja for options-->
+                {% for tutee in tutees %}
+                    <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
+                {% endfor %}
+                </select>
+            </div>
 
-            </select>
+        
+            <div class="form-dates">
+                <label>Date</label>
+                <input type="date" name="classdate" required>    
+            </div>
+
+
+            <div class="form-dates">
+                <label>Time</label>
+                <input type="time" name="classtimebegin" required>
+            </div>
             
-            <br><label>Date</label>
-            <input type="date" name="classdate" required>
             
+            <div class="form-details">
+                <label>Title</label>
+                <input type="text" name="title" required>
+            </div>
 
-            <br><label>Time</label>
-            <input type="time" name="classtimebegin" required>
+            <div class="form-details">
+                <label>Subject</label>
+                <select name="subject" id="subject" required> <!--use jinja for options-->
+                    <option value="english">English</option>
+                    <option value="maths">Mathematics</option>
+                </select>
+            </div>
 
-            <br><label>Title</label>
-            <input type="text" name="title" required>
-
-
-            <br><label>Subject</label>
-            <select name="subject" id="subject" required> <!--use jinja for options-->
-                <option value="english">English</option>
-                <option value="maths">Mathematics</option>
-            </select>
-
-            <br><label>Additional Notes</label>
-            <textarea name="classnotes"></textarea>
-
-            <br><button type="submit" id="submit">Set Class</button>
+            <div class="form-notes">
+                <label>Additional Notes</label>
+                <textarea name="classnotes"></textarea>
+            </div>
+            <button type="submit" id="submit">Set Class</button>
             </form>
         </div>
 
