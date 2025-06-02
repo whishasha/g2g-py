@@ -42,6 +42,9 @@
     [X] remove login by Google bit from Login
 
 [ ] form beautifucation
+        [X] calendar
+        [ ] assignments
+        [ ] account
 
 [ ] invalid login redirect
 
