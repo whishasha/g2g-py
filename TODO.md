@@ -12,6 +12,10 @@
 
 [-] make website compatible with screen sizes using @media (see resources.md)
 
+[ ] do charts for portfolio
+
+[ ] do first testing cycle
+
 ## Short-Term Tasks
 
 **Functional**
@@ -22,6 +26,11 @@
     - first click on right side displays offset too much bug
 
 [ ] add dateInfo draggable
+
+[ ] add colour schemes
+    -add variables as :root { et.c et.c. e.t.ec}
+
+
 
 # UI DEISNG FIRST!! DO UI DEIGNS!! 
 [ ] UI DEISNG
