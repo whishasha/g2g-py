@@ -19,6 +19,8 @@
 ## Short-Term Tasks
 
 **Functional**
+[ ] add chatting (after 1st testing cycle and styling)
+ 
 [ ] send emails or reminders to users in home page
     [ ] assignments to be marked
 
