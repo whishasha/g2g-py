@@ -7,123 +7,129 @@
     {{super()}}
         {% block css %}
         <style>
-            div#container {
-                display: grid;
-                grid-template-areas:
-                'form1 form2 form3 form4';
-                grid-row-gap: 5px;
-                margin-top: 50px;
-            }
-            div#changePassword {grid-area: form1;}
-            div#register {grid-area: form2;}
-            div#unenrollTutee {grid-area: form3;}
-            div#changeSubjects {grid-area: form4;}
-            /* form.register {
-                display: block;
-            } */
-            /* {% if current_user.is_tutor %}
-            form#register {
-                display: grid;
-                grid-template-areas:
-                'title title'
-                'lbluser inputuser'
-                'lblpass inputpass'
-                'lblfname inputfname'
-                'lbllname inputlname'
-                'lbltutor inputtutor'
-                'lblsubject inputsubjects'
-                'register register';
-                /* Have 2 columns => 1 joined, then have
-                title
-                label: input, etc.
-                submit*/
-            /*}
-            form#register#title {grid-area: title; border: 1px solid black;}
-            form#register#lbluser {grid-area: lbluser;}
-            form#register#inputuser {grid-area: inputuser;}
-            form#register#lblpass {grid-area: lblpass;}
-            form#register#inputpass {grid-area: inputpass;}
-            form#register#lblfname {grid-area: lblfname;}
-            form#register#inputfname {grid-area: inputfname;}
-            form#register#lbllname {grid-area: lbllname;}
-            form#register#inputlname {grid-area: inputlname;}
-            form#register#lbltutor {grid-area: lbltutor;}
-            form#register#inputtutor {grid-area: inputtutor;}
-            form#register#subject {grid-area: lblsubject;}
-            form#register#subjects {grid-area: inputsubjects;}
-            form#register#submit {grid-area: register;}
-            {% endif %} */
-            form {
-                margin-left: auto;
-                margin-right: auto;
-
-                margin-top: 20px;
-                padding: 10px;
-
-                background-color: var(--bgbar);
-                border-radius: 15px;
-
-                text-align: center;
-
-                display: block;
-                width: 50%;
-            }
-
-            form input{
-                border-radius: 5px;
-                border: 1px solid var(--accentbar);
-                
-                margin: 10px;
-                background-color: var(--forminput);
-            }
-            form label {
-                display: inline-block;
-                width: 50%;
-            }
-            form select {
-                border-radius: 5px;
-                border: 1px solid var(--accentbar);
-                
-                margin: 10px;
-                background-color: var(--forminput);
-            }
-
+            
             form h1{
                 font-weight: bold;
                 font-size: large;
 
                 margin-bottom: 20px;
-                border-bottom: 2px solid var(--accentbar);
                 padding-bottom: 10px;
-                
+
+                text-align: center;
                 width: 100%;
+
+                border-bottom: 2px solid var(--accentbar);
+            }
+            form label {
+                padding: 0 1rem;
+                padding-bottom: .2rem;
+                border-bottom: 2px solid var(--border);  
+                margin: 0 auto;
+            }
+            form div.form-user-login {
+                width: 50%;
+            }
+            form div.form-user-details {
+                width: 50%;
             }
 
             form #submit{
-                background-color: var(--accent);
-                font-weight: lighter;
+                background-color: var(--border);
+                
+                color: white;
+
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
                 font-size: 20px;
                 border-radius: 15px;
-                border: 1px solid var(--accent);
+                border: 1px solid var(--border);
                 padding: 10px 30px;
+                margin-left: auto;
+                margin-right: auto;
+
+
+                cursor:pointer;
+
+                transition: .2s ease-in-out;
+            }
+            form #submit:hover {
+                background-color: var(--formhover);
             }
 
-            #subjects{
+            div#subjects{
                 margin: 10px;
                 display: grid;
+                align-items: center;
                 grid:
                 '. .'
                 '. .';
                 column-gap: 10px;
             }
-            .tab {
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    
+
+    background-color: var(--bgbar);
+    border-radius: 15px;
+    padding: 10px;
+    
+    margin: 50px auto;
+
+    width: 50%;
+}
+    form div.form-password {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 80%;
+
+        margin: 0 auto;
+    }
+        form div.form-password input, 
+        div.form-user-details input {
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+            margin: .4rem 0;       
+        }
+    form div.form-user-details {
+        width: 50%;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+    form div.form-user-subjects {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        justify-content:space-between;
+    }
+        form div.form-user-subjects label {
+            margin: 0 auto;
+        }
+        form div.form-user-subjects input[type=checkbox] {
+           justify-self: center;
+           align-self: center;
+            height: 17px;
+            width: 17px;
+            margin: .2rem 0;
+        }
+
+    form#changeSubjects select {
+        width: 80%;
+        margin: 1rem auto;
+    }
+.tab {
   overflow: hidden;
   border: 1px solid #ccc;
   background-color: #f1f1f1;
 }
 
-button {
+form button {
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: .5rem;
 }
 
         /* Style the buttons that are used to open the tab content */
@@ -158,7 +164,7 @@ button {
 
             ul.flashes {
                 text-align: center;
-                width: 70%;
+                width: 100%;
                 margin-top: 1rem;
                 margin-left: auto;
                 margin-right: auto;
@@ -195,12 +201,18 @@ button {
             <form method="post" id="changePassword" class="tabcontent">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="hidden" name="changepassword"/>
-                <h1>Change Password</h1>
-                <br><label>Password</label>
-                <input type="text" name="password" required>
                 
-                <br><label>Confirm Password</label>
-                <input type="text" name="confirmpassword" required>
+                
+                <h1>Change Password</h1>
+                
+                <div class="form-password">
+                    <label>Password</label>
+                    <input type="text" name="password" required>
+                    
+                    <label>Confirm Password</label>
+                    <input type="text" name="confirmpassword" required>
+                </div>
+
                 <br><button type="submit" id="submit">Change Password</button>
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
@@ -218,29 +230,34 @@ button {
             <form method="post" id="registertutee" class="tabcontent" onkeydown="return event.key != 'Enter';">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <h1 id="title">Register a Tutee</h1>
-                <label id="lbluser">Username</label>
-                <input id="inputuser" type="text" name="username" required>
                 
-                <br><label id="lblpass">Password</label>
-                <input id="inputpass" type="text" name="password" required>
-                
-                <br><label id="lblfname">First Name</label>
-                <input id="inputfname" type="text" name="firstname" required>
-                
-                <br><label id="lbllname">Last Name</label>
-                <input id="inputlname" type="text" name="lastname" required>
+                <div class="form-user-details">
+                    <label id="lbluser">Username</label>
+                    <input id="inputuser" type="text" name="username" required>
+                    <label id="lblpass">Password</label>
+                    <input id="inputpass" type="text" name="password" required>
+                </div>
+            
+                <div class="form-user-details">
+                    <label id="lblfname">First Name</label>
+                    <input id="inputfname" type="text" name="firstname" required>
+                    <label id="lbllname">Last Name</label>
+                    <input id="inputlname" type="text" name="lastname" required>
+                </div>
+                <div class="form-user-subjects">
+                    <label id="subject">What subjects are they taking?</label>
+                    
+                    <div id="subjects">
+                        <label>English</label><label>Mathematics</label>
+                        <input type="checkbox" id="checkbox" name="is_english">
 
-                <br><label id="subject">What subjects are they taking?</label> <!--make this disappear if is_tutor is checked-->
-                
-                <div id="subjects">
-                    <label>English</label><label>Mathematics</label>
-                    <input type="checkbox" id="checkbox" name="is_english">
+                        <input type="checkbox" id="checkbox" name="is_maths">
+                </div>
 
-                    <input type="checkbox" id="checkbox" name="is_maths">
                 </div>
 
                 <input type="hidden" name="register">
-                <br><button type="submit" id="submit">Register</button>
+                <button type="submit" id="submit">Register</button>
 
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
@@ -256,17 +273,26 @@ button {
             <form method="post" id="registertutor" class="tabcontent" onkeydown="return event.key != 'Enter';">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <h1 id="title">Register a Tutor</h1>
-                <label id="lbluser">Username</label>
-                <input id="inputuser" type="text" name="username" required>
                 
-                <br><label id="lblpass">Password</label>
-                <input id="inputpass" type="text" name="password" required>
+                <div class="form-user-details">
+                    <label id="lbluser">Username</label>
+                    <input id="inputuser" type="text" name="username" required>    
+                </div>
+
+                <div class="form-user-details">
+                    <label id="lblpass">Password</label>
+                    <input id="inputpass" type="text" name="password" required>
+                </div>
+
+                <div class="form-user-details">
+                    <label id="lblfname">First Name</label>
+                    <input id="inputfname" type="text" name="firstname" required>
+                </div>
                 
-                <br><label id="lblfname">First Name</label>
-                <input id="inputfname" type="text" name="firstname" required>
-                
-                <br><label id="lbllname">Last Name</label>
-                <input id="inputlname" type="text" name="lastname" required>
+                <div class="form-user-details">
+                    <label id="lbllname">Last Name</label>
+                    <input id="inputlname" type="text" name="lastname" required>
+                </div>
 
                 <input type="hidden" name="registertutor">
                 <br><button type="submit" id="submit">Register</button>
@@ -315,24 +341,28 @@ button {
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="hidden" name="changesubjects"/>
                 <h1>Change Tutee's Subjects</h1>
+                
                 <select name="tutee" id="tutee" required>
                     {% for tutee in tutees %}
                         <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
                     {% endfor %}
                 </select>
                 
-                <br><label>Subjects Taken</label>
-                
-                <div id="subjects">
-                    <label>English</label><label>Mathematics</label>
-                    <input type="checkbox" id="checkbox" name="is_english" checked> <!--use this to auto check using if statements in jinja-->
+                <div class="form-user-subjects">
+                    <label>Subjects Taken</label>
+                    <div id="subjects">
+                        <label>English</label><label>Mathematics</label>
+                        <input type="checkbox" id="checkbox" name="is_english" checked> <!--use this to auto check using if statements in jinja-->
 
-                    <input type="checkbox" id="checkbox" name="is_maths">
+                        <input type="checkbox" id="checkbox" name="is_maths">
+                    </div>
                 </div>
-
-                <br><label>Are you sure?</label>
-                <input type="checkbox" name="changeClassCheck">
-                <br><button type="submit" id="submit">Change Classes</button>
+                
+                <div class="form-user-subjects">
+                    <label>Are you sure?</label>
+                    <input type="checkbox" name="changeClassCheck">
+                </div>
+                <button type="submit" id="submit">Change Classes</button>
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         <ul class=flashes>
@@ -357,6 +387,8 @@ button {
     const sidebarItems = document.querySelector('.topbar').getElementsByTagName('li');
     sidebarItems[2].classList.toggle('active');    
 
+    let flag = false;
+    const flashes = document.querySelector('.flashes');
     function openForm(evt, formName) {
         // Declare all variables
         var i, tabcontent, tablinks;
@@ -374,7 +406,7 @@ button {
         }
 
         // Show the current tab, and add an "active" class to the button that opened the tab
-        document.getElementById(formName).style.display = "block";
+        document.getElementById(formName).style.display = "flex";
         evt.currentTarget.className += " active";
     }
 

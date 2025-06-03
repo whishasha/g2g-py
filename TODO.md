@@ -12,37 +12,61 @@
 
 [-] make website compatible with screen sizes using @media (see resources.md)
 
+[ ] do charts for portfolio
+
+[ ] do first testing cycle
+
 ## Short-Term Tasks
 
 **Functional**
+[ ] add chatting (after 1st testing cycle and styling)
+ 
+[ ] send emails or reminders to users in home page
+    [ ] assignments to be marked
+
+[ ] fix dateInfo bug
+    - first click on right side displays offset too much bug
+
+[ ] add dateInfo draggable
+
+[ ] add colour schemes
+    -add variables as :root { et.c et.c. e.t.ec}
+
+[ ] add functional change class details button for dateInfo
+    [ ] opens changeDetails tab
+    [ ] autofills the form
 
 # UI DEISNG FIRST!! DO UI DEIGNS!! 
 [ ] UI DEISNG
     [ ] adding info about G2G
-    [ ] remove login by Google bit from Login
+    [X] remove login by Google bit from Login
 
+[ ] form beautifucation
+        [X] calendar
+        [ ] assignments
+        [ ] account
 
 [ ] invalid login redirect
 
-[ ] displaying date info is broken, fix it
+[X] displaying date info is broken, fix it
 
 
 **Non-Functional**
 
-[ ] format the nice dateInfo for the calendar
+[X] format the nice dateInfo for the calendar
 
 [ ] fix double scrollbar issue [in the timetable page]
 
 [ ] make it so when you download files the name is nice, without the UUID
 --[ ] unique folder for each id to allow for DIFFERENTIATION
 
-[ ] bug for calendars where information for single digit days does not display
+[X] bug for calendars where information for single digit days does not display
 
 [ ] calendar mobile responsivity
 
-[ ] graphic design for landing pages
+[X] graphic design for landing pages
 
-[ ] graphic designs for icons
+[X] graphic designs for icons
 
 [X] implement footer:
 refer to this:

@@ -1,6 +1,6 @@
 /* Stylesheet for the G2G Landing Pages */
 
-/* colourscheme */
+/* default colourscheme */
 :root {
   /* text in sidebar */
   --textbar: #768080;
@@ -11,13 +11,20 @@
   
 
   --button: #b9dddd;
-  --buttonhover: #80dddd;
+  --buttonhover: #ddd;
 
 
   --border: #679494;
 
-  
+  /* Form colours */
+  --formbackground: orange;
+  --formtxt: white;
+  --formhover: green;
+  --option: blue;
+  --optionhover: red;
   --txtlight: #5b7575;
+  --inputbackground: #eff9f9;
+
   --txttab: rgb(42, 47, 51);
     --warning: rgb(255, 47, 47);
   /* text colour */

@@ -5,6 +5,13 @@ from json import dumps
 from datetime import datetime
 
 
+def is_valid_time(time_string, format):
+    try:
+        datetime.strptime(time_string, format)
+        return True
+    except ValueError:
+        return False
+
 def check_password_strength(password):
     message = ''
     if password is not None:
@@ -290,4 +297,3 @@ def unenroll_tutee(tuteeID):
 
 if __name__ == '__main__':
     print('Running functions.py on main thread!')
-    
