@@ -258,7 +258,12 @@ form #submit{
     border-radius: 15px;
     border: 1px solid var(--border);
     padding: 10px 30px;
+
+    transition: .2s ease-in-out;
 }
+    form #submit:hover {
+        background-color: var(--formhover);
+    }
 
 #changeClassDetails #setClass{
     background-color: var(--bgbar);
@@ -349,9 +354,6 @@ form {
         border-right: 2px solid var(--border);
         border-left: 2px solid var(--border);
     }
-        form div.form-details input {
-            word-wrap: break-word;
-        }
     form div.form-notes{
         width: 100%;
 
@@ -551,7 +553,7 @@ textarea {
                 <div class="form-change-class">    
                     <label>Class</label>
                     <select name="class" id="date" required onchange="populateForm(event)"> <!--use jinja for options-->
-                                <option value=boop>1</option> <!--filled dynamically using code-->
+                                <option value=foo>bar</option> <!--filled dynamically using code-->
                     </select>
                 </div>
                 <div class="form-dates">
