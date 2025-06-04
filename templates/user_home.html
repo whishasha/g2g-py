@@ -179,8 +179,8 @@
 {% block js %}
 {{super()}}
 <script>
-        const sidebarItems = document.querySelector('.topbar').getElementsByTagName('li');
-        sidebarItems[1].classList.toggle('active'); //toggling home tab
+        const sidebarItem = document.querySelector('.nav-home');
+        sidebarItem.classList.toggle('active'); //toggling home tab
 </script>
 {% endblock %}
 

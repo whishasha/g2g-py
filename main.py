@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash, url_for, send_file, send_from_directory
+from flask import Flask, render_template, request, session, redirect, flash, url_for, send_file, send_from_directory
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 from flask_wtf.csrf import CSRFProtect
@@ -11,6 +11,15 @@ from werkzeug.utils import secure_filename
 
 import functions
 from datetime import datetime
+
+from flask_socketio import SocketIO, emit, join_room, leave_room
+from werkzeug.middleware.proxy_fix import ProxyFix
+import logging
+import random
+from typing import Dict
+
+#chat tutorial:
+# https://www.youtube.com/watch%3Fv%3Do5vDco6OVTs&ved=2ahUKEwjswL677tiNAxUMT2wGHalHCcEQz40FegQIFxAr&usg=AOvVaw3gLy0_lglbLC22aR5czqpp
 
 #----------------------------------------MISCELLANEOUS SECTION---------------------------------------------#
 load_dotenv(find_dotenv())
@@ -132,6 +141,11 @@ def init_real_data(ID): #fetches all events relevant to a user
 
 allowed_subjects = ['english', 'maths']
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s-%(name)s-%(levelname)s-%(message)s'
+)
+
 
 #----------------------------------------INITIALISATION SECTION---------------------------------------------#
 
@@ -152,6 +166,7 @@ csrf.init_app(app)
 
 app.config["SECRET_KEY"] = encoded_secret_key
 
+logger = logging.getLogger(__name__)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -344,8 +359,6 @@ def user_timetable():
     print(overview)
 
     return render_template('user_timetable.html', class_dates=init_real_data(current_user.id), tutees=tutees, overview=overview)
-
-
 
 # -------------------------------------------------------MISC. FUNCTION THAT I DON'T KNOW WHAT IT IS -------------------------------------------------------
 def format_calendar_data(subject, tutee, daymonthyear, time, notes): #due for deletion
@@ -772,6 +785,12 @@ def register_tutor():
     
     cur.close()
     con.close()
+
+@app.route("/user/chat", methods=['GET', 'POST'])
+def user_chat():
+    return render_template("user_chat.html")
+
+
 
 @app.route("/user/logout")
 @login_required

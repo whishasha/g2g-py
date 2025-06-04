@@ -541,8 +541,8 @@ form#set #submit{
 {% block js %}
 {{super()}}
 <script>
-    const sidebarItems = document.querySelectorAll('.topbar')[1].getElementsByTagName('li');
-    sidebarItems[1].classList.toggle('active');
+        const sidebarItem = document.querySelector('.nav-assignments');
+        sidebarItem.classList.toggle('active'); //toggling home tab
 </script>
 <script>
 

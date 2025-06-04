@@ -152,17 +152,24 @@ nav ul li h1 {
 
 nav ul li a {
   display: block;
+  align-items: left;
   text-decoration: none;
-  padding: 10px 5px;
+  padding: 12px 8px;
   color:var(--textbar);
   border-radius: 15px;
 
-  font-size: 12px;
+  font-size: 15px;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 nav ul hr.line {
   padding-left: 10px;
+}
+
+nav i {
+  width: 20px;
+  height: 20px;
+  padding: 0;
 }
 
 hr {

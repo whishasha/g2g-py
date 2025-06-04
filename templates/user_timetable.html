@@ -734,8 +734,11 @@ textarea {
     <script src="{{url_for('static', filename='js/g2g.js')}}"></script>
     <script>
         "use strict";
-    const sidebarItems = document.querySelectorAll('.topbar')[1].getElementsByTagName('li');
-    sidebarItems[2].classList.toggle('active');
+        const sidebarItem = document.querySelector('.nav-timetable');
+        sidebarItem.classList.toggle('active');
+
+
+
 // credit: https://www.youtube.com/watch?v=ZBJ44LrmwDI
 console.log('Calendar script running.')
 

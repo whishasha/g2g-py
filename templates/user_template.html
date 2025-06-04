@@ -30,17 +30,18 @@
         <ul class="topbar" id="top">
             <li><a href="/user/home"><h1>{{current_user.username}}</h1></a></li>
             <hr class="line">
-            <li><a href="/user/home"><i width="20px" height="20px" class="fa-solid fa-house"></i> Home</a></li>
-            <li><a href="/user/account"><i width="20px" height="20px" class="fa-solid fa-gear"></i> Account</a></li>            
+            <li class="nav-home"><a href="/user/home"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li class="nav-account"><a href="/user/account"><i class="fa-solid fa-gear"></i> Account</a></li>       
+            <li class="nav-chat"><a href="/user/chat"><i class="fa-solid fa-comment"></i> Chat</a></li>     
             <hr class="line">
         </ul>
         <ul class="topbar" id="bottom">
             <li><h1>User Information</h1></li>
             <hr class="line">
-            <li><a href="/user/assignments"><i width="20px" height="20px" class="fa-solid fa-folder-open"></i> Assignments</a></li>
-            <li><a href="/user/timetable"><i width="20px" height="20px" class="fa-solid fa-calendar"></i> Timetable</a></li>   
+            <li class="nav-assignments"><a href="/user/assignments"><i class="fa-solid fa-folder-open"></i> Assignments</a></li>
+            <li class="nav-timetable"><a href="/user/timetable"><i class="fa-solid fa-calendar"></i> Timetable</a></li>   
             <hr class="line">           
-            <li><a href="/user/logout"><i width="20px" height="20px" class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
+            <li><a href="/user/logout"><i class="fa-solid fa-right-to-bracket"></i> Logout</a></li>
         </ul> 
         {% endblock %}
     </nav>
