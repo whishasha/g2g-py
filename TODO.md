@@ -24,7 +24,7 @@
 [ ] send emails or reminders to users in home page
     [ ] assignments to be marked
 
-[ ] fix dateInfo bug
+[X] fix dateInfo bug
     - first click on right side displays offset too much bug
 
 [ ] add dateInfo draggable
@@ -41,9 +41,9 @@
     [ ] adding info about G2G
     [X] remove login by Google bit from Login
 
-[ ] form beautifucation
+[X] form beautifucation
         [X] calendar
-        [ ] assignments
+        [X] assignments
         [X] account
 
 [ ] invalid login redirect
