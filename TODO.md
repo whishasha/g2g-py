@@ -44,7 +44,7 @@
 [ ] form beautifucation
         [X] calendar
         [ ] assignments
-        [ ] account
+        [X] account
 
 [ ] invalid login redirect
 

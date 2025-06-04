@@ -95,7 +95,7 @@ def init_real_data(ID): #fetches all events relevant to a user
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    real_data = cur.execute('''SELECT * FROM testDates WHERE tutorID =? OR tuteeID =?''', (int(ID), int(ID))).fetchall()
+    real_data = cur.execute('''SELECT * FROM Dates WHERE tutorID =? OR tuteeID =?''', (int(ID), int(ID))).fetchall()
     cur.close()
     con.close()
 
@@ -268,8 +268,8 @@ def user_timetable():
                         flash('Invalid date and time')
                         return redirect(request.url)
 
-                    # details = cur.execute('''SELECT classdate, classtime FROM testDates WHERE tutorID=?''', (str(current_user.id))).fetchall()
-                    details = cur.execute('''SELECT classdate, classtime FROM testDates WHERE tutorID=? AND classdate=? AND classtime=?''', (current_user.id, classdate, classtime)).fetchall()
+                    # details = cur.execute('''SELECT classdate, classtime FROM Dates WHERE tutorID=?''', (str(current_user.id))).fetchall()
+                    details = cur.execute('''SELECT classdate, classtime FROM Dates WHERE tutorID=? AND classdate=? AND classtime=?''', (current_user.id, classdate, classtime)).fetchall()
                     if details:
                         flash('Date and time already in use. Please choose another.')
                         return redirect(request.url)                
@@ -278,7 +278,7 @@ def user_timetable():
 
 
 
-                    cur.execute('''INSERT INTO testDates(tuteeID, tutorID, subject, classdate, classtime, classnotes, title) VALUES(?, ?, ?, ?, ?, ?, ?)''',
+                    cur.execute('''INSERT INTO Dates(tuteeID, tutorID, subject, classdate, classtime, classnotes, title) VALUES(?, ?, ?, ?, ?, ?, ?)''',
                                 (tutee, current_user.id, subject, classdate, classtime, classnotes, title))
                     con.commit()
 
@@ -315,17 +315,17 @@ def user_timetable():
                 con = sqlite3.connect('database.db')
                 cur = con.cursor()
                 # verify that class date exists for updating
-                details = cur.execute('''SELECT classdate, classtime, tuteeID FROM testDates WHERE classdate=? AND classtime=? AND tutorID=? AND classID !=?''',(classdate, classtime, current_user.id, classID)).fetchone()
+                details = cur.execute('''SELECT classdate, classtime, tuteeID FROM Dates WHERE classdate=? AND classtime=? AND tutorID=? AND classID !=?''',(classdate, classtime, current_user.id, classID)).fetchone()
 
                 if details:
                     print('Invalid date to change. Class does not exist')
                     return redirect(request.url)
 
                 # the below statement will either overrwrite class dates or add a new class date
-                # cur.execute('''INSERT OR REPLACE INTO testDates(tuteeID, tutorID, subject, classdate, classtime, classnotes)
+                # cur.execute('''INSERT OR REPLACE INTO Dates(tuteeID, tutorID, subject, classdate, classtime, classnotes)
                 #             VALUES(?, ?, ?, ?, ?, ?)''', formattedData)
 
-                cur.execute('''UPDATE testDates SET subject=?, classdate=?, classtime=?, classnotes=?, title=? WHERE classID=?''',
+                cur.execute('''UPDATE Dates SET subject=?, classdate=?, classtime=?, classnotes=?, title=? WHERE classID=?''',
                             (subject, classdate, classtime, classnotes, title, classID))
 
                 con.commit()
@@ -340,7 +340,7 @@ def user_timetable():
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    overview = cur.execute('''SELECT subject, classdate, classtime, title FROM testDates WHERE tuteeID=? OR tutorID=? AND classdate >= ?''', (current_user.id, current_user.id, datetime.today().strftime('%Y-%m-%d'))).fetchall()
+    overview = cur.execute('''SELECT subject, classdate, classtime, title FROM Dates WHERE tuteeID=? OR tutorID=? AND classdate >= ?''', (current_user.id, current_user.id, datetime.today().strftime('%Y-%m-%d'))).fetchall()
     print(overview)
 
     return render_template('user_timetable.html', class_dates=init_real_data(current_user.id), tutees=tutees, overview=overview)
@@ -467,9 +467,9 @@ def user_assignments():
                     file.save(filepath)
                     print('Saved!')
                     functions.set_assignment_files(assignmentID=assignmentID, status=1, filename=unique_filename, filepath=filepath)
-            # need to: upload files to testFiles, with status 1
+            # need to: upload files to Files, with status 1
             functions.update_assignment_status(assignmentID=assignmentID, is_completed=1, grade=None)
-            # update testAssignment, turning is_completed = 1
+            # update Assignment, turning is_completed = 1
             
             print('Assignment files submitted!')
         if 'unsubmitassignment' in request.form:
@@ -507,9 +507,9 @@ def user_assignments():
                     file.save(filepath)
                     print('Saved!')
                     functions.set_assignment_files(assignmentID=assignmentID, status=2, filename=filename, filepath=filepath)
-            # need to: upload files to testFiles, with status 2
+            # need to: upload files to Files, with status 2
             functions.update_assignment_status(assignmentID=assignmentID, is_completed=1, grade=grade)
-            # update testAssignment, turning is_completed = 1
+            # update Assignment, turning is_completed = 1
             
             print('Assignment marked & uploaded!!')
         if 'deleteassignment' in request.form:
@@ -522,8 +522,8 @@ def user_assignments():
             con = sqlite3.connect('database.db')
             cur = con.cursor()
 
-            cur.execute('''DELETE FROM testAssignments WHERE assignmentID=?''', (assignmentID,))
-            cur.execute('''DELETE FROM testFiles WHERE assignmentID=?''', (assignmentID,))
+            cur.execute('''DELETE FROM Assignments WHERE assignmentID=?''', (assignmentID,))
+            cur.execute('''DELETE FROM Files WHERE assignmentID=?''', (assignmentID,))
             con.commit()
             
             cur.close()
@@ -618,7 +618,7 @@ def user_account(): #A lot of the forms in here should be in their own "tutees" 
                                     con = sqlite3.connect('database.db')
                                     cur = con.cursor()
 
-                                    cur.execute('''UPDATE testClasses SET is_english = ?, is_maths = ? WHERE userID=? ''', (is_english, is_maths, tuteeID))
+                                    cur.execute('''UPDATE Classes SET is_english = ?, is_maths = ? WHERE userID=? ''', (is_english, is_maths, tuteeID))
                                     con.commit()
 
                                     cur.close()
@@ -705,7 +705,7 @@ def register():
             print('An unexpected error has occurred') #user doesn't exist????!?!?!?!?!?
             return redirect(request.url)
         
-        cur.execute('''INSERT INTO testClasses(userID, tutorID, is_english, is_maths) 
+        cur.execute('''INSERT INTO Classes(userID, tutorID, is_english, is_maths) 
                     VALUES(?, ?, ?, ?)''',
                     (registereduserID, current_user.id, is_english, is_maths))
         con.commit()

@@ -49,7 +49,7 @@ def new_assignment_ID():
     cur = con.cursor()
 
     # retrieves a list of all unique assignment IDs from the database
-    assignmentIDs = cur.execute('''SELECT DISTINCT assignmentID FROM testAssignments''').fetchall()
+    assignmentIDs = cur.execute('''SELECT DISTINCT assignmentID FROM Assignments''').fetchall()
 
     formattedIDs = []
     for _ in assignmentIDs:
@@ -68,7 +68,7 @@ def set_assignment_files(assignmentID: int, status: int, filename: str, filepath
 
     con = sqlite3.connect('database.db')
     cur = con.cursor()
-    cur.execute('''INSERT INTO testFiles(assignmentID, status, name, filepath) VALUES(?, ?, ?, ?)''',
+    cur.execute('''INSERT INTO Files(assignmentID, status, name, filepath) VALUES(?, ?, ?, ?)''',
                 (assignmentID, status, filename, filepath))
     
     con.commit()
@@ -83,7 +83,7 @@ def set_assignment_details(assignmentID: int, tuteeID: int, tutorID: int, title:
 
 
 
-            cur.execute('''INSERT INTO testAssignments(assignmentID, tuteeID, tutorID, title, duedate, is_completed, is_late, grade, subject) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+            cur.execute('''INSERT INTO Assignments(assignmentID, tuteeID, tutorID, title, duedate, is_completed, is_late, grade, subject) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)''',
                         (assignmentID, tuteeID, tutorID, title, duedate, False, None, None, subject))
             
             con.commit()
@@ -96,28 +96,28 @@ def get_assignment_details(ID):
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    assignmentDetails = cur.execute('''SELECT * FROM testAssignments WHERE tuteeID=? OR tutorID=?''', (ID, ID)).fetchall()
+    assignmentDetails = cur.execute('''SELECT * FROM Assignments WHERE tuteeID=? OR tutorID=?''', (ID, ID)).fetchall()
 
     assignmentIDList = []
 
     for assignment in assignmentDetails:
         assignmentID = assignment[0]
 
-        setAssignmentFilepaths = cur.execute('''SELECT name, filepath FROM testFiles WHERE assignmentID=? AND status=0''', (assignmentID,)).fetchall()
+        setAssignmentFilepaths = cur.execute('''SELECT name, filepath FROM Files WHERE assignmentID=? AND status=0''', (assignmentID,)).fetchall()
         formattedSetFilepaths = []
         formattedSetFilenames = []
         for _ in setAssignmentFilepaths:
             formattedSetFilepaths.append(_[1])
             formattedSetFilenames.append(_[0])
 
-        submittedAssignmentFilepaths = cur.execute('''SELECT name, filepath FROM testFiles WHERE assignmentID=? AND status=1''', (assignmentID,)).fetchall()
+        submittedAssignmentFilepaths = cur.execute('''SELECT name, filepath FROM Files WHERE assignmentID=? AND status=1''', (assignmentID,)).fetchall()
         formattedSubmittedFilepaths = []
         formattedSubmittedFilenames = []
         for _ in submittedAssignmentFilepaths:
             formattedSubmittedFilepaths.append(_[1])
             formattedSubmittedFilenames.append(_[0])
 
-        markedAssignmentFilepaths = cur.execute('''SELECT name, filepath FROM testFiles WHERE assignmentID=? AND status=2''', (assignmentID,)).fetchall()
+        markedAssignmentFilepaths = cur.execute('''SELECT name, filepath FROM Files WHERE assignmentID=? AND status=2''', (assignmentID,)).fetchall()
         formattedMarkedFilepaths = []
         formattedMarkedFilenames = []
         for _ in markedAssignmentFilepaths:
@@ -164,9 +164,9 @@ def update_assignment_status(assignmentID: int, is_completed: int, grade: int):
 
 
     if is_completed == 0:
-        cur.execute('''UPDATE testAssignments SET is_completed = 0 WHERE assignmentID = ?''', (assignmentID,))
+        cur.execute('''UPDATE Assignments SET is_completed = 0 WHERE assignmentID = ?''', (assignmentID,))
     if is_completed == 1:
-        duedate = cur.execute('''SELECT duedate FROM testAssignments WHERE assignmentID=?''', (assignmentID,)).fetchone()[0]
+        duedate = cur.execute('''SELECT duedate FROM Assignments WHERE assignmentID=?''', (assignmentID,)).fetchone()[0]
         is_late = 0
         date = datetime.today().strftime('%Y-%m-%d')
         if duedate > date:
@@ -174,7 +174,7 @@ def update_assignment_status(assignmentID: int, is_completed: int, grade: int):
         elif duedate < date:
             is_late = 1
 
-        cur.execute('''UPDATE testAssignments SET is_completed = ?, is_late=?, grade=? WHERE assignmentID = ?''', (is_completed, is_late, grade, assignmentID,))
+        cur.execute('''UPDATE Assignments SET is_completed = ?, is_late=?, grade=? WHERE assignmentID = ?''', (is_completed, is_late, grade, assignmentID,))
     con.commit()
     
     
@@ -213,12 +213,12 @@ def validate_file_access(unique_filename, userID):
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    assignmentID = cur.execute('''SELECT assignmentID from testFiles WHERE filepath=?''', (fr'static/files\{unique_filename}',)).fetchone()
-    assignmentName = cur.execute('''SELECT name from testFiles WHERE filepath=?''', (fr'static/files\{unique_filename}',)).fetchone()
+    assignmentID = cur.execute('''SELECT assignmentID from Files WHERE filepath=?''', (fr'static/files\{unique_filename}',)).fetchone()
+    assignmentName = cur.execute('''SELECT name from Files WHERE filepath=?''', (fr'static/files\{unique_filename}',)).fetchone()
     
     if assignmentID is not None and assignmentName is not None:
-        row = cur.execute('''SELECT tuteeID FROM testAssignments WHERE assignmentID=?''', (assignmentID)).fetchone()[0]
-        row1 = cur.execute('''SELECT tutorID FROM testAssignments WHERE assignmentID=?''', (assignmentID)).fetchone()[0]
+        row = cur.execute('''SELECT tuteeID FROM Assignments WHERE assignmentID=?''', (assignmentID)).fetchone()[0]
+        row1 = cur.execute('''SELECT tutorID FROM Assignments WHERE assignmentID=?''', (assignmentID)).fetchone()[0]
         
         
         if row == userID or row1 == userID:
@@ -249,17 +249,17 @@ def get_home_details(tuteeID):
     # fetching assignment:
         # number of due assignments
         # duedate, title, subject
-    assignment_details = cur.execute('''SELECT duedate, title, subject FROM testAssignments WHERE tuteeID=? AND duedate > ? OR tutorID=?''', (tuteeID, currentYearMonthDate, tuteeID)).fetchall()
+    assignment_details = cur.execute('''SELECT duedate, title, subject FROM Assignments WHERE tuteeID=? AND duedate > ? OR tutorID=?''', (tuteeID, currentYearMonthDate, tuteeID)).fetchall()
 
 
     # fetching enrolled classes:
         # enrolled classes
-    enrolled_classes = cur.execute('''SELECT is_english, is_maths FROM testClasses WHERE userID=?''', (tuteeID,)).fetchone()
+    enrolled_classes = cur.execute('''SELECT is_english, is_maths FROM Classes WHERE userID=?''', (tuteeID,)).fetchone()
 
     # fetching class details:
         # upcoming classes where:
             # date > currentdate, subject, classtime
-    class_times = cur.execute('''SELECT classdate, subject, classtime FROM testDates WHERE tuteeID=? AND classdate > ?''', (tuteeID, currentYearMonthDate)).fetchall()
+    class_times = cur.execute('''SELECT classdate, subject, classtime FROM Dates WHERE tuteeID=? AND classdate > ?''', (tuteeID, currentYearMonthDate)).fetchall()
 
     cur.close()
     con.close()
@@ -278,12 +278,12 @@ def unenroll_tutee(tuteeID):
         try:
             cur.execute('''DELETE FROM users WHERE ID=?''', (tuteeID))
             
-            assignmentIDs = cur.execute('''SELECT assignmentID FROM testAssignments WHERE tuteeID=?''', (tuteeID)).fetchall()
+            assignmentIDs = cur.execute('''SELECT assignmentID FROM Assignments WHERE tuteeID=?''', (tuteeID)).fetchall()
             for assignmentID in assignmentIDs:
-                cur.execute('''DELETE FROM testFiles WHERE assignmentID=?''', (assignmentID))
+                cur.execute('''DELETE FROM Files WHERE assignmentID=?''', (assignmentID))
 
-            cur.execute('''DELETE FROM testAssignments WHERE tuteeID=?''', (tuteeID))
-            cur.execute('''DELETE FROM testClasses WHERE userID=?''', (tuteeID))
+            cur.execute('''DELETE FROM Assignments WHERE tuteeID=?''', (tuteeID))
+            cur.execute('''DELETE FROM Classes WHERE userID=?''', (tuteeID))
             con.commit()
             print('Successful deletion!')
             return True
