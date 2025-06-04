@@ -379,23 +379,22 @@ def user_assignments():
     if request.method == "POST":
         print(request.form)
         if 'setassignment' in request.form:
-
+            print('Setting assignment!')
             if not request.form['subject']:
                 print('No subject selected')
                 return redirect(request.url)
             subject = request.form['subject']
-
-            if subject not in allowed_subjects:
-                flash('Invalid subject. Please try again.')
+            
+            if subject.lower() not in allowed_subjects:
+                print('Invalid subject. Please try again.')
                 return redirect(request.url)
 
             if not request.form['date']:
                 print('Invalid date')
                 return redirect(request.url)
             duedate = str(request.form['date'])
-
-            if functions.is_valid_time(duedate, '%Y-%m-%d'):
-                flash('Invalid time. Please try again')
+            if not functions.is_valid_time(duedate, '%Y-%m-%d'):
+                print('Invalid time. Please try again')
                 return redirect(request.url)
 
             tuteeID = request.form['tutee']

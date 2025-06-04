@@ -82,10 +82,14 @@ form {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: flex-start;
         width: 80%;
 
         margin: 0 auto;
     }
+        form div.form-password select{
+            margin: 10px;
+        }
         form div.form-password input, 
         div.form-user-details input {
             width: 80%;
@@ -315,15 +319,17 @@ form button {
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="hidden" name="unenrolltutee" />
                 <h1>Unenroll a Tutee</h1>
-                <select name="tutee" id="tutee" required>
-                {% for tutee in tutees %}
-                    <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
-                {% endfor %}
-                </select>
+                <div class="form-password">
+                        <select name="tutee" id="tutee" required>
+                            {% for tutee in tutees %}
+                                <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
+                             {% endfor %}
+                        </select>
+                    <label>Are you sure?</label>
+                    <input type="checkbox" name="unenrollCheck">
+                </div>
                 
-                <br><label>Are you sure?</label>
-                <input type="checkbox" name="unenrollCheck">
-                <br><button type="submit" id="submit">Unenroll Tutee</button>
+                <button type="submit" id="submit">Unenroll Tutee</button>
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         <ul class=flashes>

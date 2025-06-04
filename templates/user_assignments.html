@@ -146,7 +146,7 @@
 
                 border-top-left-radius: 10px;
 
-                overflow-y: scroll;
+                overflow-y: auto;
                 height: 100%;
 
                 display: flex;
@@ -157,7 +157,7 @@
             }
 
             div.submitbox form input{
-                margin: 10px;
+                margin: .1rem;
 
             }
 
@@ -202,7 +202,7 @@
             .assignment > div.files {
                 grid-area: files;
                 height: 100%;
-                overflow-y: scroll;
+                overflow-y: auto;
                 border: 1px solid var(--border);
 
                 border-top-left-radius: 10px;
@@ -234,7 +234,7 @@
                 grid-area: submitfiles;
                 border: 1px solid black;
 
-                overflow-y: scroll;
+                overflow-y: auto;
                 height: 100%;
 
                 display: flex;
@@ -253,7 +253,7 @@
                 grid-area: submitbox;
                 border: 1px solid black;
 
-                overflow-y: scroll;
+                overflow-y: auto;
                 height: 100%;
 
                 display: flex;
@@ -265,7 +265,7 @@
             .markAssignment > div.files {
                 grid-area: files;
                 height: 100%;
-                overflow-y: scroll;
+                overflow-y: auto;
                 border: 1px solid black;
             }
 
@@ -306,64 +306,86 @@
             }
 
             form {
-                margin-left: auto;
-                margin-right: auto;
+                display: flex;
+                flex-direction: column;
+            }
 
-                padding: 10px;
+            form#set {
+
+                margin: 2rem auto;
+                padding: .2rem 5rem;
 
                 background-color: var(--bgbar);
                 border-radius: 15px;
 
                 text-align: center;
 
-                display: flex;
+                display: none;
                 justify-content: baseline; /* Aligns from top */
                 flex-direction: column;
                 align-items: center;
 
-                width: 50%;
-
+                width: fit-content;
                 font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             }
-
-            form#set {
-                display: none;
-            }
-            form input{
-                border-radius: 5px;
-                border: 1px solid var(--accentbar);
-                
-                /* margin: 10px 0; */
-                background-color: var(--forminput);
+            form#set label {
+                padding: 0 1rem;
+                padding-bottom: .2rem;
+                border-bottom: 2px solid var(--border);  
+                margin: 0 auto;
             }
 
-            form select {
-                border-radius: 5px;
-                border: 1px solid var(--accentbar);
-                
-                /* margin: 10px 0; */
-                background-color: var(--forminput);
+    form#set input, form textarea, form select {
+        border: 1px solid var(--border);
+        font-size: 12px;
+        font-family: 'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+        text-align: center;
+        background-color: var(--inputbackground);
+        cursor: pointer;
+        color: var(--txtlight);
+        
+        border-radius: 5px;
+        border: 1px solid var(--border);
+        margin: 10px;
+    }
+
+            form#set select {
+                padding: .5rem;
+                text-align: left;
             }
 
-            form h1{
+            form#set h1{
                 font-weight: bold;
                 font-size: large;
 
                 margin-bottom: 20px;
-                border-bottom: 2px solid var(--accentbar);
                 padding-bottom: 10px;
-                
-                width: 100%;
-            }
 
-            form #submit{
-                background-color: var(--accent);
-                font-weight: lighter;
-                font-size: 20px;
-                border-radius: 15px;
-                border: 1px solid var(--accent);
-                padding: 10px 30px;
+                text-align: center;
+                width: 100%;
+
+                border-bottom: 2px solid var(--accentbar);
             }
+form#set #submit{
+    background-color: var(--border);
+    
+    color: white;
+
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+    border-radius: 15px;
+    border: 1px solid var(--border);
+    padding: 1rem .5rem;
+
+    margin: 2rem auto;
+
+    cursor: pointer;
+
+    transition: .2s ease-in-out;
+}
+        form#set #submit:hover {
+            background-color: var(--formhover);
+        }
 
         </style>
     {% endblock %}
@@ -394,7 +416,7 @@
             <button class="tablinks right" onclick="openAssignments(event, 'set')">Set Assignment</button>
         </div>
 
-            <div class="assignmentWrapper" id="due">
+            <div class="assignmentWrapper tabcontent" id="due">
                 <h1>Due Assignments [tutee]</h1>
                 <div class="filters">
                 <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('dueAssignments'))">Date</button> 
@@ -408,7 +430,7 @@
                 </div>
             </div>
 
-            <div class="assignmentWrapper" id="assigned">
+            <div class="assignmentWrapper tabcontent" id="assigned">
                 <h1>Assigned Assignments [tutor]</h1>
                 <div class="filters">
                 <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('assignedAssignments'))">Date</button> 
@@ -424,7 +446,7 @@
                 </div>
             </div>
 
-            <div class="assignmentWrapper" id="completed">
+            <div class="assignmentWrapper tabcontent" id="completed">
                 <h1>Completed Assignments [tutee + tutor]</h1>
                 <div class="filters">
                 <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('completedAssignments'))">Date</button> 
@@ -439,7 +461,7 @@
                 </div>
             </div>
 
-            <div class="assignmentWrapper" id="awaiting">
+            <div class="assignmentWrapper tabcontent" id="awaiting">
                 <h1>Awaiting Assignments [tutor]</h1>
                 <div class="filters">
                 <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('unmarkedAssignments'))">Date</button> 
@@ -456,7 +478,7 @@
                 </div>
             </div>
 
-            <div class="assignmentWrapper" id="marked">
+            <div class="assignmentWrapper tabcontent" id="marked">
                 <h1>Marked Assignments [tutee + tutor]</h1>
                 <div class="filters">
                     <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('markedAssignments'))">Date</button> 
@@ -475,47 +497,43 @@
                 </div>
             </div>
 
-            <form id="set" method="post" enctype=multipart/form-data>
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                
-                <h1>Set an Assignment</h1>
-                <label>Tutee</label>
-                <br>
-                <select name="tutee" required> <!--value is username, text will be firstname lastname-->
-                    <!-- <option value="Johnathan">Johnathan</option>
-                    <option value="Apple">Apple</option> -->
-                    {% for tutee in tutees %}
-                        <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
-                    {% endfor %}
-                </select>
-                <br>
+            <form class="tabcontent" method="post" id="set" enctype=multipart/form-data>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            
+            <h1>Set an Assignment</h1>
+            <label>Tutee</label>
+            <br>
+            <select name="tutee" required> <!--value is username, text will be firstname lastname-->
+                <!-- <option value="Johnathan">Johnathan</option>
+                <option value="Apple">Apple</option> -->
+                {% for tutee in tutees %}
+                    <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
+                {% endfor %}
+            </select>
+            <br>
 
-                <label>Title</label>
-                <br>
-                <textarea name="title" placeholder="What is the title of your assignment?"></textarea>
+            <label>Title</label>
+            <br>
+            <textarea name="title" placeholder="What is the title of your assignment?" required></textarea>
 
-                <br><label>Date</label><br>
-                <input type="date" name="date" required>
-                <br>
+            <label>Date</label><br>
+            <input type="date" name="date" required>
 
-                <br>
-                <label>Assignment File</label>
-                <br>
-                <input type=file name=file accept="application/pdf" multiple>
+            <label>Assignment File</label>
+
+            <input type=file name=file accept="application/pdf" multiple required>
+
+            <label>Subject</label>
+            <select name="subject" required>
+                <option value="English">English</option>
+                <option value="Maths">Maths</option>
+            </select>
 
 
-                <br>
-                <label>Subject</label>
-                <select name="subject" required>
-                    <option value="English">English</option>
-                    <option value="Maths">Maths</option>
-                </select>
-                <br>
-
-                <input name="setassignment" type="hidden">
-
-                <br><button id="submit" type="submit">Set Assignment</button>
+            <input name="setassignment" type="hidden">
+            <button id="submit" type="submit">Set Assignment</button>
             </form>
+
         </div>   
         {% endblock %}
     </div>
@@ -573,9 +591,9 @@
                             <h2>Submission Box</h2>
                                 <form enctype="multipart/form-data" method="post">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                    <button type="submit">Turn in</button><br>
                                     <input type="file" name="file" accept="application/pdf" multiple/>       
                                     <input type="hidden" name="submitassignment" value="${assignmentID}">
+                                    <button type="submit">Turn in</button>
                                 </form>
                             </div>
                             <div class="files">
@@ -629,7 +647,7 @@
                             <h1>Submitted Files</h1>
                                 <form method="post">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                    <button type="submit">Unsubmit</button><br>       
+                                    <button type="submit">Unsubmit</button>      
                                     <input type="hidden" name="unsubmitassignment" value="${assignmentID}">
                                 </form>
                                 <ul>
@@ -810,10 +828,10 @@
                             <h1>Upload Marked Files</h1>
                                 <form method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                    <br><button type="submit">Submit</button><br>  
                                     <input type="file" name="file" accept="application/pdf" multiple/><br>                                       
                                     <label>Grade (%):</label><input name=grade type="number" onkeypress="return /[0-9]/i.test(event.key)" required> 
-                                         
+                                    
+                                    <button type="submit">Submit</button>
                                     <input type="hidden" name="markassignment" value="${assignmentID}">
                                 </form>
                         </div>
@@ -829,7 +847,7 @@ displayAssignments()
         var i, tabcontent, tablinks;
 
         // Get all elements with class="tabcontent" and hide them
-        tabcontent = document.getElementsByClassName("assignmentWrapper");
+        tabcontent = document.getElementsByClassName("tabcontent");
         for (let i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
         }

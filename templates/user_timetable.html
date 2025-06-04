@@ -168,7 +168,8 @@
     overflow-x:hidden;
 
 
-    display: none; /* code turns this to display flex */
+    /* Initially loads the div to prevent any errors from loading */
+    display: flex; /* code turns this to display flex */
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
@@ -487,7 +488,23 @@ textarea {
 }
 
 @media only screen and (max-width: 768px) {
-    
+    .tab {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tab button:hover {
+    background-color: var(--buttonhover);
+    }
+
+    .tab button.active {
+    background-color: #ccc;
+    }
+
+    #main {
+        height: fit-content;
+    }
+
     #overview {
         flex-direction: column;
         justify-content: center;
@@ -535,8 +552,8 @@ textarea {
             hi ;3
         </div>
         <div class="tab">
-            <button class="tablinks" onclick="openCity(event, 'overview')">Overview</button>
-            <button class="tablinks options"id="defaultOpen" onclick="openCity(event, 'setclass')">Set New Class</button>
+            <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'overview')">Overview</button>
+            <button class="tablinks options" onclick="openCity(event, 'setclass')">Set New Class</button>
             <button class="tablinks options" onclick="openCity(event, 'changeClassDetails')">Change Details</button>
         </div>
 
@@ -728,7 +745,7 @@ const btnEl = document.querySelectorAll('.calendar-headings');
 const monthYearEl = document.querySelector('.month-year');
 
 const class_dates = {{ class_dates | tojson }}; //stop freaking out, Javascript!
-console.log(class_dates)
+
 let dmObj = {
     days: [
         "Sunday",
