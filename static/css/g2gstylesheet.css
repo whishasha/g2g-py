@@ -45,6 +45,9 @@
 --linkcolour: #4698C7;
 --textcolour: black;
 --headercolour: rgb(118, 118, 118);
+--inputbg: #F7FAFA;
+--remove: #F15050;
+
 }
 
 /* handles left sticky navbar in the landing page */

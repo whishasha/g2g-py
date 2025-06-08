@@ -25,7 +25,7 @@
     DISPLAY
     ------
     [ ] sort announcements
-    [ ] tutees cannot set, only scroll / sort
+    [X] tutees cannot set, only scroll / sort
     [ ] tutors can set, delete
     SET
     ------

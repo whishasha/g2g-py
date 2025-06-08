@@ -779,6 +779,8 @@ def register_tutor():
 
 @app.route("/user/notices", methods=['GET', 'POST'])
 def user_notices():
+    if request.method=='POST':
+        print('yello!')
     return render_template("user_notices.html")
 
 

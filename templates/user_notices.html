@@ -11,7 +11,206 @@
                 float:right;
             }
 
+/* General Styling */
+div#main {
+    height: 100%;
+}
+            /* Notice Create styling */
+
+            div#create {
+                padding: 1rem 2rem;
+                margin: 1rem auto;
+
+                max-width: fit-content;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+
+                background-color: var(--noticebg);
+
+                display:flex;
+                flex-direction: column;
+                justify-content: space-between;
+                overflow: hidden;
+            }
+
+
+            form#create button#submit {
+                background-color: var(--noticebg);
+                font-size: large;
+                cursor:pointer;
+                
+                border: transparent;
+
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                font-size: 25px;
+
+                padding: 1rem;
+                
+                margin-bottom: 2rem;
+
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+            
+                transition: .2s ease-in-out;
+            }
+
+            form#create button#submit:hover {
+                background-color: var(--border);
+                color: white;
+            }
+
+            form#create input#title {
+                width: 60%;
+                height: fit-content;
+                font-size: 30px;
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                
+                border-radius: 5px;
+                border: 1px solid var(--border);
+                padding-bottom: 2rem;
+                padding-left: .5rem;
+            }
+
+            form#create div#create-title {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-start;
+            
+                margin: 1rem 0;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid var(--border);
+            }
+            form#create button#clear {
+                width: 10%;
+                color: var(--remove);
+                background-color: transparent;
+                border: 1px solid var(--border);
+                border-radius: 5px;
+
+                padding: .2rem;
+
+                
+                cursor:pointer;
+
+
+
+                font-size: 15px;
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            
+                transition: .2s ease-in-out;
+            }
+            form#create button#clear:hover {
+                color: white;
+                background-color: var(--remove);
+            }
+
+            form#create textarea {
+                border-top-right-radius: 10px;
+                border: 1px solid var(--border);
+
+                background-color: var(--inputbg);
+
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+                padding-left: .5rem;
+                padding-top: .3rem;
+                width: 100%;
+                height: 10rem;
+
+                margin-bottom: .8rem;
+
+            }
+
+            form#create div.wrapper {
+                display: flex;
+                flex-direction: row;
+            }
+            form#create div.wrapper h1 {
+                font-size: 30px;
+
+                border-bottom: 1px solid var(--border);
+                padding-bottom: .6rem;
+                padding-left: .3rem;
+
+                margin-bottom: .3rem;
+            }
+
+            form#create div.wrapper span {
+                display: inline-block;
+                margin: .5rem 0;
+                padding-left: .3rem;
+
+            }
+            form#create div.wrapper span input {
+                float:left;
+            }
+
+            form#create div#form-attachments {
+                
+                width: 60%;
+                border-right: 1px solid var(--border);
+                border-left: 1px solid var(--border);
+            }
+
+            form#create div#form-tags {              
+                
+                width: 40%;
+                border-left: 1px solid var(--border);
+                border-right: 1px solid var(--border);            
+            } 
+
+            form#create div#form-tags ul li {
+                margin: .5rem 0;
+                width: 100%;
+                
+            }
+            form#create div#form-tags ul input {
+                margin-right: .5rem;
+            }
+
+            form#create div#form-tags ul input#none {
+                box-shadow: 5px 0 0 0 var(--border);
+            }
+            form#create div#form-tags ul input#important {
+                box-shadow: 5px 0 0 0 #EDAB72;
+            }
+            form#create div#form-tags ul input#unimportant {
+                box-shadow: 5px 0 0 0 #8DF3A0;
+            }
+            form#create div#form-tags ul input#class-related {
+                box-shadow: 5px 0 0 0 #8DDDF3;
+            }
+
+            form#create input[type=file]::file-selector-button {
+                border: 1px solid var(--border);
+                padding: .2em .4em;
+                border-radius: .2em;
+                background-color: var(--border);
+                cursor: pointer;
+                color: var(--bg);
+                transition: .5s;
+
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            }
+            form#create input[type=file]::file-selector-button:hover {
+                background-color: white;
+                border: 1px solid var(--border);
+                color: var(--border);
+
+            }
+
+            form#create input#title {
+                background-color: var(--inputbg);
+            }
+
             /* Notice styling */
+            
+            
             div.notice {
                 margin: 1rem auto;
                 width: 70%;
@@ -36,6 +235,8 @@
                 text-align: left;
 
                 font-size: 50px;
+                padding-top: .8rem;
+                padding-bottom: 1rem;
                 padding-left: .2rem;
                 margin-left: .4rem;
             }
@@ -84,6 +285,26 @@
 
                 color: var(--linkcolour);
             }
+
+            button.delete {
+                color: var(--remove);
+                background-color: transparent;
+                border: transparent;
+
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                font-size: 15px;
+
+                margin: 1rem .5rem;
+                padding: .5rem;
+                cursor: pointer;
+
+                border-radius: 10px;
+                transition: 0.2s ease-in-out;
+            }
+            button.delete:hover {
+                background-color: var(--remove);
+                color: white;
+            }
         </style>    
         
         {% endblock %}
@@ -108,7 +329,46 @@
 
         <!-- Create notice tab, only visible to tutors -->
         <div class="tabcontent" id="create-notice">
-            making up something@
+            <form id="create" method="post" enctype=multipart/form-data>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div id="create">
+                    <div id="create-title">
+                        <input id="title" placeholder="Notice title" required>
+                        <button id="clear" type="button"><i class="fa-solid fa-trash"></i> Clear</button>
+                    </div>
+
+                    
+                    <textarea id="content" placeholder="Enter text here"></textarea>
+
+                    <div class="wrapper">
+                        <div id="form-attachments">
+                            <h1>Files</h1>
+                            <span>
+                                <label>Input display image</label>
+                                <input id="files" placeholder="job" type=file name=file accept="image/png, image/svg, image/jpeg">    
+                            </span>
+                            <span>
+                                <label>Upload files</label>
+                                <input type=file name=file accept="application/pdf" multiple>
+                            </span>
+                        </div>
+
+                        <div id="form-tags">
+                            <h1>Tags</h1>
+                                <ul>
+                                    <li id="none"><input type="radio" name="tag" id="none" value="none"><label for="0">None</label></li>
+                                    <li id="important"><input type="radio" name="tag" id="important" value="1"><label for="important">Important</label></li>
+                                    <li id="unimportant"><input type="radio" name="tag" id="unimportant" value="2"><label for="unimportant">Not Important</label></li>
+                                    <li id="class-related"><input type="radio" name="tag" id="class-related" value="3"><label for="class-related">Class-related</label></li>
+                                </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button id="submit">Create New Notice</button>
+
+            </form>
         </div>
         {% endif %}
 
@@ -124,6 +384,7 @@
                     <span class="header-title" style="box-shadow: -.5rem 0px 0px 0px var(--unimportant);">
                         Really just some chill guy having a pretty cool title, yeah.
                     </span>
+                    <button class="delete"><i class="fa-solid fa-trash"></i> Delete Notice</button>
                     <div class="header-details">
                         <span class="notice-poster">Made by ME</span>
                         <span class="notice-date">Posted HERE and NOW</span>
@@ -149,10 +410,6 @@
 
             </div>
         </div>
-
-
-
-
 
     {%endblock%}
 </div>
@@ -187,8 +444,8 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => { //load first tab on page load, courtesy of chatgpt
-            document.querySelector('.tablinks').click();
-        });
+            document.querySelectorAll('.tablinks')[0].click();
+        });  
 </script>
 {% endblock %}
 </html>
