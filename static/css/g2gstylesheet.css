@@ -38,6 +38,13 @@
   --accentalt: white;
 
   --forminput: #e0dcdc; /*to be changed*/
+
+/* notice colourscheme */
+--noticebg: #EEF6F5;
+--unimportant: #8DF3A0;
+--linkcolour: #4698C7;
+--textcolour: black;
+--headercolour: rgb(118, 118, 118);
 }
 
 /* handles left sticky navbar in the landing page */

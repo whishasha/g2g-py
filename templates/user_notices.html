@@ -10,6 +10,80 @@
             .tab .create{
                 float:right;
             }
+
+            /* Notice styling */
+            div.notice {
+                margin: 1rem auto;
+                width: 70%;
+                border: 1px solid black;
+                border-top-left-radius: 10px;
+
+
+                background-color: var(--noticebg);
+
+                display:flex;
+                flex-direction: column;
+                justify-content: center;
+                overflow: hidden;
+            }
+
+            /* there is an inline style tag doing a box shadow here */
+            span.header-title {
+                /* Forces span to adhere to margin and padding */
+                /* https://stackoverflow.com/questions/10666032/why-does-span-break-outside-div-when-margin-and-padding-is-applied */
+                display: inline-block;
+
+                text-align: left;
+
+                font-size: 50px;
+                padding-left: .2rem;
+                margin-left: .4rem;
+            }
+
+            div.header-details {
+                margin: .4rem .6rem .3rem .8rem;
+
+                padding-bottom: 1rem;
+
+                border-bottom: 1px solid var(--border);
+
+                color: var(--headercolour);
+            }
+            span.notice-date {
+                float: right;
+                margin-right: .2rem;
+            }
+            div.content {
+                margin-left: .6rem;
+                margin-right: .6rem;
+
+                border-bottom: 1px solid var(--border);
+
+                margin-bottom: 1rem;
+            }
+            div.attachments {
+                display: flex;
+                flex-direction: column;
+            }
+            div.notice div.attachments div.image {
+                width: 100%;
+                text-align: center;
+                padding: .9rem 0;
+                margin: .5rem auto;
+
+                border-top: 1px solid var(--border);
+            }
+
+            div.attachments ul.files {
+                border-top: 1px solid var(--border);
+            }
+            div.attachments ul.files li {
+                margin: .5rem 2rem;
+
+                cursor: pointer;
+
+                color: var(--linkcolour);
+            }
         </style>    
         
         {% endblock %}
@@ -43,8 +117,37 @@
          <!-- make sure to add delete button on posts for tutors -->
         <div 
             {% if current_user.is_tutor ==1 %} class="tabcontent" {% endif %} 
-        id="notices">
-            Notices!
+            id="notices">
+            <!-- example format of a notice -->
+            <div class="notice">
+                <div class="header">
+                    <span class="header-title" style="box-shadow: -.5rem 0px 0px 0px var(--unimportant);">
+                        Really just some chill guy having a pretty cool title, yeah.
+                    </span>
+                    <div class="header-details">
+                        <span class="notice-poster">Made by ME</span>
+                        <span class="notice-date">Posted HERE and NOW</span>
+                    </div>
+                </div>
+                <div class="content">
+                    Yo! this is some sick content, yo!
+
+
+                    <div class="attachments">
+                        <div class="image">
+                            <img src="{{url_for('static', filename='assets/fumo.svg')}}" height="400px">                       
+                        </div>
+                        <ul class="files">
+                            <li><i class="fa-solid fa-paperclip"></i> this isa file</li>
+                            <li><i class="fa-solid fa-paperclip"></i> Here's another one</li>
+                            <li><i class="fa-solid fa-paperclip"></i> 3rd time's the charm!</li>
+                        </ul>                 
+                    </div>
+
+                </div>
+
+
+            </div>
         </div>
 
 
