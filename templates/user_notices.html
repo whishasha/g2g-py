@@ -1,0 +1,91 @@
+{% extends "user_template.html" %}
+
+<html>
+
+<head>
+    {%block head%}
+        {{super()}}
+        {% block css %}
+        <style>
+            .tab .create{
+                float:right;
+            }
+        </style>    
+        
+        {% endblock %}
+    {%endblock%}
+</head>
+
+<div id="main">
+    {%block main%}
+        <!-- Title section -->
+        <div id="title">
+            <div id="menu"><i class="fa-solid fa-bars" onclick="hideSidenav()"></i></div>
+            <h1><i class="fa-solid fa-radio"></i><br>Notices</h1>
+        </div>
+        <!-- Tab section -->
+
+        {% if current_user.is_tutor == 1 %}
+        <div class="tab">
+            <button class="tablinks" onclick="openTab(event, 'notices')">Notices</button>
+            <button class="tablinks create" onclick="openTab(event, 'create-notice')">Create New Notice</button>
+        </div>
+
+
+        <!-- Create notice tab, only visible to tutors -->
+        <div class="tabcontent" id="create-notice">
+            making up something@
+        </div>
+        {% endif %}
+
+
+        <!-- Notice display tab -->
+         <!-- make sure to add delete button on posts for tutors -->
+        <div 
+            {% if current_user.is_tutor ==1 %} class="tabcontent" {% endif %} 
+        id="notices">
+            Notices!
+        </div>
+
+
+
+
+
+    {%endblock%}
+</div>
+{% block js %}
+{{ super() }}
+<script>
+
+    // Highlights navbar tab that user is on
+        const sidebarItem = document.querySelector('.nav-notices');
+        sidebarItem.classList.toggle('active'); //toggling home tab
+
+    // Opens relevant tab from the tab bar.
+        function openTab(evt, tabName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { //load first tab on page load, courtesy of chatgpt
+            document.querySelector('.tablinks').click();
+        });
+</script>
+{% endblock %}
+</html>

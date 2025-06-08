@@ -12,18 +12,12 @@ from werkzeug.utils import secure_filename
 import functions
 from datetime import datetime
 
-from flask_socketio import SocketIO, emit, join_room, leave_room
-from werkzeug.middleware.proxy_fix import ProxyFix
-import logging
-import random
-from typing import Dict
-
 #chat tutorial:
 # https://www.youtube.com/watch%3Fv%3Do5vDco6OVTs&ved=2ahUKEwjswL677tiNAxUMT2wGHalHCcEQz40FegQIFxAr&usg=AOvVaw3gLy0_lglbLC22aR5czqpp
 
 #----------------------------------------MISCELLANEOUS SECTION---------------------------------------------#
 load_dotenv(find_dotenv())
-encoded_secret_key = os.getenv("SECRET_KEY")
+encoded_secret_key = os.getenv("SECRET_KEY") or os.urandom(24)
 
 # see Documentation for Flask_Login here:
 # https://flask-login.readthedocs.io/en/latest/
@@ -141,10 +135,6 @@ def init_real_data(ID): #fetches all events relevant to a user
 
 allowed_subjects = ['english', 'maths']
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s-%(name)s-%(levelname)s-%(message)s'
-)
 
 
 #----------------------------------------INITIALISATION SECTION---------------------------------------------#
@@ -166,7 +156,8 @@ csrf.init_app(app)
 
 app.config["SECRET_KEY"] = encoded_secret_key
 
-logger = logging.getLogger(__name__)
+
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -786,9 +777,9 @@ def register_tutor():
     cur.close()
     con.close()
 
-@app.route("/user/chat", methods=['GET', 'POST'])
-def user_chat():
-    return render_template("user_chat.html")
+@app.route("/user/notices", methods=['GET', 'POST'])
+def user_notices():
+    return render_template("user_notices.html")
 
 
 

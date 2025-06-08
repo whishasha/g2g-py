@@ -16,16 +16,31 @@
 
 [ ] do first testing cycle
 
+[ ] reconfigure requirements.txt / virtual environment to remove unecessary packages
+
 ## Short-Term Tasks
 
 **Functional**
-[ ] add chatting (after 1st testing cycle and styling)
- 
+[ ] add announcements
+    DISPLAY
+    ------
+    [ ] sort announcements
+    [ ] tutees cannot set, only scroll / sort
+    [ ] tutors can set, delete
+    SET
+    ------
+    [ ] annoumcement details:
+        [ ] title
+        [ ] content (add bold capabilities)
+        [ ] image [optional]
+    [ ] add tags to announcements (optional, subject)
+    [ ] announcements remove auto(???)
+
+
+    [ ] announcement mockup
+
 [ ] send emails or reminders to users in home page
     [ ] assignments to be marked
-
-[X] fix dateInfo bug
-    - first click on right side displays offset too much bug
 
 [ ] add dateInfo draggable
 
