@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 
 import functions
 from datetime import datetime
-
+from html import escape
 #chat tutorial:
 # https://www.youtube.com/watch%3Fv%3Do5vDco6OVTs&ved=2ahUKEwjswL677tiNAxUMT2wGHalHCcEQz40FegQIFxAr&usg=AOvVaw3gLy0_lglbLC22aR5czqpp
 
@@ -435,7 +435,7 @@ def user_assignments():
                 if file.filename == '':
                     print('No selected file')
                     return redirect(request.url)
-                if file and allowed_file(file.filename):
+                if file and allowed_file_pdf(file.filename):
                     filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
                     unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
                     filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
@@ -463,7 +463,7 @@ def user_assignments():
                     print('No selected file')
                     return redirect(request.url)
             
-                if file and allowed_file(file.filename):
+                if file and allowed_file_pdf(file.filename):
                     filename = secure_filename(file.filename) 
                     unique_filename = make_unique(filename) 
                     filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
@@ -503,7 +503,7 @@ def user_assignments():
                     print('No selected file')
                     return redirect(request.url)
             
-                if file and allowed_file(file.filename):
+                if file and allowed_file_pdf(file.filename):
                     filename = secure_filename(file.filename) 
                     unique_filename = make_unique(filename) 
                     filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
@@ -780,7 +780,42 @@ def register_tutor():
 @app.route("/user/notices", methods=['GET', 'POST'])
 def user_notices():
     if request.method=='POST':
-        print('yello!')
+        if request.form:
+            
+            # NON-FILE INPUT VALIDATION
+            if 'title' not in request.form or 'text' not in request.form or 'tag' not in request.form:
+                print('Invalid request')
+            try:
+                title = str(request.form.get('title'))
+                text = str(request.form.get('text'))
+                tag = int(request.form.get('tag'))
+            except e as TypeError:
+                print('Invalid fields submitted')
+            
+            if len(title) > 250:
+                flash('Title too long, please keep it below 250 characters')
+                return redirect(request.url)
+            if not 0 < tag < 3:
+                flash('Invalid tag selected.')
+                return redirect(request.url)
+            escape(title)
+            escape(text) 
+
+            #FILE-BASED INPUT VALIDATION
+            if 'file' in request.files:
+                
+
+                for file in request.files.getlist('file'):
+                    if file.filename == '':
+                        print('No selected file')
+                        return redirect(request.url)
+                    if file and allowed_file_pdf(file.filename):
+                        filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
+                        unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
+                        filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
+                        file.save(filepath)
+
+
     return render_template("user_notices.html")
 
 
@@ -800,9 +835,17 @@ app.config['UPLOAD_FOLDER'] = 'static/files'
 ALLOWED_EXTENSIONS = {'pdf'} #allowed file extensions
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000 #16MB max upload
 
-def allowed_file(filename: str):
+ALLOWED_IMAGES = {'jpeg', 'png'}
+
+def allowed_file_pdf(filename: str):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def allowed_file_image(filename: str):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # https://flask.palletsprojects.com/en/stable/patterns/fileuploads/
 # Application example uses this feature called 'flash' will seems to be useful for sending messages to users.
@@ -821,7 +864,7 @@ def file_upload():
         if file.filename == '':
             print('No selected file')
             return redirect(request.url)
-        if file and allowed_file(file.filename):
+        if file and allowed_file_pdf(file.filename):
             filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename) 
             file.save(filepath)

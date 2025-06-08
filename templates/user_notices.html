@@ -333,12 +333,12 @@ div#main {
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <div id="create">
                     <div id="create-title">
-                        <input id="title" placeholder="Notice title" required>
+                        <input type="text" id="title" placeholder="Notice title" name="title" required>
                         <button id="clear" type="button"><i class="fa-solid fa-trash"></i> Clear</button>
                     </div>
 
                     
-                    <textarea id="content" placeholder="Enter text here"></textarea>
+                    <textarea typ="text" name="text" id="content" placeholder="Enter text here"></textarea>
 
                     <div class="wrapper">
                         <div id="form-attachments">
@@ -356,10 +356,10 @@ div#main {
                         <div id="form-tags">
                             <h1>Tags</h1>
                                 <ul>
-                                    <li id="none"><input type="radio" name="tag" id="none" value="none"><label for="0">None</label></li>
-                                    <li id="important"><input type="radio" name="tag" id="important" value="1"><label for="important">Important</label></li>
-                                    <li id="unimportant"><input type="radio" name="tag" id="unimportant" value="2"><label for="unimportant">Not Important</label></li>
-                                    <li id="class-related"><input type="radio" name="tag" id="class-related" value="3"><label for="class-related">Class-related</label></li>
+                                    <li id="none"><input type="radio" name="tag" id="none" value="0" required><label for="none">None</label></li>
+                                    <li id="important"><input type="radio" name="tag" id="important" value="1" required><label for="important">Important</label></li>
+                                    <li id="unimportant"><input type="radio" name="tag" id="unimportant" value="2" required><label for="unimportant">Not Important</label></li>
+                                    <li id="class-related"><input type="radio" name="tag" id="class-related" value="3" required><label for="class-related">Class-related</label></li>
                                 </ul>
                         </div>
                     </div>
