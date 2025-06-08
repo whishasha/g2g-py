@@ -791,32 +791,115 @@ def user_notices():
                 tag = int(request.form.get('tag'))
             except e as TypeError:
                 print('Invalid fields submitted')
-            
             if len(title) > 250:
-                flash('Title too long, please keep it below 250 characters')
+                print('Title too long, please keep it below 250 characters')
                 return redirect(request.url)
-            if not 0 < tag < 3:
-                flash('Invalid tag selected.')
+            if not 0 <= tag <= 3:
+                print('Invalid tag selected.')
                 return redirect(request.url)
             escape(title)
             escape(text) 
 
+            date = datetime.today().strftime('%Y-%m-%d')
+            poster = current_user.id
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            
+            check = cur.execute('''SELECT * FROM Notices WHERE title=? AND date=?''', (title, date)).fetchall()
+
+            if check:
+                flash('Cannot have duplicate posts')
+                return redirect(request.url)
+
+
+            cur.execute('''INSERT INTO Notices(title, text, tag, date, posterID) VALUES (?, ?, ?, ?, ?)''', (title, text, tag, date, poster))
+
+            noticeID = cur.execute('''SELECT noticeID FROM Notices WHERE title=? AND text=? AND tag=? AND date=? AND posterID=?''',
+                                 (title, text, tag, date, poster)).fetchone()[0]
+
+
+            con.commit()
+
+
             #FILE-BASED INPUT VALIDATION
             if 'file' in request.files:
-                
-
+                print(request.files.getlist('file'))
                 for file in request.files.getlist('file'):
-                    if file.filename == '':
-                        print('No selected file')
-                        return redirect(request.url)
-                    if file and allowed_file_pdf(file.filename):
-                        filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
-                        unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
-                        filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
-                        file.save(filepath)
+                    if file:
+                        print('yup. it is a file.')
+                        fileroot = f'{app.config['UPLOAD_NOTICES']}/{noticeID}'
+                        if not os.path.exists(fileroot):
+                            os.makedirs(fileroot)
+
+                        if allowed_file_pdf(file.filename):
+                            filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
+                            unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
+                            filepath = os.path.join(fileroot, unique_filename) 
+                            print(f'Uploading a PDF with filepath: {filepath} and \n filename: {filename}')
+                            file.save(filepath)
+                            cur.execute('''INSERT INTO NoticesFiles(noticeID, name, filepath) VALUES(?, ?, ?)''',
+                                        (noticeID, filename, filepath))
+                            con.commit()
 
 
-    return render_template("user_notices.html")
+                        if allowed_file_image(file.filename):
+                            filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
+                            unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
+                            filepath = os.path.join(fileroot, unique_filename) 
+                            print(f'Uploading an image with filepath: {filepath} and \n filename: {filename}')
+                            file.save(filepath)
+                            cur.execute('''UPDATE Notices SET imgfilepath=? WHERE noticeID=?''',
+                                        (filepath, noticeID))
+                            con.commit()
+                        
+            cur.close()
+            con.close()
+
+    con = sqlite3.connect('database.db')
+    cur = con.cursor()
+
+    notices = cur.execute('''SELECT * FROM Notices''').fetchall()
+    noticesfiles = cur.execute('''SELECT noticeID, name, filepath FROM NoticesFiles''').fetchall()
+    from collections import defaultdict #this function is altered to fit the testData database structure
+    from json import dumps
+    notices_dict = defaultdict(list)
+    for notice in notices:
+        noticeID = str(notice[0])
+        poster = User.get(str(notice[6])).username
+        title = str(notice[1])
+        text = str(notice[2])
+        tag = str(notice[3])
+        date = str(notice[5])
+        imgfilepath = str(notice[4])
+
+        if 'static' in imgfilepath[:6]:
+            imgfilepath = imgfilepath[6:]
+        print(imgfilepath)
+
+
+        attachments = []
+        for attachment in noticesfiles:
+            print(noticeID)
+            print(attachment[0])
+            if int(attachment[0]) == int(noticeID):
+                print('check!')
+                attachments.append(attachment)
+        print(attachments)
+        notices_dict[noticeID].append({
+            "poster": poster,
+            "title": title,
+            "text": text,
+            "tag": tag,
+            "date": date,
+            "img": imgfilepath,
+            "attachments": attachments
+        })
+
+    print(dumps(notices_dict, indent=3))    #Hierarchy of events / debugging
+
+
+
+    return render_template("user_notices.html", notices=notices_dict)
 
 
 
@@ -832,6 +915,7 @@ def logout():
 #----------------------------------------FILE UPLOAD SECTION---------------------------------------------#
 
 app.config['UPLOAD_FOLDER'] = 'static/files'
+app.config['UPLOAD_NOTICES'] = 'static/notices'
 ALLOWED_EXTENSIONS = {'pdf'} #allowed file extensions
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000 #16MB max upload
 
@@ -844,7 +928,7 @@ def allowed_file_pdf(filename: str):
 
 def allowed_file_image(filename: str):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGES
 
 
 # https://flask.palletsprojects.com/en/stable/patterns/fileuploads/

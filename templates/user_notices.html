@@ -13,7 +13,7 @@
 
 /* General Styling */
 div#main {
-    height: 100%;
+    height: fit-content;
 }
             /* Notice Create styling */
 
@@ -278,12 +278,26 @@ div#main {
             div.attachments ul.files {
                 border-top: 1px solid var(--border);
             }
-            div.attachments ul.files li {
+            div.attachments ul.files li{
                 margin: .5rem 2rem;
-
                 cursor: pointer;
-
+            }
+            div.attachments ul.files li a:visited, div.attachments ul.files li a:link{
                 color: var(--linkcolour);
+                transition: .2s ease-in-out;
+            }
+            div.attachments ul.files li a{
+                color: var(--linkcolour);
+                transition: .2s ease-in-out;
+                padding: .2rem;
+                margin: .2rem;
+
+                border-radius: 5px;
+                text-decoration:none;
+            }
+            div.attachments ul.files li a:hover{
+                background-color: var(--linkcolour);
+                color: white;
             }
 
             button.delete {
@@ -406,9 +420,42 @@ div#main {
                     </div>
 
                 </div>
-
-
             </div>
+
+            {% for notice in notices %}
+            {{notices[notice][0]}}
+            <div class="notice">
+                <div class="header">
+                    <span class="header-title" style="box-shadow: -.5rem 0px 0px 0px var(--unimportant);">
+                        {{notices[notice][0]['title']}}
+                    </span>
+                    <button class="delete"><i class="fa-solid fa-trash"></i> Delete Notice</button>
+                    <div class="header-details">
+                        <span class="notice-poster">Made by {{notices[notice][0]['poster']}}</span>
+                        <span class="notice-date">Posted {{notices[notice][0]['date']}}</span>
+                    </div>
+                </div>
+                <div class="content">
+                    {{notices[notice][0]['text']}}
+                    <div class="attachments">
+                        {% if notices[notice][0]['img'] != 'None' %}
+                        <div class="image">
+                            <img src="{{ url_for('static', filename=notices[notice][0]['img'] | replace('static/', '') | replace('\\', '/')) }}" height="400px">                       
+                        </div>
+                        {% endif %}
+                        {% if notices[notice][0]['attachments'] is defined %}
+                        <ul class="files">
+                            {% for attachment in notices[notice][0]['attachments'] %}
+                            <li><a href="{{ url_for('static', filename=attachment[2] | replace('static/', '') | replace('\\', '/')) }}"><i class="fa-solid fa-paperclip"></i> {{attachment[1]}}</a></li>
+                            {% endfor %}
+                        </ul>                 
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+
+            {% endfor %}
         </div>
 
     {%endblock%}

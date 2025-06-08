@@ -194,12 +194,12 @@ hr {
 }
 
 /* Change the link color on hover */
-li a:hover {
+/* li a:hover {
   background-color: var(--accentbar);
 
   transition: 0.3s;
   color: var(--accentalt);
-}
+} */
 
 .active a{ /*for selected tabs */
   background-color: var(--accentbar);
