@@ -170,6 +170,18 @@ nav ul li a {
 
   font-size: 15px;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+  transition: .2s ease-in-out;
+}
+
+nav ul li a:hover {
+  background-color: var(--accentbar);
+  color: rgb(208, 208, 208);
+}
+
+.active a{ /*for selected tabs */
+  background-color: var(--accentbar);
+  color: var(--accentalt);
 }
 
 nav ul hr.line {

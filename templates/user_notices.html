@@ -348,7 +348,7 @@ div#main {
                 <div id="create">
                     <div id="create-title">
                         <input type="text" id="title" placeholder="Notice title" name="title" required>
-                        <button id="clear" type="button"><i class="fa-solid fa-trash"></i> Clear</button>
+                        <button id="clear" type="reset"><i class="fa-solid fa-trash"></i> Clear</button>
                     </div>
 
                     
@@ -423,7 +423,6 @@ div#main {
             </div>
 
             {% for notice in notices %}
-            {{notices[notice][0]}}
             <div class="notice">
                 <div class="header">
                     <span class="header-title" style="box-shadow: -.5rem 0px 0px 0px var(--unimportant);">
