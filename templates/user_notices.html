@@ -347,19 +347,20 @@ div#main {
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <div id="create">
                     <div id="create-title">
+                        <input type="hidden" name="create">
                         <input type="text" id="title" placeholder="Notice title" name="title" required>
                         <button id="clear" type="reset"><i class="fa-solid fa-trash"></i> Clear</button>
                     </div>
 
                     
-                    <textarea typ="text" name="text" id="content" placeholder="Enter text here"></textarea>
+                    <textarea type="text" name="text" id="content" placeholder="Enter text here"></textarea>
 
                     <div class="wrapper">
                         <div id="form-attachments">
                             <h1>Files</h1>
                             <span>
                                 <label>Input display image</label>
-                                <input id="files" placeholder="job" type=file name=file accept="image/png, image/svg, image/jpeg">    
+                                <input id="files" placeholder="job" type=file name=file accept="image/png, image/jpg, image/jpeg">    
                             </span>
                             <span>
                                 <label>Upload files</label>
@@ -423,12 +424,20 @@ div#main {
             </div>
 
             {% for notice in notices %}
+            {{notices[notice][0]['tag']}}
             <div class="notice">
                 <div class="header">
-                    <span class="header-title" style="box-shadow: -.5rem 0px 0px 0px var(--unimportant);">
+                    <span class="header-title" style="box-shadow: -.5rem 0px 0px 0px var(--{% if notices[notice][0]['tag'] == "0" %}none{% elif notices[notice][0]['tag'] == "1" %}unimportant{% elif notices[notice][0]['tag'] == "2" %}important{% elif notices[notice][0]['tag'] == "3" %}class-related{% endif %});">
                         {{notices[notice][0]['title']}}
                     </span>
-                    <button class="delete"><i class="fa-solid fa-trash"></i> Delete Notice</button>
+                    {% if current_user.is_tutor == 1 %}
+                    <form method="post">
+                        <input type="hidden" name="delete">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <input type="hidden" value={{notice}} name="noticeID"/>
+                        <button class="delete" value="{{notice}}"><i class="fa-solid fa-trash"></i> Delete Notice</button>
+                    </form>
+                    {% endif %}
                     <div class="header-details">
                         <span class="notice-poster">Made by {{notices[notice][0]['poster']}}</span>
                         <span class="notice-date">Posted {{notices[notice][0]['date']}}</span>

@@ -777,83 +777,111 @@ def register_tutor():
     cur.close()
     con.close()
 
+@login_required
 @app.route("/user/notices", methods=['GET', 'POST'])
 def user_notices():
     if request.method=='POST':
         if request.form:
-            
-            # NON-FILE INPUT VALIDATION
-            if 'title' not in request.form or 'text' not in request.form or 'tag' not in request.form:
-                print('Invalid request')
-            try:
-                title = str(request.form.get('title'))
-                text = str(request.form.get('text'))
-                tag = int(request.form.get('tag'))
-            except e as TypeError:
-                print('Invalid fields submitted')
-            if len(title) > 250:
-                print('Title too long, please keep it below 250 characters')
-                return redirect(request.url)
-            if not 0 <= tag <= 3:
-                print('Invalid tag selected.')
-                return redirect(request.url)
-            escape(title)
-            escape(text) 
+            if 'create' in request.form:
+                # NON-FILE INPUT VALIDATION
+                if 'title' not in request.form or 'text' not in request.form or 'tag' not in request.form:
+                    print('Invalid request')
+                try:
+                    title = str(request.form.get('title'))
+                    text = str(request.form.get('text'))
+                    tag = int(request.form.get('tag'))
+                except e as TypeError:
+                    print('Invalid fields submitted')
+                if len(title) > 250:
+                    print('Title too long, please keep it below 250 characters')
+                    return redirect(request.url)
+                if not 0 <= tag <= 3:
+                    print('Invalid tag selected.')
+                    return redirect(request.url)
+                escape(title)
+                escape(text) 
 
-            date = datetime.today().strftime('%Y-%m-%d')
-            poster = current_user.id
-            con = sqlite3.connect('database.db')
-            cur = con.cursor()
-            
-            check = cur.execute('''SELECT * FROM Notices WHERE title=? AND date=?''', (title, date)).fetchall()
+                date = datetime.today().strftime('%Y-%m-%d')
+                poster = current_user.id
+                con = sqlite3.connect('database.db')
+                cur = con.cursor()
+                
+                check = cur.execute('''SELECT * FROM Notices WHERE title=? AND date=?''', (title, date)).fetchall()
 
-            if check:
-                flash('Cannot have duplicate posts')
-                return redirect(request.url)
-
-
-            cur.execute('''INSERT INTO Notices(title, text, tag, date, posterID) VALUES (?, ?, ?, ?, ?)''', (title, text, tag, date, poster))
-
-            noticeID = cur.execute('''SELECT noticeID FROM Notices WHERE title=? AND text=? AND tag=? AND date=? AND posterID=?''',
-                                 (title, text, tag, date, poster)).fetchone()[0]
+                if check:
+                    flash('Cannot have duplicate posts')
+                    return redirect(request.url)
 
 
-            con.commit()
+                cur.execute('''INSERT INTO Notices(title, text, tag, date, posterID) VALUES (?, ?, ?, ?, ?)''', (title, text, tag, date, poster))
+
+                noticeID = cur.execute('''SELECT noticeID FROM Notices WHERE title=? AND text=? AND tag=? AND date=? AND posterID=?''',
+                                    (title, text, tag, date, poster)).fetchone()[0]
 
 
-            #FILE-BASED INPUT VALIDATION
-            if 'file' in request.files:
-                print(request.files.getlist('file'))
-                for file in request.files.getlist('file'):
-                    if file:
-                        print('yup. it is a file.')
-                        fileroot = f'{app.config['UPLOAD_NOTICES']}/{noticeID}'
-                        if not os.path.exists(fileroot):
-                            os.makedirs(fileroot)
-
-                        if allowed_file_pdf(file.filename):
-                            filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
-                            unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
-                            filepath = os.path.join(fileroot, unique_filename) 
-                            print(f'Uploading a PDF with filepath: {filepath} and \n filename: {filename}')
-                            file.save(filepath)
-                            cur.execute('''INSERT INTO NoticesFiles(noticeID, name, filepath) VALUES(?, ?, ?)''',
-                                        (noticeID, filename, filepath))
-                            con.commit()
+                con.commit()
 
 
-                        if allowed_file_image(file.filename):
-                            filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
-                            unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
-                            filepath = os.path.join(fileroot, unique_filename) 
-                            print(f'Uploading an image with filepath: {filepath} and \n filename: {filename}')
-                            file.save(filepath)
-                            cur.execute('''UPDATE Notices SET imgfilepath=? WHERE noticeID=?''',
-                                        (filepath, noticeID))
-                            con.commit()
-                        
-            cur.close()
-            con.close()
+                #FILE-BASED INPUT VALIDATION
+                if 'file' in request.files:
+                    print(request.files.getlist('file'))
+                    for file in request.files.getlist('file'):
+                        if file:
+                            print('yup. it is a file.')
+                            fileroot = f'{app.config['UPLOAD_NOTICES']}/{noticeID}'
+                            if not os.path.exists(fileroot):
+                                os.makedirs(fileroot)
+
+                            if allowed_file_pdf(file.filename):
+                                filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
+                                unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
+                                filepath = os.path.join(fileroot, unique_filename) 
+                                print(f'Uploading a PDF with filepath: {filepath} and \n filename: {filename}')
+                                file.save(filepath)
+                                cur.execute('''INSERT INTO NoticesFiles(noticeID, name, filepath) VALUES(?, ?, ?)''',
+                                            (noticeID, filename, filepath))
+                                con.commit()
+
+
+                            if allowed_file_image(file.filename):
+                                filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
+                                unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
+                                filepath = os.path.join(fileroot, unique_filename) 
+                                print(f'Uploading an image with filepath: {filepath} and \n filename: {filename}')
+                                file.save(filepath)
+                                cur.execute('''UPDATE Notices SET imgfilepath=? WHERE noticeID=?''',
+                                            (filepath, noticeID))
+                                con.commit()
+                            
+                cur.close()
+                con.close()
+
+            if 'delete' in request.form:
+
+                if current_user.id == 1:
+                    try:
+                        noticeID = request.form.get('noticeID')
+                        noticeID = int(noticeID)
+                    except e as TypeError:
+                        flash('Invalid request.')
+                        return redirect(request.url)
+
+                    con = sqlite3.connect('database.db')
+                    cur = con.cursor()
+                    print('Im tryna delete')
+                    try:
+                        cur.execute('''DELETE FROM Notices WHERE noticeID=?''', (noticeID,))
+                        cur.execute('''DELETE FROM NoticesFiles WHERE noticeID=?''', (noticeID,))
+                        con.commit()
+                    except:
+                        print('Invalid SQL statement')
+                        flash('An unexpected error has occurred.')
+                        return redirect(request.url)
+                    cur.close()
+                    con.close()
+
+                    flash('Successful deletion!')
+
 
     con = sqlite3.connect('database.db')
     cur = con.cursor()
@@ -874,17 +902,12 @@ def user_notices():
 
         if 'static' in imgfilepath[:6]:
             imgfilepath = imgfilepath[6:]
-        print(imgfilepath)
 
 
         attachments = []
         for attachment in noticesfiles:
-            print(noticeID)
-            print(attachment[0])
             if int(attachment[0]) == int(noticeID):
-                print('check!')
                 attachments.append(attachment)
-        print(attachments)
         notices_dict[noticeID].append({
             "poster": poster,
             "title": title,
@@ -894,8 +917,6 @@ def user_notices():
             "img": imgfilepath,
             "attachments": attachments
         })
-
-    print(dumps(notices_dict, indent=3))    #Hierarchy of events / debugging
 
 
 
@@ -919,7 +940,7 @@ app.config['UPLOAD_NOTICES'] = 'static/notices'
 ALLOWED_EXTENSIONS = {'pdf'} #allowed file extensions
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000 #16MB max upload
 
-ALLOWED_IMAGES = {'jpeg', 'png'}
+ALLOWED_IMAGES = {'jpeg', 'png', 'jpg'}
 
 def allowed_file_pdf(filename: str):
     return '.' in filename and \

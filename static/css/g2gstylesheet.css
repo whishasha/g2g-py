@@ -41,7 +41,13 @@
 
 /* notice colourscheme */
 --noticebg: #EEF6F5;
+
+--none: #679494;
 --unimportant: #8DF3A0;
+--important: #EDAB72;
+--class-related: #8DDDF3;
+
+
 --linkcolour: #4698C7;
 --textcolour: black;
 --headercolour: rgb(118, 118, 118);
