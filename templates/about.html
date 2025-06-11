@@ -8,6 +8,68 @@
         
         {% block css %} <!--css renders in the HEAD first, else the template overrides-->
             {{super()}}
+            <style>
+                div.section {
+                    width: 100vw;
+                }
+
+                div.section div.wrapper {
+                    display:flex;
+                    flex-direction: row;
+                    justify-items: flex-start;
+                    
+                    justify-content: space-between;
+                }
+                ul.qa {
+                    width: 500px;
+                    height: 100%;
+                    margin: 0 .5rem;
+                }
+                ul.qa h2 {
+                    font-size: large;
+                    font-weight: 100000;
+                    margin-bottom: 1rem;
+
+                    color: black;
+                }
+                ul.qa li {
+                    color: var(--textalt3);
+                }
+
+                div#header {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-around;
+                }
+                div#header img {
+                    width: 200px;
+                }
+                div#header h1 {
+                    width: 100%;
+                }
+                div#header p{
+                    width: 40%;
+                }
+
+                @media only screen and (max-width: 800px) {
+                    img {
+                        margin: auto;
+                        width: 300px;
+                    }
+                    div.section div.wrapper {
+                        flex-direction: column;
+                    }
+                    ul.qa {
+                        width: 100%;
+                        padding-bottom: 1rem;
+                        margin: 0 0 .5rem 0;
+
+                        border-bottom: 1px solid black;
+                    }
+
+                }
+                
+            </style>
         {% endblock %}
 
     {% endblock %}
@@ -22,22 +84,45 @@
 
     <div id="main">
         {% block main %}
-        <div class="section">
-            <img src="{{url_for('static', filename='assets/fumo.svg')}}" width="200px" height="200px" style="margin-left: auto;margin-right: auto;display: block;">
-            <h1>Meet the Man Behind G2G</h1>
-            <p>Angus Chen is a decorated student at the selective Girraween High School</p>
-            <button onclick="showSidebar()">hi</button>
+        <h1>Meet the Man Behind G2G</h1>
+        <div class="section" id="header">
+            <p>Starting from a young age, Angus Chen had something special; he had a gift. And with the help of his teachers, friends and family, it has been nurtured into academic greatness. As a decorated student of the selective Girraween High School, Angus Chen is the tutor in charge of G2G.<br> He is the man who will elevate your child from gifted, to greatness.</p>
+            <img src="{{url_for('static', filename='assets/about.png')}}" id="banner">
         </div>
-        <div class="section">
-            <h1>Qualified Help</h1>
-            <p>Q: What made you want to start G2G?
-                <br>
-                A: I think I can make a difference, where everybody can succeed and reach the same position I am in now
-            </p>
+        <div class="section" id="qa">
+            <h1>Words from the Man Himself</h1>
+            <div class="wrapper">
+                <ul class="qa">
+                    <li><h2>Q: What made you want to start G2G?</h2></li>
+                    <li>A: I think I can make a difference, where everybody can succeed and reach the same position I am in now</li>
+                </ul>
+                <ul class="qa">
+                    <li><h2>Q: Why did you decide to charge such low prices?</h2></li>
+                    <li>A: I believe education should be affordable to all people. And as this is a place of learning, not business, I keep tuition costs low.</li>
+                </ul>
+                <ul class="qa">
+                    <li><h2>Q: What makes you qualified to tutor?</h2></li>
+                    <li>A: I am a top student at Girraween High School, performing excellently with a projected Band 6 for Mathematics Extension 2 and English. With these accreditations, your child's future is guaranteed to be great</li>
+                </ul>
+            </div>
+
         </div>
         <div class="section">
             <h1>Proven Results</h1>
-            <p>Johnathan Johnny</p>
+            <div class="wrapper">
+                <ul class="qa">
+                    <li><h2>Johnathan Johnny</h2></li>
+                    <li>I got into James Ruse, thanks to Mr. Chen's tutoring. His gentle and encouraging demeanour combined with his thorough homework made it easy for me to pass the seletive test!</li>
+                </ul>
+                <ul class="qa">
+                    <li><h2>Leon Yan</h2></li>
+                    <li>The only reason I am good at English is because Mr. Chen has taught me the principles of creative writing and literary analysis excellently. He has provided valuable feedback on and ahead of time, making me amazing at English.</li>
+                </ul>
+                <ul class="qa">
+                    <li><h2>Sanjit Bollina</h2></li>
+                    <li>My academics have vastly improved since taking Mr. Chen's class. Every tough question I have he answers in a distinguished and simple manner, making sure I understand every nuance.</li>
+                </ul>
+            </div>
         </div>
         {% endblock %}
     </div>

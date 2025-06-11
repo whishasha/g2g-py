@@ -12,6 +12,8 @@ from werkzeug.utils import secure_filename
 import functions
 from datetime import datetime
 from html import escape
+
+import shutil
 #chat tutorial:
 # https://www.youtube.com/watch%3Fv%3Do5vDco6OVTs&ved=2ahUKEwjswL677tiNAxUMT2wGHalHCcEQz40FegQIFxAr&usg=AOvVaw3gLy0_lglbLC22aR5czqpp
 
@@ -868,7 +870,13 @@ def user_notices():
 
                     con = sqlite3.connect('database.db')
                     cur = con.cursor()
-                    print('Im tryna delete')
+                    
+                    filedirectory = f'{app.config['UPLOAD_NOTICES']}/{noticeID}'
+                    if os.path.exists(filedirectory):
+                        shutil.rmtree(filedirectory)
+                        print(f"The directory {filedirectory} has been deleted.") #untested
+                    else:
+                        print(f"The directory {filedirectory} does not exist.")
                     try:
                         cur.execute('''DELETE FROM Notices WHERE noticeID=?''', (noticeID,))
                         cur.execute('''DELETE FROM NoticesFiles WHERE noticeID=?''', (noticeID,))
