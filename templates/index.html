@@ -27,7 +27,7 @@
                 .section{
                     text-align: center;
                     max-width: 90%;
-                    min-width: 70%;
+                    min-width: 40%;
                     padding-bottom: 20px;
                     border-bottom: 1px solid var(--line)
                 }
@@ -44,7 +44,16 @@
                     height: 300px;
                     width: auto;
                 }
-
+                div.wrapper {
+                    display:flex;
+                    flex-direction: row;
+                }
+                div.wrapper .section{
+                    width: 50%;
+                }
+                div.wrapper .section h1 {
+                    height: 100px;
+                }
             </style>
         {% endblock %}
     {% endblock %}
@@ -58,7 +67,7 @@
             <a href="/" class="navitem"><img src="{{url_for('static', filename='assets/g2glogoalt.svg')}}"></a>
             </li>
             <li><a href="/about" class="navitem">About</a></li>
-            <li><a href="/pricing" class="navitem">Pricing</a></li>   
+            <li><a href="/pricing" class="navitem">Pricing & Course Content</a></li>   
             <li><a href="/inquire" class="important navitem" >Inquire</a></li>   
             <li><a href="/login" class="important navitem" >Login</a></li>
 
@@ -73,28 +82,28 @@
                 <h1>Gifted 2 Greatness</h1>
                 <div class="flexwrapper">
                     <div class="text">
-                        <p>Placeholder text Placeholder text Placeholder text Placeholder textPlaceholder text Placeholder text</p>
+                        <p>Bring your child from Gifted 2 Greatness</p>
                     </div>
                         <img src="{{url_for('static', filename='assets/index.png')}}" width="700px">
                 </div>
             </div>
-            <div class="section">
-                <h1>Become One with Mathematics</h1>
-                <div class="flexwrapper">
-                    <div class="text">
-                        <p>Placeholder text Placeholder text Placeholder text Placeholder textPlaceholder text Placeholder text</p>
+
+            <div class="wrapper">
+                <div class="section">
+                    <h1>Become Fluid with Mathematics</h1>
+                    <div class="flexwrapper">
+                        <div class="text">
+                            <p>Understand numbers with Mr. Chen</p>
+                        </div>
+                            <!-- <img src="{{url_for('static', filename='assets/fumo.svg')}}"> -->
                     </div>
-                        <img src="{{url_for('static', filename='assets/fumo.svg')}}">
                 </div>
-            </div>
-            <div class="section">
-                <h1>Intertwine yourself with English</h1>
-                <div class="flexwrapper">
-                    <div class="img">
-                        <img src="{{url_for('static', filename='assets/fumo.svg')}}">
-                    </div>
-                    <div class="text">
-                        <p>Placeholder text Placeholder text Placeholder text Placeholder textPlaceholder text Placeholder text</p>
+                <div class="section">
+                    <h1>Understand the Literary Arts</h1>
+                    <div class="flexwrapper">
+                        <div class="text">
+                            <p>Conquer English with G2G</p>
+                        </div>
                     </div>
                 </div>
             </div>

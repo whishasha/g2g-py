@@ -46,7 +46,7 @@ nav ul {
     align-items: center; /* Vertically center the items */
     list-style-type: none;
     margin: 0;
-    padding-right: 20px;
+    padding-right: .5rem;
     overflow: hidden;
     background-color: var(--bg);
 }
@@ -66,8 +66,8 @@ nav a:hover {
 }
 /* handles vertical dropdown bar for small screens */
 nav img {
-    margin-right: 20px; /* Add some space after the logo */
-    width: 30px;
+    margin-right: .1rem; /* Add some space after the logo */
+    width: 2rem;
     height: auto;
     display: inline-block; /* Ensure the logo is inline with the text */
     vertical-align: middle; /* Align with the text vertically */
@@ -96,10 +96,6 @@ div#main {
     max-width: 100%;
     flex-grow: 1;
     
-}
-
-div.section {
-    margin-bottom: auto;
 }
 
 div#footer {

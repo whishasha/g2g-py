@@ -9,46 +9,60 @@
         {% block css %} <!--css renders in the HEAD first, else the template overrides-->
             {{super()}}
             <style>
+
+                div#main {
+                    justify-content: flex-start;
+                }
                 div.section {
-                    width: 100vw;
+                    width: 1000px;
                 }
 
                 div.section div.wrapper {
                     display:flex;
                     flex-direction: row;
                     justify-items: flex-start;
-                    
-                    justify-content: space-between;
                 }
-                ul.qa {
+                .section ul{
+                    border: 1px solid var(--box);
+                    border-radius: 10px;
+
+                    margin-top: 10px; 
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                }
+                .section ul li{
+                    margin: 10px;
+
+                    border-bottom: 1px solid var(--box);
+                    padding-bottom: .5rem;
+                }
+                div.section ul {
                     width: 500px;
                     height: 100%;
-                    margin: 0 .5rem;
+                    margin: 0 20px;
                 }
-                ul.qa h2 {
+                div.section ul h2 {
                     font-size: large;
                     font-weight: 100000;
-                    margin-bottom: 1rem;
+                    margin-bottom: 20px;
 
                     color: black;
                 }
-                ul.qa li {
+                div.section ul li {
                     color: var(--textalt3);
                 }
 
                 div#header {
                     display: flex;
                     flex-direction: row;
-                    justify-content: space-around;
+                    justify-content: center;
                 }
                 div#header img {
                     width: 200px;
                 }
-                div#header h1 {
-                    width: 100%;
-                }
                 div#header p{
-                    width: 40%;
+                    width: 30%;
+                    margin-top: 20px;
                 }
 
                 @media only screen and (max-width: 800px) {
@@ -56,15 +70,17 @@
                         margin: auto;
                         width: 300px;
                     }
+                    div.section {
+                        width: 600px;
+                    }
                     div.section div.wrapper {
                         flex-direction: column;
                     }
-                    ul.qa {
-                        width: 100%;
+                    div.section ul {
+                        width: 99%;
                         padding-bottom: 1rem;
                         margin: 0 0 .5rem 0;
 
-                        border-bottom: 1px solid black;
                     }
 
                 }
@@ -86,7 +102,7 @@
         {% block main %}
         <h1>Meet the Man Behind G2G</h1>
         <div class="section" id="header">
-            <p>Starting from a young age, Angus Chen had something special; he had a gift. And with the help of his teachers, friends and family, it has been nurtured into academic greatness. As a decorated student of the selective Girraween High School, Angus Chen is the tutor in charge of G2G.<br> He is the man who will elevate your child from gifted, to greatness.</p>
+            <p>Starting from a young age, Angus Chen had something special; he had a gift. And with the help of his teachers, friends and family, it has been nurtured into academic greatness. As a decorated student of the selective Girraween High School, Angus Chen is the tutor in charge of G2G.<br><br> He is the man who will elevate your child from gifted, to greatness.</p>
             <img src="{{url_for('static', filename='assets/about.png')}}" id="banner">
         </div>
         <div class="section" id="qa">

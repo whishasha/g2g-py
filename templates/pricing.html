@@ -13,14 +13,21 @@
                     justify-content: center;
                     align-items: center;
                 }
+                .wrapper {
+                    display:flex;
+                    flex-direction: column;
+                }
                 .section{
                     text-align: center;
-                    width: 50%;
-                    padding-right: 10px;
-                    padding-left: 10px;
+                    width: 80%;
+                    padding-right: 30px;
+                    padding-left: 30px;
                     padding-bottom: 20px;
                     height: 100%;
                     word-wrap: break-word;
+
+                    border-left: 1px solid var(--line);
+                    border-right: 1px solid var(--line);
                 }
                 .section img{
                     max-width: 100px;
@@ -31,19 +38,33 @@
                 }
 
                 .section p{
-                    color: var(--textalt)
+                    color: var(--textalt);
+                    height: 50px;
                 }
 
                 .section ul{
-                    background-color: var(--box);
+                    border: 1px solid var(--box);
                     border-radius: 10px;
-                    
+
                     margin-top: 10px; 
                     padding-top: 10px;
                     padding-bottom: 10px;
                 }
                 .section ul li{
                     margin: 10px;
+
+                    border-bottom: 1px solid var(--box);
+                    padding-bottom: .5rem;
+                }
+
+                div#banner {
+                    align-items: center;
+                }
+                div#banner h1 {
+                    text-align: center;
+                }
+                div#banner img {
+                    margin: auto;
                 }
 
                 @media (max-width: 768px) {
@@ -71,30 +92,41 @@
 
     <div id="main">
         {% block main %}
+        <div id="banner">
+            <h1>Pricing & Course Content</h1>
+            <img src="{{url_for('static', filename='assets/pricing.png')}}">
+        </div>
+        <div id="wrapper">
             <div class="section">
-                <img src="{{url_for('static', filename='assets/fumo.svg')}}">
                 <h1>Mathematics</h1>
-                    <ul>
-                        <li>Bananas</li>
-                        <li>Bananas</li>
-                        <li>Bananas</li>
-                        <li>Bananas</li>
-                        <li>Bananas</li>
-                    </ul>
                 <p>A tutor that will ensure you reach the pearly gates.</p>                    
-            </div>
-            <div class="section">
-                <img src="{{url_for('static', filename='assets/fumo.svg')}}">
-                <h1>English</h1>
                 <ul>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                    <li>Bananas</li>
-                </ul>
-                <p>Elevate your connection with God's numbers through G2G's maths tutoring </p>
+                        <li>Division</li>
+                        <li>Partial Fractions</li>
+                        <li>Integration</li>
+                        <li>Addition</li>
+                        <li>Subtraction</li>
+                    </ul>
+                    <br>
+                <p>$XXX / Fortnight</p>
             </div>
+            <hr class="line" style="margin:0;margin-left: 30px;">
+            <div class="section">
+                <h1>English</h1>
+                <p>Elevate your connection with God's numbers through G2G's maths tutoring </p>
+                <ul>
+                    <li>Grammar</li>
+                    <li>Spelling</li>
+                    <li>Punctuation</li>
+                    <li>Dictation</li>
+                    <li>Vocabulary</li>
+                    <li>Comprehension</li>
+                </ul>
+                <br>
+                <p>$XXX / Fortnight</p>
+            </div>
+        </div>
+
         {% endblock %}
     </div>
 
