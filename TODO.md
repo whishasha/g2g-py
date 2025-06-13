@@ -16,6 +16,9 @@
 
 [ ] do first testing cycle
 
+[ ] add rate limiting (prevent time-based sidechannel attacks)
+- https://flask-limiter.readthedocs.io/en/stable/
+
 [ ] reconfigure requirements.txt / virtual environment to remove unecessary packages
 
 ## Short-Term Tasks
