@@ -671,17 +671,21 @@ def user_account(): #A lot of the forms in here should be in their own "tutees" 
     return render_template('user_account.html', tutees=tutees)
 
 def register():
-        firstname = request.form.get('firstname')
-        lastname = request.form.get('lastname')
-        
-        username = request.form.get('username')
-        password = request.form.get('password')
+        try:
+            firstname = str(request.form.get('firstname'))
+            lastname = str(request.form.get('lastname'))
+            
+            username = str(request.form.get('username'))
+            password = str(request.form.get('password'))
 
-        is_english = request.form.get('is_english')
-        is_maths = request.form.get('is_maths')
+            is_english = int(request.form.get('is_english'))
+            is_maths = int(request.form.get('is_maths'))
 
-        is_english = assign_int_boolean(is_english) #Turns str value of checkbox to boolean integer (1: True, 2: False)
-        is_maths = assign_int_boolean(is_maths)
+            is_english = assign_int_boolean(is_english) #Turns str value of checkbox to boolean integer (1: True, 2: False)
+            is_maths = assign_int_boolean(is_maths)
+        except TypeError as e:
+            flash('Error. Invalid fields submitted')
+            return redirect(request.url)
 
         if not firstname: #input validation
             print('Empty first name field!')
@@ -711,9 +715,8 @@ def register():
         con = sqlite3.connect('database.db')
         cur = con.cursor()
 
-        usernameCheck = cur.execute('''SELECT name FROM users WHERE name=?''', (username,)).fetchone()
+        usernameCheck = cur.execute('''SELECT name FROM users WHERE name=? AND firstname=? AND lastname=?''', (username, firstname, lastname)).fetchone()
         print(usernameCheck)
-
 
         if usernameCheck:
             print(f"Error: Account with {username} already exists")
@@ -728,7 +731,7 @@ def register():
         if registereduserID: #checking if this has type None
             registereduserID = registereduserID[0]
         else:
-            print('An unexpected error has occurred') #user doesn't exist????!?!?!?!?!?
+            print('An unexpected error has occurred') #user doesn't exist
             return redirect(request.url)
         
         cur.execute('''INSERT INTO Classes(userID, tutorID, is_english, is_maths) 
