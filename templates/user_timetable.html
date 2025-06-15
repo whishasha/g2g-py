@@ -808,7 +808,7 @@ const displayCalendar = () => {
     for( let i = firstDayofMonth; i > 0; i--){// add overflow dates of the last month
         const overflowDate = lastDateofLastMonth - i + 1;
         const dayEvents = classesLastMonth[overflowDate] || [];
-        let class1 = [{title: "Not set", time:"Not set", description: "Not set", subject: "Not set"}];
+        let class1 = [{id: "Not set", title: "Not set", time:"Not set", description: "Not set", subject: "Not set"}];
         if (dayEvents.length > 0) {
             class1 = dayEvents;
         }
@@ -840,7 +840,7 @@ const displayCalendar = () => {
         
         // add other bits such as time, date passed? etc. here too
         const dayEvents = classes[i] || []; // Default to an empty array if no events exist for the day
-        let class1 = [{title: "Not set", time:"Not set", description: "Not set", subject: "Not set"}];
+        let class1 = [{id: "Not set", title: "Not set", time:"Not set", description: "Not set", subject: "Not set"}];
         if (dayEvents.length > 0) {
             class1 = dayEvents;
         }
@@ -851,12 +851,11 @@ const displayCalendar = () => {
     for (let i = lastDayofMonth; i<6; i++){ //add next month date overflow
         const overflowDate = i - lastDayofMonth + 1;
         const dayEvents = classesNextMonth[overflowDate] || [];
-        let class1 = [{title: "Not set", time:"Not set", description: "Not set", subject: "Not set"}];
+        let class1 = [{id: "Not set", title: "Not set", time:"Not set", description: "Not set", subject: "Not set"}];
         if (dayEvents.length > 0) {
             class1 = dayEvents;
         }
         let checkClass;
-        console.log(classes);
         if (classes.hasOwnProperty(i) && nextyear_month == overflowDate) {
             checkClass = " classes";
         } else {
@@ -899,7 +898,9 @@ const displayDateInfo = (El) => { //display class details for each date
                 <li>Time: ${infoData[index].time}</li>
                 <li>Subject: ${infoData[index].subject}</li>
                 <li>Description: ${infoData[index].description}</li>
-                <button onclick="changeClassDetails()">Change Details</button>
+                {% if current_user.is_tutor == 1 %}
+                <button onclick="populateForm(event)" value=${infoData[index].id}>Change Details</button>
+                {% endif %}
                 </ul>
             </div>` ;
     })
@@ -1005,6 +1006,8 @@ document.addEventListener('click', (e) => { //Listener which closes the dateInfo
 
 const changeDateForm = document.getElementById('changeClassDetails');
 
+const changeClassSelect = document.querySelector('#changeClassDetails .form-change-class select')
+
 const changeClassDate = document.querySelector('#changeClassDetails #classdate');
 
 const changeClassTime = document.querySelector('#changeClassDetails #classtimebegin');
@@ -1042,6 +1045,7 @@ function populateForm(event) {
     for (const [key, event] of Object.entries(date)) {
         for (var i = 0; i < event.length; i++) {
             if (event[i]['id'] == classID) {
+                changeClassSelect.value = `${event[i]['id']}`
                 changeClassDate.value=`${month}-${key}`;
                 changeClassTime.value=`${event[i]['time']}`;
                 changeClassTitle.value = `${event[i]['title']}`;
@@ -1050,9 +1054,13 @@ function populateForm(event) {
             }    
         }
     }
-
+    openCity(event, 'changeClassDetails');
+    dateInfoEl.style.display = 'none';
 }  
 }
+
+
+
 
 
     </script>
