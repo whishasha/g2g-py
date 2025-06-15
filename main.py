@@ -341,7 +341,28 @@ def user_timetable():
                 cur.close()
                 con.close()
                 print('Class details updated')
+            if 'delete' in request.form:
+                    try:
+                        classID = request.form.get('classID')
+                        classID = int(classID)
+                    except e as TypeError:
+                        flash('Invalid request.')
+                        return redirect(request.url)
 
+                    con = sqlite3.connect('database.db')
+                    cur = con.cursor()
+                    
+                    try:
+                        cur.execute('''DELETE FROM Dates WHERE classID=?''', (classID,))
+                        con.commit()
+                    except:
+                        print('Invalid SQL statement')
+                        flash('An unexpected error has occurred.')
+                        return redirect(request.url)
+                    cur.close()
+                    con.close()
+
+                    flash('Successful deletion!')
     print(current_user.id)
     tutees = functions.get_tutees()
     

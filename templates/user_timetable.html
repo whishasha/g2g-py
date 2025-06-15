@@ -571,6 +571,14 @@ textarea {
                             <div class="title">Title: {{class[3]}}</div>
                             <div class="duedate">Date: {{class[1]}}</div>
                             <div class="subject">Time: {{class[2]}}</div>
+                            {% if current_user.is_tutor == 1 %}
+                            <form method="post">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <input value=${infoData[index].id} name=classID type="hidden">
+                                <input type="hidden" name="delete"/>
+                                <button type="submit">Delete Class</button>
+                            </form>
+                            {% endif %}
                         </div>
                     {% endfor %}
                 {% else %}
@@ -900,6 +908,12 @@ const displayDateInfo = (El) => { //display class details for each date
                 <li>Description: ${infoData[index].description}</li>
                 {% if current_user.is_tutor == 1 %}
                 <button onclick="populateForm(event)" value=${infoData[index].id}>Change Details</button>
+                <form method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input value=${infoData[index].id} name=classID type="hidden">
+                    <input type="hidden" name="delete"/>
+                    <button type="submit">Delete Class</button>
+                </form>
                 {% endif %}
                 </ul>
             </div>` ;
