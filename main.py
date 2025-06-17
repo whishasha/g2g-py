@@ -918,7 +918,7 @@ def user_notices():
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    notices = cur.execute('''SELECT * FROM Notices''').fetchall()
+    notices = cur.execute('''SELECT * FROM Notices ORDER BY noticeID DESC''').fetchall()
     noticesfiles = cur.execute('''SELECT noticeID, name, filepath FROM NoticesFiles''').fetchall()
     from collections import defaultdict #this function is altered to fit the testData database structure
     from json import dumps
@@ -949,8 +949,6 @@ def user_notices():
             "img": imgfilepath,
             "attachments": attachments
         })
-
-
 
     return render_template("user_notices.html", notices=notices_dict)
 
