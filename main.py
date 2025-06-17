@@ -143,7 +143,7 @@ allowed_subjects = ['english', 'maths']
 
 
 login_manager = LoginManager()
-# John, B@nan1aba => example tutor
+# John, B@nan1abB => example tutor
 # Alex, B@nan1aba => example tutee
 
 #Initialising the application
