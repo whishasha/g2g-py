@@ -1056,11 +1056,12 @@ function populateForm(event) {
     for (const [month, date] of Object.entries(class_dates)) {
     // date is a nested DICTIONARY containing events which are lists
     console.log(month);
-    for (const [key, event] of Object.entries(date)) {
+    for (const [day, event] of Object.entries(date)) {
         for (var i = 0; i < event.length; i++) {
+            console.log(`${month}-${day}`);
             if (event[i]['id'] == classID) {
                 changeClassSelect.value = `${event[i]['id']}`
-                changeClassDate.value=`${month}-${key}`;
+                changeClassDate.value=`${month}-${day}`;
                 changeClassTime.value=`${event[i]['time']}`;
                 changeClassTitle.value = `${event[i]['title']}`;
                 changeClassSubject.value = `${event[i]['subject']}`;
