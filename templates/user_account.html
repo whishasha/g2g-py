@@ -176,10 +176,10 @@ form button {
                 
                 <div class="form-password">
                     <label>Password</label>
-                    <input type="text" name="password" required>
+                    <input type="password" name="password" id="userinputpassword" required>
                     
                     <label>Confirm Password</label>
-                    <input type="text" name="confirmpassword" required>
+                    <input type="password" name="confirmpassword" onchange="detectPassword(this)" required>
                 </div>
 
                 <br><button type="submit" class="submit">Change Password</button>
@@ -204,7 +204,7 @@ form button {
                     <label id="lbluser">Username</label>
                     <input  type="text" name="username" required>
                     <label id="lblpass">Password</label>
-                    <input  type="text" name="password" required>
+                    <input  type="password" name="password" required>
                 </div>
             
                 <div class="form-user-details">
@@ -249,13 +249,13 @@ form button {
                 </div>
 
                 <div class="form-user-details">
-                    <label id="lblpass">Password</label>
-                    <input  type="text" name="password" required>
+                    <label id="lblfname">First Name</label>
+                    <input  type="text" name="firstname" required>
                 </div>
 
                 <div class="form-user-details">
-                    <label id="lblfname">First Name</label>
-                    <input  type="text" name="firstname" required>
+                    <label id="lblpass">Password</label>
+                    <input  type="password" name="password" required>
                 </div>
                 
                 <div class="form-user-details">
@@ -382,6 +382,18 @@ form button {
 document.addEventListener('DOMContentLoaded', () => { //load first tab on page load, courtesy of chatgpt
     document.querySelector('.tablinks').click();
 });
+
+function detectPassword(El) {
+    const confirmationpassword = El.value;
+    const password = document.querySelector('#userinputpassword').value;
+
+    if (confirmationpassword != password) {
+        El.style.borderColor = 'red';
+    }
+    else {
+        El.style.borderColor = 'var(--border)';
+    }
+}
 
 </script>
 {% endblock %}

@@ -719,7 +719,7 @@ def register():
         print(usernameCheck)
 
         if usernameCheck:
-            print(f"Error: Account with {username} already exists")
+            flash(f"Error: Account with username: {username} and same name: {firstname} {lastname} already exists")
         else:
             cur.execute('''INSERT INTO users(name, firstname, lastname, password, is_tutor) 
                         VALUES(?, ?, ?, ?, ?)''', 
@@ -784,7 +784,7 @@ def register_tutor():
 
 
     if usernameCheck:
-        print(f"Error: Account with {username} already exists")
+        flash(f"Error: Account with {username} already exists")
     else:
         cur.execute('''INSERT INTO users(name, firstname, lastname, password, is_tutor) 
                     VALUES(?, ?, ?, ?, ?)''', 
@@ -792,7 +792,7 @@ def register_tutor():
         con.commit()
         print("Account registered!")
 
-    registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck,)).fetchone()
+    registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck)).fetchone()
 
     if registereduserID: #checking if this has type None
         registereduserID = registereduserID[0]
@@ -816,7 +816,7 @@ def user_notices():
                     title = str(request.form.get('title'))
                     text = str(request.form.get('text'))
                     tag = int(request.form.get('tag'))
-                except e as TypeError:
+                except TypeError as e:
                     print('Invalid fields submitted')
                 if len(title) > 250:
                     print('Title too long, please keep it below 250 characters')
