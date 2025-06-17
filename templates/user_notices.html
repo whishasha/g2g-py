@@ -394,7 +394,7 @@ div#main {
             {% if current_user.is_tutor ==1 %} class="tabcontent" {% endif %} 
             id="notices">
             <!-- example format of a notice -->
-            <div class="notice">
+            <!-- <div class="notice">
                 <div class="header">
                     <span class="header-title" style="box-shadow: -.5rem 0px 0px 0px var(--unimportant);">
                         Really just some chill guy having a pretty cool title, yeah.
@@ -421,10 +421,9 @@ div#main {
                     </div>
 
                 </div>
-            </div>
+            </div> -->
 
             {% for notice in notices %}
-            {{notices[notice][0]['tag']}}
             <div class="notice">
                 <div class="header">
                     <span class="header-title" style="box-shadow: -.5rem 0px 0px 0px var(--{% if notices[notice][0]['tag'] == "0" %}none{% elif notices[notice][0]['tag'] == "1" %}unimportant{% elif notices[notice][0]['tag'] == "2" %}important{% elif notices[notice][0]['tag'] == "3" %}class-related{% endif %});">
