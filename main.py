@@ -717,10 +717,12 @@ def register():
         cur = con.cursor()
 
         usernameCheck = cur.execute('''SELECT name FROM users WHERE name=? AND firstname=? AND lastname=?''', (username, firstname, lastname)).fetchone()
-        print(usernameCheck)
+
+        if cur.execute('''SELECT name FROM users WHERE name=?'''(username)).fetchone():
+            flash(f'Error: Account with username: {username} already exists.')
 
         if usernameCheck:
-            flash(f"Error: Account with username: {username} and same name: {firstname} {lastname} already exists")
+            flash(f"Error: Account with username: {username} and same name: {firstname} {lastname} already exists. Please enter a different username.")
         else:
             cur.execute('''INSERT INTO users(name, firstname, lastname, password, is_tutor) 
                         VALUES(?, ?, ?, ?, ?)''', 
