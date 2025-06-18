@@ -169,6 +169,7 @@ def load_user(user_id):
 
 @app.route("/")
 def hello_world():
+    session.pop('_flashes', None)
     return render_template('index.html')
 
 
@@ -345,7 +346,7 @@ def user_timetable():
                     try:
                         classID = request.form.get('classID')
                         classID = int(classID)
-                    except e as TypeError:
+                    except TypeError as e:
                         flash('Invalid request.')
                         return redirect(request.url)
 
@@ -369,8 +370,7 @@ def user_timetable():
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    overview = cur.execute('''SELECT subject, classdate, classtime, title FROM Dates WHERE tuteeID=? OR tutorID=? AND classdate >= ?''', (current_user.id, current_user.id, datetime.today().strftime('%Y-%m-%d'))).fetchall()
-    print(overview)
+    overview = cur.execute('''SELECT subject, classdate, classtime, title, classID FROM Dates WHERE tuteeID=? OR tutorID=? AND classdate >= ?''', (current_user.id, current_user.id, datetime.today().strftime('%Y-%m-%d'))).fetchall()
 
     return render_template('user_timetable.html', class_dates=init_real_data(current_user.id), tutees=tutees, overview=overview)
 
@@ -465,25 +465,26 @@ def user_assignments():
                     file.save(filepath)
                     print('Saved!')
                     functions.set_assignment_files(assignmentID, status=0, filename=filename, filepath=filepath)
-            print('Assignment files set!')
+                else:
+                    flash('File limit is 25MB. Please try again.')
+            flash('Assignment files set!')
 
             # after the files have been uploaded, we will now upload assignment details concerning the involved tutor, tutee, 
             # assignment, and name of the task
-            print(duedate)
             functions.set_assignment_details(assignmentID=assignmentID, tuteeID=tuteeID, tutorID=current_user.id, title=title, duedate=duedate, subject=subject)
         if 'submitassignment' in request.form:
             if 'file' not in request.files:
-                print('No file part(s) selected')
+                flash('No file selected')
                 return redirect(request.url)
             
             if 'submitassignment' not in request.form:
-                print('Invalid request')
+                flash('Invalid request')
                 return redirect(request.url)
             
             assignmentID = request.form['submitassignment']
             for file in request.files.getlist('file'):
                 if file.filename == '':
-                    print('No selected file')
+                    flash('No selected files')
                     return redirect(request.url)
             
                 if file and allowed_file_pdf(file.filename):
@@ -505,26 +506,26 @@ def user_assignments():
         if 'markassignment' in request.form:
             print(request.files)
             if 'file' not in request.files:
-                print('No file part(s) selected')
+                flash('No file part(s) selected')
                 return redirect(request.url)
             
             if 'grade' not in request.form:
-                print('No grade submitted!')
+                flash('No grade submitted!')
                 return redirect(request.url)
             try:
                 grade = int(request.form['grade'])
                 if grade < 0 or grade > 100:
-                    print('Invalid grade entered!')
+                    flash('Invalid grade entered!')
                     return redirect(request.url)
             except:
-                print('Invalid grade entered!')
+                flash('Invalid grade entered! Must be between 0 and 100')
                 return redirect(request.url)
             
             assignmentID = request.form['markassignment']
             for file in request.files.getlist('file'):
-                if file.filename == '':
-                    print('No selected file')
-                    return redirect(request.url)
+                # if file.filename == '':
+                #     flash('No selected file')
+                #     return redirect(request.url)
             
                 if file and allowed_file_pdf(file.filename):
                     filename = secure_filename(file.filename) 
@@ -678,8 +679,8 @@ def register():
             username = str(request.form.get('username'))
             password = str(request.form.get('password'))
 
-            is_english = int(request.form.get('is_english'))
-            is_maths = int(request.form.get('is_maths'))
+            is_english = str(request.form.get('is_english'))
+            is_maths = str(request.form.get('is_maths'))
 
             is_english = assign_int_boolean(is_english) #Turns str value of checkbox to boolean integer (1: True, 2: False)
             is_maths = assign_int_boolean(is_maths)
@@ -727,7 +728,7 @@ def register():
             con.commit()
             print("Account registered!")
 
-        registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck,)).fetchone()
+        registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck)).fetchone()
         if registereduserID: #checking if this has type None
             registereduserID = registereduserID[0]
         else:
@@ -957,6 +958,7 @@ def user_notices():
 @app.route("/user/logout")
 @login_required
 def logout():
+    session.pop('_flashes', None)
     logout_user()
     return redirect("/")
 

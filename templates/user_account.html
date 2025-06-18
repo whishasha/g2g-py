@@ -182,7 +182,15 @@ form button {
                     <input type="password" name="confirmpassword" onchange="detectPassword(this)" required>
                 </div>
 
-                <br><button type="submit" class="submit">Change Password</button>
+                <br><button type="submit" class="submit">Change Password</button><br>
+                <ul style="width:100%;text-align:center;">
+                    <li>Password must:</li>
+                    <li>be between 8 and 128 characters</li>
+                    <li>contain 1 alphabetic uppercase character</li>
+                    <li>contain 1 number</li>
+                    <li>contain a special character</li>
+                    <li></li>
+                </ul>
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         <ul class=flashes>
@@ -221,8 +229,15 @@ form button {
                         <input type="checkbox"  name="is_english">
 
                         <input type="checkbox"  name="is_maths">
-                </div>
-
+                </div><br>
+                <ul style="width:100%;text-align:center;">
+                    <li>Password must:</li>
+                    <li>be between 8 and 128 characters</li>
+                    <li>contain 1 alphabetic uppercase character</li>
+                    <li>contain 1 number</li>
+                    <li>contain a special character</li>
+                    <li></li>
+                </ul>
                 </div>
 
                 <input type="hidden" name="register">
@@ -274,6 +289,14 @@ form button {
                         </ul>
                     {% endif %}
                 {% endwith %}
+                                <ul style="width:100%;text-align:center;">
+                    <li>Password must:</li>
+                    <li>be between 8 and 128 characters</li>
+                    <li>contain 1 alphabetic uppercase character</li>
+                    <li>contain 1 number</li>
+                    <li>contain a special character</li>
+                    <li></li>
+                </ul>
             </form>
 
             {% endif %}

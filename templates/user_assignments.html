@@ -7,6 +7,15 @@
     {{super()}}
     {% block css %}
         <style>
+            ul.flashes {
+                text-align: center;
+                width: 70%;
+                float: right;
+                margin-top: 1rem;
+            }
+            ul.flashes li {
+                color: var(--warning);
+            }
             #wrapper{
                 display: flex;
                 justify-content: center;
@@ -409,15 +418,36 @@ form#set #submit{
         
         <div class="tab">
             <button class="tablinks" onclick="openAssignments(event, 'due')">Due</button>
-            <button class="tablinks" onclick="openAssignments(event, 'assigned')">Assigned</button>
+            
+            {% if current_user.is_tutor == 1 %}
+                <button class="tablinks" onclick="openAssignments(event, 'assigned')">Assigned</button>
+            {% endif %}
+            
             <button class="tablinks" onclick="openAssignments(event, 'completed')">Completed</button>
-            <button class="tablinks" onclick="openAssignments(event, 'awaiting')">Awaiting</button>
+            
+            {% if current_user.is_tutor == 1 %}
+                <button class="tablinks" onclick="openAssignments(event, 'awaiting')">Awaiting</button>
+            {% endif %}
+            
             <button class="tablinks" onclick="openAssignments(event, 'marked')">Marked</button>
-            <button class="tablinks right" onclick="openAssignments(event, 'set')">Set Assignment</button>
+            
+            {% if current_user.is_tutor == 1 %}
+                <button class="tablinks right" onclick="openAssignments(event, 'set')">Set Assignment</button>
+            {% endif %}
         </div>
 
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
             <div class="assignmentWrapper tabcontent" id="due">
-                <h1>Due Assignments [tutee]</h1>
+                <h1>Due Assignments</h1>
                 <div class="filters">
                 <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('dueAssignments'))">Date</button> 
                     Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('dueAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('dueAssignments'), this.value)">Maths</button> 
@@ -431,7 +461,7 @@ form#set #submit{
             </div>
 
             <div class="assignmentWrapper tabcontent" id="assigned">
-                <h1>Assigned Assignments [tutor]</h1>
+                <h1>Assigned Assignments</h1>
                 <div class="filters">
                 <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('assignedAssignments'))">Date</button> 
                     Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('assignedAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('assignedAssignments'), this.value)">Maths</button> 
@@ -447,7 +477,7 @@ form#set #submit{
             </div>
 
             <div class="assignmentWrapper tabcontent" id="completed">
-                <h1>Completed Assignments [tutee + tutor]</h1>
+                <h1>Completed Assignments</h1>
                 <div class="filters">
                 <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('completedAssignments'))">Date</button> 
                     Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('completedAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('completedAssignments'), this.value)">Maths</button> 
@@ -462,7 +492,7 @@ form#set #submit{
             </div>
 
             <div class="assignmentWrapper tabcontent" id="awaiting">
-                <h1>Awaiting Assignments [tutor]</h1>
+                <h1>Awaiting Assignments</h1>
                 <div class="filters">
                 <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('unmarkedAssignments'))">Date</button> 
                     Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('unmarkedAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('unmarkedAssignments'), this.value)">Maths</button> 
@@ -479,7 +509,7 @@ form#set #submit{
             </div>
 
             <div class="assignmentWrapper tabcontent" id="marked">
-                <h1>Marked Assignments [tutee + tutor]</h1>
+                <h1>Marked Assignments</h1>
                 <div class="filters">
                     <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('markedAssignments'))">Date</button> 
                         Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('markedAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('markedAssignments'), this.value)">Maths</button> 
@@ -606,7 +636,7 @@ form#set #submit{
                     </div>` ;    
         }
         // for submitted assignments [tutee]
-        if (assignmentDict[assignmentID][0].is_completed == String(1)) {
+        if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade === null) {
             completedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
@@ -664,7 +694,7 @@ form#set #submit{
                     </div>` ;    
         }      
         // for viewing assigned & unmarked assignments [tutor]
-        if (assignmentDict[assignmentID][0].is_completed == String(0)) {
+        if (assignmentDict[assignmentID][0].is_completed == String(0) && assignmentDict[assignmentID][0].grade === null) {
             assignedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 

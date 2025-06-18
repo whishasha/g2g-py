@@ -15,6 +15,17 @@
 div#main {
     height: fit-content;
 }
+
+            ul.flashes {
+                text-align: center;
+                width: 70%;
+                float: right;
+                margin-top: 1rem;
+            }
+            ul.flashes li {
+                color: var(--warning);
+            }
+
             /* Notice Create styling */
 
             div#create {
@@ -340,7 +351,15 @@ div#main {
             <button class="tablinks create" onclick="openTab(event, 'create-notice')">Create New Notice</button>
         </div>
 
-
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         <!-- Create notice tab, only visible to tutors -->
         <div class="tabcontent" id="create-notice">
             <form id="create" method="post" enctype=multipart/form-data>

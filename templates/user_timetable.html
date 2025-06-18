@@ -565,7 +565,7 @@ textarea {
             <div class="container">
                 <h1>Class Overview</h1>
             <div id="scroll">
-                {% if overview is defined %}
+                {% if overview|length != 0 %}
                     {% for class in overview %} <!--not sure if this work :/-->
                         <div class="class">
                             <div class="title">Title: {{class[3]}}</div>
@@ -574,7 +574,7 @@ textarea {
                             {% if current_user.is_tutor == 1 %}
                             <form method="post">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                                <input value=${infoData[index].id} name=classID type="hidden">
+                                <input value={{class[4]}} name=classID type="hidden">
                                 <input type="hidden" name="delete"/>
                                 <button type="submit">Delete Class</button>
                             </form>
@@ -1055,10 +1055,10 @@ function populateForm(event) {
     const classID = event.target.value;
     for (const [month, date] of Object.entries(class_dates)) {
     // date is a nested DICTIONARY containing events which are lists
-    console.log(month);
+
     for (const [day, event] of Object.entries(date)) {
         for (var i = 0; i < event.length; i++) {
-            console.log(`${month}-${day}`);
+
             if (event[i]['id'] == classID) {
                 changeClassSelect.value = `${event[i]['id']}`
                 changeClassDate.value=`${month}-${day}`;
