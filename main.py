@@ -257,7 +257,7 @@ def user_timetable():
                         return redirect(request.url)
 
                     # check for length of title, then restrict length
-                    if len(title) > 50:
+                    if len(title) > 100:
                         flash('Title too long. Restricted to 50 characters')
                         return redirect(request.url)
 
@@ -313,7 +313,7 @@ def user_timetable():
                                     
 
 
-                if len(title) > 50:
+                if len(title) > 100:
                     print('Title too long. Restricted to 50 characters')
                     redirect(request.url)
 
