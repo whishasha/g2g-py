@@ -16,7 +16,8 @@ from html import escape
 import shutil
 #chat tutorial:
 # https://www.youtube.com/watch%3Fv%3Do5vDco6OVTs&ved=2ahUKEwjswL677tiNAxUMT2wGHalHCcEQz40FegQIFxAr&usg=AOvVaw3gLy0_lglbLC22aR5czqpp
-
+from collections import defaultdict
+from json import dumps
 #----------------------------------------MISCELLANEOUS SECTION---------------------------------------------#
 load_dotenv(find_dotenv())
 encoded_secret_key = os.getenv("SECRET_KEY") or os.urandom(24)
@@ -105,8 +106,7 @@ def init_real_data(ID): #fetches all events relevant to a user
     con.close()
 
 
-    from collections import defaultdict #this function is altered to fit the testData database structure
-    from json import dumps
+
     events_data = defaultdict(lambda: defaultdict(list))
     for event in real_data:
         if all(value is not None for value in event):
@@ -130,9 +130,7 @@ def init_real_data(ID): #fetches all events relevant to a user
                 "id": id
             })
 
-    print(dumps(events_data, indent=3))    #Hierarchy of events / debugging
-    for event in events_data:
-        print(event)
+    # print(dumps(events_data, indent=3))    #Hierarchy of events / debugging
     return events_data
 
 allowed_subjects = ['english', 'maths']
@@ -230,13 +228,13 @@ def user_home():
 @app.route("/user/timetable", methods=["GET","POST"])
 @login_required
 def user_timetable():
-    if request.method == "POST": # for changing classdates => add verification for setting classes and changing classes
+    if request.method == "POST":
 
         if current_user.is_tutor == 1:
             if 'set' in request.form:  
                 # Verifying user input
                 if 'tutee' not in request.form or 'classdate' not in request.form or 'classtimebegin' not in request.form or 'title' not in request.form or 'subject' not in request.form or 'classnotes' not in request.form:
-                    print('Invalid information in form')
+                    flash('Invalid information in form')
                     return redirect(request.url)
                 else:
                     try:
@@ -364,7 +362,6 @@ def user_timetable():
                     con.close()
 
                     flash('Successful deletion!')
-    print(current_user.id)
     tutees = functions.get_tutees()
     
     con = sqlite3.connect('database.db')
