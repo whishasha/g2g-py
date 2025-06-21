@@ -275,7 +275,6 @@ def user_timetable():
                         flash('Invalid date and time')
                         return redirect(request.url)
 
-                    # details = cur.execute('''SELECT classdate, classtime FROM Dates WHERE tutorID=?''', (str(current_user.id))).fetchall()
                     details = cur.execute('''SELECT classdate, classtime FROM Dates WHERE tutorID=? AND classdate=? AND classtime=?''', (current_user.id, classdate, classtime)).fetchall()
                     if details:
                         flash('Date and time already in use. Please choose another.')
@@ -306,13 +305,13 @@ def user_timetable():
                         classnotes = str(request.form['classnotes'])
                         subject = str(request.form['subject'])                  
                     except:
-                        print('Invalid request')
+                        flash('Invalid request')
                         return redirect(request.url)
                                     
 
 
                 if len(title) > 100:
-                    print('Title too long. Restricted to 50 characters')
+                    flash('Title too long. Restricted to 100 characters')
                     redirect(request.url)
 
                 # get classID, then see if it exists. 
@@ -322,10 +321,10 @@ def user_timetable():
                 con = sqlite3.connect('database.db')
                 cur = con.cursor()
                 # verify that class date exists for updating
-                details = cur.execute('''SELECT classdate, classtime, tuteeID FROM Dates WHERE classdate=? AND classtime=? AND tutorID=? AND classID !=?''',(classdate, classtime, current_user.id, classID)).fetchone()
+                details = cur.execute('''SELECT classdate, classtime, tuteeID FROM Dates WHERE classdate=? AND classtime=? AND tutorID=? AND classID=?''',(classdate, classtime, current_user.id, classID)).fetchone()
 
                 if details:
-                    print('Invalid date to change. Class does not exist')
+                    flash('Invalid date to change. Class does not exist')
                     return redirect(request.url)
 
                 # the below statement will either overrwrite class dates or add a new class date
@@ -339,7 +338,7 @@ def user_timetable():
 
                 cur.close()
                 con.close()
-                print('Class details updated')
+                flash('Class details updated')
             if 'delete' in request.form:
                     try:
                         classID = request.form.get('classID')
@@ -355,7 +354,7 @@ def user_timetable():
                         cur.execute('''DELETE FROM Dates WHERE classID=?''', (classID,))
                         con.commit()
                     except:
-                        print('Invalid SQL statement')
+                        print(f'Invalid SQL statement caused by {current_user.id}')
                         flash('An unexpected error has occurred.')
                         return redirect(request.url)
                     cur.close()
@@ -405,33 +404,33 @@ def user_assignments():
         if 'setassignment' in request.form:
             print('Setting assignment!')
             if not request.form['subject']:
-                print('No subject selected')
+                flash('No subject selected')
                 return redirect(request.url)
             subject = request.form['subject']
             
             if subject.lower() not in allowed_subjects:
-                print('Invalid subject. Please try again.')
+                flash('Invalid subject. Please try again.')
                 return redirect(request.url)
 
             if not request.form['date']:
-                print('Invalid date')
+                flash('Invalid date')
                 return redirect(request.url)
             duedate = str(request.form['date'])
             if not functions.is_valid_time(duedate, '%Y-%m-%d'):
-                print('Invalid time. Please try again')
+                flash('Invalid time. Please try again')
                 return redirect(request.url)
 
             tuteeID = request.form['tutee']
             if User.get(tuteeID) is None:
-                print('Invalid tutee ID!')
+                flash('Invalid tutee!')
                 return redirect(request.url)
             
             if User.get(tuteeID).is_tutor != 0:
-                print('Invalid tutee ID! Please contact system admin.')
+                flash('Invalid tutee ID! Please contact system admin.')
                 return redirect(request.url)                
 
             if not request.form['title']:
-                print('Title not set')
+                flash('Title not set')
                 return redirect(request.url)
             title = str(request.form['title'])
 
@@ -441,7 +440,7 @@ def user_assignments():
 
             # If no file is uploaded, cancel request
             if 'file' not in request.files:
-                print('No file part(s) selected')
+                flash('No file part(s) selected')
                 return redirect(request.url)
             
             # request.files returns a MultiDict due to multiple files being uploaded
@@ -453,14 +452,14 @@ def user_assignments():
             # code for uploading to the table handling assignment files
             for file in request.files.getlist('file'):
                 if file.filename == '':
-                    print('No selected file')
+                    flash('No selected file')
                     return redirect(request.url)
                 if file and allowed_file_pdf(file.filename):
                     filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
                     unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
                     filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
                     file.save(filepath)
-                    print('Saved!')
+                    flash('Saved!')
                     functions.set_assignment_files(assignmentID, status=0, filename=filename, filepath=filepath)
                 else:
                     flash('File limit is 25MB. Please try again.')
@@ -489,19 +488,19 @@ def user_assignments():
                     unique_filename = make_unique(filename) 
                     filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
                     file.save(filepath)
-                    print('Saved!')
+                    flash('Saved!')
                     functions.set_assignment_files(assignmentID=assignmentID, status=1, filename=unique_filename, filepath=filepath)
             # need to: upload files to Files, with status 1
             functions.update_assignment_status(assignmentID=assignmentID, is_completed=1, grade=None)
             # update Assignment, turning is_completed = 1
             
-            print('Assignment files submitted!')
+            flash('Assignment files submitted!')
         if 'unsubmitassignment' in request.form:
-            print("It's going through!")
             assignmentID = request.form['unsubmitassignment']
             functions.update_assignment_status(assignmentID=assignmentID, is_completed=0, grade=None)
+            flash('Assignment unsubmitted!')
         if 'markassignment' in request.form:
-            print(request.files)
+
             if 'file' not in request.files:
                 flash('No file part(s) selected')
                 return redirect(request.url)
@@ -512,7 +511,7 @@ def user_assignments():
             try:
                 grade = int(request.form['grade'])
                 if grade < 0 or grade > 100:
-                    flash('Invalid grade entered!')
+                    flash('Invalid grade entered! Must be between 0 and 100')
                     return redirect(request.url)
             except:
                 flash('Invalid grade entered! Must be between 0 and 100')
@@ -529,30 +528,40 @@ def user_assignments():
                     unique_filename = make_unique(filename) 
                     filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename) 
                     file.save(filepath)
-                    print('Saved!')
+                    flash('Saved!')
                     functions.set_assignment_files(assignmentID=assignmentID, status=2, filename=filename, filepath=filepath)
             # need to: upload files to Files, with status 2
             functions.update_assignment_status(assignmentID=assignmentID, is_completed=1, grade=grade)
             # update Assignment, turning is_completed = 1
             
-            print('Assignment marked & uploaded!!')
+            flash('Assignment marked & uploaded')
         if 'deleteassignment' in request.form:
             try:
                 assignmentID = request.form['deleteassignment']
-                print(assignmentID)
+
             except ValueError:
-                print('Invalid ID')
+                flash('Invalid assignment!')
                 return redirect(request.url)
             con = sqlite3.connect('database.db')
             cur = con.cursor()
 
             cur.execute('''DELETE FROM Assignments WHERE assignmentID=?''', (assignmentID,))
+
+            files = cur.execute('''SELECT filepath FROM Files WHERE assignmentID=?''', (assignmentID,)).fetchall()
+            for filepath in files:
+                try: 
+                    os.remove(filepath)
+                    print(f"File '{filepath}' deleted successfully.")
+
+                except FileNotFoundError: 
+                    print(f"File '{filepath}' not found.")
             cur.execute('''DELETE FROM Files WHERE assignmentID=?''', (assignmentID,))
             con.commit()
             
             cur.close()
             con.close()
             print(f'Assignment with ID {assignmentID} successfully deleted!')
+            flash('Assignment has been deleted!')
     assignments = functions.get_assignment_details(current_user.id) # returns all assignments associated with the user's ID
     tutees = functions.get_tutees()
     
@@ -811,18 +820,20 @@ def user_notices():
             if 'create' in request.form:
                 # NON-FILE INPUT VALIDATION
                 if 'title' not in request.form or 'text' not in request.form or 'tag' not in request.form:
-                    print('Invalid request')
+                    flash('Invalid request')
+                    return redirect(request.url)
                 try:
                     title = str(request.form.get('title'))
                     text = str(request.form.get('text'))
                     tag = int(request.form.get('tag'))
                 except TypeError as e:
-                    print('Invalid fields submitted')
+                    flash('Invalid fields submitted')
+                    return redirect(request.url)
                 if len(title) > 250:
-                    print('Title too long, please keep it below 250 characters')
+                    flash('Title too long, please keep it under 250 characters')
                     return redirect(request.url)
                 if not 0 <= tag <= 3:
-                    print('Invalid tag selected.')
+                    flash('Invalid tag selected.')
                     return redirect(request.url)
                 escape(title)
                 escape(text) 
@@ -853,7 +864,6 @@ def user_notices():
                     print(request.files.getlist('file'))
                     for file in request.files.getlist('file'):
                         if file:
-                            print('yup. it is a file.')
                             fileroot = f'{app.config['UPLOAD_NOTICES']}/{noticeID}'
                             if not os.path.exists(fileroot):
                                 os.makedirs(fileroot)
@@ -870,8 +880,8 @@ def user_notices():
 
 
                             if allowed_file_image(file.filename):
-                                filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
-                                unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
+                                filename = secure_filename(file.filename) 
+                                unique_filename = make_unique(filename) 
                                 filepath = os.path.join(fileroot, unique_filename) 
                                 print(f'Uploading an image with filepath: {filepath} and \n filename: {filename}')
                                 file.save(filepath)
@@ -920,8 +930,7 @@ def user_notices():
 
     notices = cur.execute('''SELECT * FROM Notices ORDER BY noticeID DESC''').fetchall()
     noticesfiles = cur.execute('''SELECT noticeID, name, filepath FROM NoticesFiles''').fetchall()
-    from collections import defaultdict #this function is altered to fit the testData database structure
-    from json import dumps
+
     notices_dict = defaultdict(list)
     for notice in notices:
         noticeID = str(notice[0])
