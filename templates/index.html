@@ -36,6 +36,7 @@
                     font-weight: 200;
                     font-size:xx-large;
                     width: 80%;
+                    height: fit-content;
                     margin-left: auto;
                     margin-right: auto;
                 }
@@ -51,8 +52,17 @@
                 div.wrapper .section{
                     width: 50%;
                 }
-                div.wrapper .section h1 {
-                    height: 100px;
+
+                img#logo {
+                    width: 400px;
+                }
+                img#index {
+                    width: 500px;
+                    padding: 50px;
+                }
+                p.description {
+                    font-size: 15px;
+                    padding-bottom: 2px;
                 }
             </style>
         {% endblock %}
@@ -84,7 +94,7 @@
                     <div class="text">
                         <p>Bring your child from Gifted 2 Greatness</p>
                     </div>
-                        <img src="{{url_for('static', filename='assets/index.png')}}" width="700px">
+                        
                 </div>
             </div>
 
@@ -94,6 +104,8 @@
                     <div class="flexwrapper">
                         <div class="text">
                             <p>Understand numbers with Mr. Chen</p>
+                            <br>
+                            <p class="description">Feel prepared for any mathematical queries with expertise from 51 different fields. Mr. Chen will ensure academic success through his careful coaching, nurturing gifts towards greatness.</p>
                         </div>
                             <!-- <img src="{{url_for('static', filename='assets/fumo.svg')}}"> -->
                     </div>
@@ -103,10 +115,13 @@
                     <div class="flexwrapper">
                         <div class="text">
                             <p>Conquer English with G2G</p>
+                            <br>
+                            <p class="description">Become closer to God and your academic goals with Mr. Chen's excellent grasp of English literature, being cited in 20 internationally acclaimed theses.</p>
                         </div>
                     </div>
                 </div>
             </div>
+            <img src="{{url_for('static', filename='assets/index.png')}}" id="index">
         {% endblock %}
 
     </div>

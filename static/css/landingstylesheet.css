@@ -9,7 +9,7 @@
 
     --textalt2: white;
 
-    --textalt3: rgb(169, 174, 175);
+    --textalt3: rgb(101, 101, 101);
 
     --warning: rgb(255, 47, 47);
     /* background colour */
@@ -100,7 +100,7 @@ div#main {
 
 div#footer {
     width: 100vw;
-    height: 100px;
+    height: 60px;
 
     padding: 10px;
     font-weight: bolder;
