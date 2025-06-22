@@ -243,7 +243,9 @@ def user_timetable():
                         classtime = str(request.form['classtimebegin'])
                         title = str(request.form['title'])
                         classnotes = str(request.form['classnotes'])
-                        subject = str(request.form['subject'])                 
+                        subject = str(request.form['subject'])    
+                        escape(title)
+                        escape(classnotes)             
                     except:
                         flash('Invalid request')
                         return redirect(request.url)
@@ -303,7 +305,9 @@ def user_timetable():
                         classtime = str(request.form['classtimebegin'])
                         title = str(request.form['title'])
                         classnotes = str(request.form['classnotes'])
-                        subject = str(request.form['subject'])                  
+                        subject = str(request.form['subject'])                 
+                        escape(title)
+                        escape(classnotes) 
                     except:
                         flash('Invalid request')
                         return redirect(request.url)
@@ -343,7 +347,7 @@ def user_timetable():
                     try:
                         classID = request.form.get('classID')
                         classID = int(classID)
-                    except TypeError as e:
+                    except:
                         flash('Invalid request.')
                         return redirect(request.url)
 
@@ -438,6 +442,7 @@ def user_assignments():
                 flash('Title is too long.')
                 return redirect(request.url)
 
+            escape(title)
             # If no file is uploaded, cancel request
             if 'file' not in request.files:
                 flash('No file part(s) selected')
@@ -724,7 +729,7 @@ def register():
 
         usernameCheck = cur.execute('''SELECT name FROM users WHERE name=? AND firstname=? AND lastname=?''', (username, firstname, lastname)).fetchone()
 
-        if cur.execute('''SELECT name FROM users WHERE name=?'''(username)).fetchone():
+        if cur.execute('''SELECT name FROM users WHERE name=?''', (username)).fetchone():
             flash(f'Error: Account with username: {username} already exists.')
 
         if usernameCheck:

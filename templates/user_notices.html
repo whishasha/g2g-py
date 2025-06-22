@@ -19,8 +19,7 @@ div#main {
             ul.flashes {
                 text-align: center;
                 width: 70%;
-                float: right;
-                margin-top: 1rem;
+                margin: auto;
             }
             ul.flashes li {
                 color: var(--warning);
@@ -226,7 +225,9 @@ div#main {
                 margin: 1rem auto;
                 width: 70%;
                 border: 1px solid black;
+                border-left: 0px solid transparent;
                 border-top-left-radius: 10px;
+                border-bottom-left-radius: 10px;
 
 
                 background-color: var(--noticebg);
@@ -283,6 +284,8 @@ div#main {
                 padding: .9rem 0;
                 margin: .5rem auto;
 
+                overflow-x: auto;
+
                 border-top: 1px solid var(--border);
             }
 
@@ -329,6 +332,52 @@ div#main {
             button.delete:hover {
                 background-color: var(--remove);
                 color: white;
+            }
+            /* Tooltip styling */
+            /* Tooltip container */
+            .tooltip {
+            position: relative;
+            display: inline-block;
+            margin: 1rem;
+
+            border: 1px solid var(--border);
+            padding: .5rem;
+            border-radius: 10px;
+            }
+
+            /* Tooltip text */
+            .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 150px;
+            top: 100%;
+            left: 50%;
+
+            margin-top: 10px;
+
+
+            margin-left: -75px; /* Use half of the width (120/2 = 60), to center the tooltip */
+            background-color: var(--border);
+            color: white;
+            text-align: left;
+            padding: .5rem;
+            border-radius: 6px;
+            border: 1px solid black;
+            /* Position the tooltip text - see examples below! */
+            position: absolute;
+            z-index: 1;
+            }
+
+            .tooltip .tooltiptext ul li{
+                margin: 10px 0;
+            }
+            .tooltip .tooltiptext ul li i {
+                border: 1px solid black;
+                border-radius: 10px;
+            }
+
+            /* Show the tooltip text when you mouse over the tooltip container */
+            .tooltip:hover .tooltiptext {
+            visibility: visible;
             }
         </style>    
         
@@ -441,11 +490,21 @@ div#main {
 
                 </div>
             </div> -->
+            <div class="tooltip"><i class="fa-solid fa-info"></i> Notice Legend
+  <span class="tooltiptext">            
+            <ul>
+                <li><i class="fa-solid fa-circle" style="color:var(--none);"></i> None</li>
+                <li><i class="fa-solid fa-circle" style="color:var(--unimportant);"></i> Unimportant</li>
+                <li><i class="fa-solid fa-circle" style="color:var(--important);"></i> Important</li>
+                <li><i class="fa-solid fa-circle" style="color:var(--class-related);"></i> Class-related</li>
+            </ul>
+    </span>
+            </div> 
 
             {% for notice in notices %}
-            <div class="notice">
+            <div class="notice" style="box-shadow: -.5rem 0px 0px 0px var(--{% if notices[notice][0]['tag'] == "0" %}none{% elif notices[notice][0]['tag'] == "1" %}unimportant{% elif notices[notice][0]['tag'] == "2" %}important{% elif notices[notice][0]['tag'] == "3" %}class-related{% endif %});">
                 <div class="header">
-                    <span class="header-title" style="box-shadow: -.5rem 0px 0px 0px var(--{% if notices[notice][0]['tag'] == "0" %}none{% elif notices[notice][0]['tag'] == "1" %}unimportant{% elif notices[notice][0]['tag'] == "2" %}important{% elif notices[notice][0]['tag'] == "3" %}class-related{% endif %});">
+                    <span class="header-title" >
                         {{notices[notice][0]['title']}}
                     </span>
                     {% if current_user.is_tutor == 1 %}

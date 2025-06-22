@@ -175,24 +175,28 @@
                 border: 1px solid var(--border);
                 padding: .2em .4em;
                 border-radius: .2em;
-                background-color: var(--accent);
+                background-color: var(--border);
                 color: var(--bg);
                 transition: .5s;
+
+                cursor: pointer;
 
                 font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             }
             div.submitbox input[type=file]::file-selector-button:hover {
-                background-color: #81ecec;
-                border: 1px solid #00cec9;
-                color: var(--text);
+                background-color: white;
+
+                color: var(--border);
 
             }
             /* Credits end here */
 
             .assignmentWrapper form button {
-                background-color: var(--accent);
+                background-color: var(--border);
                 padding: 5px 10px;
                 border-radius: 10px;
+
+                cursor: pointer;
 
                 border: 1px solid var(--border);
                 color: var(--bg);
@@ -204,8 +208,8 @@
             }
 
             .assignmentWrapper form button:hover {
-                background-color: #81ecec;
-                color: var(--text);
+                background-color: white;
+                color: var(--border);
             }
 
             .assignment > div.files {
@@ -396,7 +400,42 @@ form#set #submit{
             background-color: var(--formhover);
         }
 
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  width: 80%;
+}
+div li a {
+    text-decoration-style: none;
+    color: var(--border);
+}
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 100%;
+  height: fit-content;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -50%; /* Use half of the width (120/2 = 60), to center the tooltip */
+  color: #fff;
+  background-color: var(--border);
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 9999;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
         </style>
+
+
     {% endblock %}
     {%endblock%}
 </head>
@@ -417,20 +456,24 @@ form#set #submit{
         <div id="wrapper">        
         
         <div class="tab">
-            <button class="tablinks" onclick="openAssignments(event, 'due')">Due</button>
-            
+            {% if current_user.is_tutor == 0 %}
+            <button class="tablinks active" onclick="openAssignments(event, 'due')">Due</button>
+            {% endif %}
+
             {% if current_user.is_tutor == 1 %}
                 <button class="tablinks" onclick="openAssignments(event, 'assigned')">Assigned</button>
             {% endif %}
-            
-            <button class="tablinks" onclick="openAssignments(event, 'completed')">Completed</button>
-            
-            {% if current_user.is_tutor == 1 %}
-                <button class="tablinks" onclick="openAssignments(event, 'awaiting')">Awaiting</button>
+
+            {% if current_user.is_tutor == 0 %}
+            <button class="tablinks" onclick="openAssignments(event, 'completed')">Submitted</button>
             {% endif %}
             
+            {% if current_user.is_tutor == 1 %}
+                <button class="tablinks active" onclick="openAssignments(event, 'awaiting')">Awaiting</button>
+            {% endif %}
+
             <button class="tablinks" onclick="openAssignments(event, 'marked')">Marked</button>
-            
+
             {% if current_user.is_tutor == 1 %}
                 <button class="tablinks right" onclick="openAssignments(event, 'set')">Set Assignment</button>
             {% endif %}
@@ -445,7 +488,6 @@ form#set #submit{
                 </ul>
             {% endif %}
         {% endwith %}
-
             <div class="assignmentWrapper tabcontent" id="due">
                 <h1>Due Assignments</h1>
                 <div class="filters">
@@ -477,7 +519,7 @@ form#set #submit{
             </div>
 
             <div class="assignmentWrapper tabcontent" id="completed">
-                <h1>Completed Assignments</h1>
+                <h1>Submitted Assignments</h1>
                 <div class="filters">
                 <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('completedAssignments'))">Date</button> 
                     Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('completedAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('completedAssignments'), this.value)">Maths</button> 
@@ -490,7 +532,6 @@ form#set #submit{
                     </div>
                 </div>
             </div>
-
             <div class="assignmentWrapper tabcontent" id="awaiting">
                 <h1>Awaiting Assignments</h1>
                 <div class="filters">
@@ -527,6 +568,7 @@ form#set #submit{
                 </div>
             </div>
 
+{% if current_user.is_tutor == 1 %}
             <form class="tabcontent" method="post" id="set" enctype=multipart/form-data>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             
@@ -563,7 +605,7 @@ form#set #submit{
             <input name="setassignment" type="hidden">
             <button id="submit" type="submit">Set Assignment</button>
             </form>
-
+{% endif %}
         </div>   
         {% endblock %}
     </div>
@@ -606,7 +648,7 @@ form#set #submit{
             for (index in assignmentFiles) {
                 // console.log(assignmentFiles[index]); //filepath
                 // console.log(assignmentFilesNames[index]); //name of file for filepath
-                fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+                fileList += `<li><div class="tooltip"><a href="/${assignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${assignmentFilesNames[index]}</span></div></li>`
             }
 
             dueAssignmentsEl.innerHTML +=
@@ -628,6 +670,8 @@ form#set #submit{
                             </div>
                             <div class="files">
                                 <h2>Assignment Attachments</h2>
+                                    Click to view
+                                    <br><br>
                                 <ul>
                                     ${fileList}
                                 </ul>
@@ -658,11 +702,11 @@ form#set #submit{
             for (index in assignmentFiles) {
                 // console.log(assignmentFiles[index]); //filepath
                 // console.log(assignmentFilesNames[index]); //name of file for filepath
-                fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+                fileList += `<li><div class="tooltip"><a href="/${assignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${assignmentFilesNames[index]}</span></div></li>`
             }
 
             for (index in submittedAssignmentFiles) {
-                submittedFileList += `<li><a href="/${submittedAssignmentFiles[index]}">${submittedAssignmentFilesNames[index]}</a></li>`
+                submittedFileList += `<li><div class="tooltip"><a href="/${submittedAssignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${submittedAssignmentFilesNames[index]}</span></div></li>`
             }
 
             completedAssignmentsEl.innerHTML +=
@@ -686,6 +730,8 @@ form#set #submit{
                             </div>
                             <div class="files">
                                 <h2>Assignment Attachments</h2>
+                                    Click to view
+                                    <br><br>
                                 <ul>
                                     ${fileList}
                                 </ul>
@@ -703,7 +749,7 @@ form#set #submit{
             for (index in assignmentFiles) {
                 // console.log(assignmentFiles[index]); //filepath
                 // console.log(assignmentFilesNames[index]); //name of file for filepath
-                fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+                fileList += `<li><div class="tooltip"><a href="/${assignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${assignmentFilesNames[index]}</span></div></li>`
             }
 
             assignedAssignmentsEl.innerHTML +=
@@ -725,6 +771,8 @@ form#set #submit{
                             </div>
                             <div class="files">
                                 <h2>Assignment Attachments</h2>
+                                    Click to view
+                                    <br><br>
                                 <ul>
                                     ${fileList}
                                 </ul>
@@ -761,16 +809,17 @@ form#set #submit{
             for (index in assignmentFiles) {
                 // console.log(assignmentFiles[index]); //filepath
                 // console.log(assignmentFilesNames[index]); //name of file for filepath
-                fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+                fileList += `<li><div class="tooltip"><a href="/${assignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${assignmentFilesNames[index]}</span></div></li>`
             }
 
 
             for (index in submittedAssignmentFiles) {
-                submittedFileList += `<li><a href="/${submittedAssignmentFiles[index]}">${submittedAssignmentFilesNames[index]}</a></li>`
+                submittedFileList += `<li><div class="tooltip"><a href="/${submittedAssignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${submittedAssignmentFilesNames[index]}</span></div></li>`
             }
 
             for (index in markedAssignmentFiles) {
-                markedFilelist += `<li><a href="/${markedAssignmentFiles[index]}">${markedAssignmentFilesNames[index]}</a></li>`
+                markedFilelist += `<li><div class="tooltip"><a href="/${markedAssignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${markedAssignmentFiles[index]}</span></div></li>`
+
             }
 
             markedAssignmentsEl.innerHTML +=
@@ -783,12 +832,16 @@ form#set #submit{
                         </div>
                         <div class="submitfiles">
                             <h1>Submitted Files</h1>
+                                Click to view
+                                <br><br>
                                 <ul>
                                     ${submittedFileList}
                                 </ul>
                         </div>
                         <div class="files">
                             <h2>Assignment Attachments</h2>
+                                    Click to view
+                                    <br><br>                            
                             <ul>
                                 ${fileList}
                             </ul>
@@ -826,12 +879,12 @@ form#set #submit{
             for (index in assignmentFiles) {
                 // console.log(assignmentFiles[index]); //filepath
                 // console.log(assignmentFilesNames[index]); //name of file for filepath
-                fileList += `<li><a href="/${assignmentFiles[index]}">${assignmentFilesNames[index]}</a></li>`
+                fileList += `<li><div class="tooltip"><a href="/${assignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${assignmentFilesNames[index]}</span></div></li>`
             }
 
 
             for (index in submittedAssignmentFiles) {
-                submittedFileList += `<li><a href="/${submittedAssignmentFiles[index]}">${submittedAssignmentFilesNames[index]}</a></li>`
+                submittedFileList += `<li><div class="tooltip"><a href="/${submittedAssignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${submittedAssignmentFilesNames[index]}</span></div></li>`
             }
 
             unmarkedAssignmentsEl.innerHTML +=
@@ -844,12 +897,16 @@ form#set #submit{
                         </div>
                         <div class="submitfiles">
                             <h1>Submitted Files</h1>
+                                    Click to view
+                                    <br><br>
                                 <ul>
                                     ${submittedFileList}
                                 </ul>
                         </div>
                         <div class="files">
                             <h2>Assignment Attachments</h2>
+                                    Click to view
+                                    <br><br>
                             <ul>
                                 ${fileList}
                             </ul>

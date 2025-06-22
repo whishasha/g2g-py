@@ -166,7 +166,7 @@ def update_assignment_status(assignmentID: int, is_completed: int, grade: int):
     if is_completed == 0:
         cur.execute('''UPDATE Assignments SET is_completed = 0 WHERE assignmentID = ?''', (assignmentID,))
     if is_completed == 1:
-        duedate = cur.execute('''SELECT duedate FROM Assignments WHERE assignmentID=?''', (assignmentID,)).fetchone()[0]
+        duedate = cur.execute('''SELECT duedate FROM Assignments WHERE assignmentID = ?''', (assignmentID,)).fetchone()[0]
         is_late = 0
         date = datetime.today().strftime('%Y-%m-%d')
         if duedate > date:
@@ -249,7 +249,7 @@ def get_home_details(tuteeID):
     # fetching assignment:
         # number of due assignments
         # duedate, title, subject
-    assignment_details = cur.execute('''SELECT duedate, title, subject FROM Assignments WHERE tuteeID=? AND duedate > ? OR tutorID=?''', (tuteeID, currentYearMonthDate, tuteeID)).fetchall()
+    assignment_details = cur.execute('''SELECT duedate, title, subject FROM Assignments WHERE tuteeID=? OR tutorID=? AND duedate > ? AND is_completed = 0''', (tuteeID, tuteeID, currentYearMonthDate)).fetchall()
 
 
     # fetching enrolled classes:
@@ -259,7 +259,7 @@ def get_home_details(tuteeID):
     # fetching class details:
         # upcoming classes where:
             # date > currentdate, subject, classtime
-    class_times = cur.execute('''SELECT classdate, subject, classtime FROM Dates WHERE tuteeID=? AND classdate > ?''', (tuteeID, currentYearMonthDate)).fetchall()
+    class_times = cur.execute('''SELECT classdate, subject, classtime, title FROM Dates WHERE tuteeID=? OR tutorID=? AND classdate > ?''', (tuteeID, tuteeID, currentYearMonthDate)).fetchall()
 
     cur.close()
     con.close()

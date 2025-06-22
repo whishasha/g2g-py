@@ -126,6 +126,12 @@ form {
         margin: 1rem auto;
     }
 
+    ul.password{
+        padding: .5rem;
+        width:100%;
+        text-align:left;
+        list-style-type:circle;
+    }
 form button {
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     margin: .5rem;
@@ -183,13 +189,12 @@ form button {
                 </div>
 
                 <br><button type="submit" class="submit">Change Password</button><br>
-                <ul style="width:100%;text-align:center;">
+                <ul class="password">
                     <li>Password must:</li>
                     <li>be between 8 and 128 characters</li>
                     <li>contain 1 alphabetic uppercase character</li>
                     <li>contain 1 number</li>
                     <li>contain a special character</li>
-                    <li></li>
                 </ul>
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
@@ -230,19 +235,18 @@ form button {
 
                         <input type="checkbox"  name="is_maths">
                 </div><br>
-                <ul style="width:100%;text-align:center;">
+
+                </div>
+
+                <input type="hidden" name="register">
+                <button type="submit" class="submit">Register</button>
+                <ul class="password">
                     <li>Password must:</li>
                     <li>be between 8 and 128 characters</li>
                     <li>contain 1 alphabetic uppercase character</li>
                     <li>contain 1 number</li>
                     <li>contain a special character</li>
-                    <li></li>
                 </ul>
-                </div>
-
-                <input type="hidden" name="register">
-                <button type="submit" class="submit">Register</button>
-
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         <ul class=flashes>
@@ -289,13 +293,12 @@ form button {
                         </ul>
                     {% endif %}
                 {% endwith %}
-                                <ul style="width:100%;text-align:center;">
+                                <ul class="password">
                     <li>Password must:</li>
                     <li>be between 8 and 128 characters</li>
                     <li>contain 1 alphabetic uppercase character</li>
                     <li>contain 1 number</li>
                     <li>contain a special character</li>
-                    <li></li>
                 </ul>
             </form>
 

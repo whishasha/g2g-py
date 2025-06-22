@@ -52,6 +52,20 @@
     cursor:pointer;
 }
 
+form.deletebutton {
+    margin: .5rem auto;
+    padding: 0;
+}
+form.deletebutton button {
+    background-color: var(--border);
+    padding: 10px;
+    color: var(--background);
+
+    border-radius: 15px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border: none;
+}
+
 .current-datetime{
     display: flex;
     justify-content: space-between;
@@ -212,28 +226,44 @@ button:hover {
 #dateInfo li {
     margin: 15px;
 
-    padding-bottom: 10px;
-
-    border-bottom: 1px solid var(--border);
-
-}
-
-#dateInfo li h1 {
-    border-bottom: 1px solid var(--border);
-
-    background-color: var(--border);
 
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 
-    padding: .1rem .1rem .1rem .2rem;
-    margin: .1rem .1rem .1rem 0;
+    padding: .1rem .1rem .2rem .2rem;
+    margin: .1rem .1rem 1rem 0;
 
+background-color: var(--border);
+}
+
+#dateInfo button {
+    transition: .2s ease-in-out;
+}
+#dateInfo button:hover {
+                background-color: white;
+                color: var(--border);
+}
+
+#dateInfo button:hover[type=submit] {
+    background-color: var(--remove);
+    color: white;
+}
+
+#dateInfo li h1 {
+    border-bottom: 1px solid var(--border);
     font-size: large;
 }
 
 
 
+ul.flashes {
+    text-align: center;
+    width: 70%;
+    margin: auto;
+}
+ul.flashes li {
+    color: var(--warning);
+}
 
 
 
@@ -243,12 +273,7 @@ form label {
     padding-bottom: .2rem;
     border-bottom: 2px solid var(--border);  
 }
-form option { 
-    background-color: var(--option);
-}
-    form option:hover{
-        background-color: var(--optionhover)
-    }
+
 form #submit{
     background-color: var(--border);
     
@@ -364,7 +389,8 @@ form {
         transition: .2s ease-in-out;
     }
         form button:hover {
-            background-color: var(--formhover);
+                background-color: var(--remove);
+
         }
 
     #setclass .form-set-tutee {
@@ -519,6 +545,15 @@ textarea {
             <button class="tablinks options" onclick="openCity(event, 'setclass')">Set New Class</button>
             <button class="tablinks options" onclick="openCity(event, 'changeClassDetails')">Change Details</button>
         </div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 
 
         <div id="changeClassDetails" class="tabcontent"> <!--only visible to tutors-->
@@ -572,7 +607,7 @@ textarea {
                             <div class="duedate">Date: {{class[1]}}</div>
                             <div class="subject">Time: {{class[2]}}</div>
                             {% if current_user.is_tutor == 1 %}
-                            <form method="post">
+                            <form method="post" class="deletebutton">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 <input value={{class[4]}} name=classID type="hidden">
                                 <input type="hidden" name="delete"/>
@@ -898,17 +933,27 @@ const displayDateInfo = (El) => { //display class details for each date
 
     const infoData = JSON.parse(decodeURIComponent(El.dataset.info));
     infoData.forEach(function createDivs(value, index, array){
-        console.log(infoData[index].title);
-        dateInfoEl.innerHTML += `
+
+        if (infoData[index].title == 'Not set' && infoData[index].time == 'Not set' && infoData[index].subject == 'Not set') {
+            dateInfoEl.innerHTML += `
             <div>
                 <ul>
                 <li><h1>Title: ${infoData[index].title}</h1></li>
                 <li>Time: ${infoData[index].time}</li>
                 <li>Subject: ${infoData[index].subject}</li>
                 <li>Description: ${infoData[index].description}</li>
-                {% if current_user.is_tutor == 1 %}
+            </div>` ;
+        } else {
+            dateInfoEl.innerHTML += `
+            <div>
+                <ul>
+                <li><h1>Title: ${infoData[index].title}</h1></li>
+                <li>Time: ${infoData[index].time}</li>
+                <li>Subject: ${infoData[index].subject}</li>
+                <li>Description: ${infoData[index].description}</li>
+                            {% if current_user.is_tutor == 1 %}
                 <button onclick="populateForm(event)" value=${infoData[index].id}>Change Details</button>
-                <form method="post">
+                <form method="post" class="deletebutton">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <input value=${infoData[index].id} name=classID type="hidden">
                     <input type="hidden" name="delete"/>
@@ -916,7 +961,11 @@ const displayDateInfo = (El) => { //display class details for each date
                 </form>
                 {% endif %}
                 </ul>
-            </div>` ;
+            </div>` 
+
+        }
+
+
     })
 
     // dateInfoEl.innerHTML += `<button onclick="changeClassDetails()">Change Details</button>`
