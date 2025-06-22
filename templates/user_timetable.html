@@ -540,10 +540,14 @@ textarea {
         <div id="dateInfo">
             hi ;3
         </div>
+
         <div class="tab">
             <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'overview')">Overview</button>
+        {% if current_user.is_tutor == 1 %}
             <button class="tablinks options" onclick="openCity(event, 'setclass')">Set New Class</button>
             <button class="tablinks options" onclick="openCity(event, 'changeClassDetails')">Change Details</button>
+        {% endif %}
+
         </div>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -556,6 +560,8 @@ textarea {
         {% endwith %}
 
 
+
+        {% if current_user.is_tutor == 1 %}
         <div id="changeClassDetails" class="tabcontent"> <!--only visible to tutors-->
             <form method="post">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -596,12 +602,61 @@ textarea {
                 <button type="submit" id="submit">Change Details</button>
             </form>
         </div>
+        <div id="setclass" class="tabcontent">
+            <form method="post" name="setClass">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="set"/>
+
+            <h1>Set Class</h1>
+            <div class="form-set-tutee">
+                <label>Tutee</label>
+                <select name="tutee" id="tutee" required> <!--use jinja for options-->
+                {% for tutee in tutees %}
+                    <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
+                {% endfor %}
+                </select>
+            </div>
+
+        
+            <div class="form-dates">
+                <label>Date</label>
+                <input type="date" name="classdate" required>    
+            </div>
+
+
+            <div class="form-dates">
+                <label>Time</label>
+                <input type="time" name="classtimebegin" required>
+            </div>
+            
+            
+            <div class="form-details">
+                <label>Title</label>
+                <input type="text" name="title" required>
+            </div>
+
+            <div class="form-details">
+                <label>Subject</label>
+                <select name="subject" id="subject" required> <!--use jinja for options-->
+                    <option value="english">English</option>
+                    <option value="maths">Mathematics</option>
+                </select>
+            </div>
+
+            <div class="form-notes">
+                <label>Additional Notes</label>
+                <textarea name="classnotes"></textarea>
+            </div>
+            <button type="submit" id="submit">Set Class</button>
+            </form>
+        </div>
+        {% endif %}
         <div id="overview" class="tabcontent">
             <div class="container">
                 <h1>Class Overview</h1>
             <div id="scroll">
                 {% if overview|length != 0 %}
-                    {% for class in overview %} <!--not sure if this work :/-->
+                    {% for class in overview %}
                         <div class="class">
                             <div class="title">Title: {{class[3]}}</div>
                             <div class="duedate">Date: {{class[1]}}</div>
@@ -681,54 +736,8 @@ textarea {
             </div>
             </div>
         </div>
-        <div id="setclass" class="tabcontent">
-            <form method="post" name="setClass">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="set"/>
-
-            <h1>Set Class</h1>
-            <div class="form-set-tutee">
-                <label>Tutee</label>
-                <select name="tutee" id="tutee" required> <!--use jinja for options-->
-                {% for tutee in tutees %}
-                    <option value={{tutee[0]}}>{{tutee[1]}} ({{tutee[2]}})</option>
-                {% endfor %}
-                </select>
-            </div>
-
         
-            <div class="form-dates">
-                <label>Date</label>
-                <input type="date" name="classdate" required>    
-            </div>
 
-
-            <div class="form-dates">
-                <label>Time</label>
-                <input type="time" name="classtimebegin" required>
-            </div>
-            
-            
-            <div class="form-details">
-                <label>Title</label>
-                <input type="text" name="title" required>
-            </div>
-
-            <div class="form-details">
-                <label>Subject</label>
-                <select name="subject" id="subject" required> <!--use jinja for options-->
-                    <option value="english">English</option>
-                    <option value="maths">Mathematics</option>
-                </select>
-            </div>
-
-            <div class="form-notes">
-                <label>Additional Notes</label>
-                <textarea name="classnotes"></textarea>
-            </div>
-            <button type="submit" id="submit">Set Class</button>
-            </form>
-        </div>
 
         {%endblock%}
     </div>
@@ -919,6 +928,7 @@ displayCalendar();
 
 
 const dateInfoEl = document.getElementById('dateInfo');
+
 const changeClassDetailsEl = document.getElementById('changeClassDetails');
 const calendar = document.getElementById('calendar');
 // datesEl selects all elements with class dates

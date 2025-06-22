@@ -167,11 +167,14 @@ form button {
         </div>
         <div class="tab">
             <button class="tablinks" onclick="openForm(event, 'changePassword')">Change Password</button>
+            
+            {% if current_user.is_tutor %}
             <button class="tablinks" onclick="openForm(event, 'changeSubjects')">Change Subjects</button>
             <button class="tablinks tutorlinks" onclick="openForm(event, 'registertutee')">Register Tutee</button>
             <button class="tablinks tutorlinks" onclick="openForm(event, 'registertutor')">Register Tutor</button>
             <button class="tablinks tutorlinks" onclick="openForm(event, 'unenrollTutee')">Unenroll Tutee</button>
-          </div>
+            {% endif %}
+        </div>
         <!-- <div id="container">     -->
             <form method="post" id="changePassword" class="tabcontent">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -208,7 +211,7 @@ form button {
                 
             </form>
 
-            {% if current_user.is_tutor %}
+            {% if current_user.is_tutor == 1 %}
             <form method="post" id="registertutee" class="tabcontent" onkeydown="return event.key != 'Enter';">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <h1 id="title">Register a Tutee</h1>

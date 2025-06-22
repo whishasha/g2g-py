@@ -156,6 +156,7 @@ button:hover {
     /* smooth transition to white as you hover over a button */
     color: var(--accentalt);
     transition: 0.3s;
+    cursor: pointer;
 }
 button {
     /* Creates circular buttons for each thing there */

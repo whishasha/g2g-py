@@ -461,7 +461,7 @@ div li a {
             {% endif %}
 
             {% if current_user.is_tutor == 1 %}
-                <button class="tablinks" onclick="openAssignments(event, 'assigned')">Assigned</button>
+            <button class="tablinks" onclick="openAssignments(event, 'assigned')">Assigned</button>
             {% endif %}
 
             {% if current_user.is_tutor == 0 %}
@@ -488,6 +488,8 @@ div li a {
                 </ul>
             {% endif %}
         {% endwith %}
+            
+        {% if current_user.is_tutor == 0 %}
             <div class="assignmentWrapper tabcontent" id="due">
                 <h1>Due Assignments</h1>
                 <div class="filters">
@@ -501,7 +503,23 @@ div li a {
                     </div>
                 </div>
             </div>
+            <div class="assignmentWrapper tabcontent" id="completed">
+                            <h1>Submitted Assignments</h1>
+                            <div class="filters">
+                            <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('completedAssignments'))">Date</button> 
+                                Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('completedAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('completedAssignments'), this.value)">Maths</button> 
+                                <button class="filter" onclick="resetFilters(document.getElementById('completedAssignments'))">Reset</button>                    
+                            </div>
 
+                            <div id="completedAssignments">
+                                <div class="assignment">
+                                    <!--contains assignments-->
+                                </div>
+                            </div>
+            </div>
+        {% endif %}
+
+        {% if current_user.is_tutor == 1 %}
             <div class="assignmentWrapper tabcontent" id="assigned">
                 <h1>Assigned Assignments</h1>
                 <div class="filters">
@@ -517,21 +535,6 @@ div li a {
                     </div>
                 </div>
             </div>
-
-            <div class="assignmentWrapper tabcontent" id="completed">
-                <h1>Submitted Assignments</h1>
-                <div class="filters">
-                <p>Sort by: <button class="filter" onclick="filterByDate(event, document.getElementById('completedAssignments'))">Date</button> 
-                    Subject:<button class="filter" value="English" onclick="filterBySubject(event, document.getElementById('completedAssignments'), this.value)">English</button><button class="filter" value="Maths" onclick="filterBySubject(event, document.getElementById('completedAssignments'), this.value)">Maths</button> 
-                    <button class="filter" onclick="resetFilters(document.getElementById('completedAssignments'))">Reset</button>                    
-                </div>
-
-                <div id="completedAssignments">
-                    <div class="assignment">
-                        <!--contains assignments-->
-                    </div>
-                </div>
-            </div>
             <div class="assignmentWrapper tabcontent" id="awaiting">
                 <h1>Awaiting Assignments</h1>
                 <div class="filters">
@@ -542,13 +545,9 @@ div li a {
                 </div>
 
                 <div id="unmarkedAssignments">
-
-                    <div class="markAssignment">
-                        <!--contains assignments-->
-                    </div>
                 </div>
             </div>
-
+        {% endif %}
             <div class="assignmentWrapper tabcontent" id="marked">
                 <h1>Marked Assignments</h1>
                 <div class="filters">
@@ -559,14 +558,9 @@ div li a {
                 </div>
         
                 <div id="markedAssignments">
-
-                    <div class="markAssignment"> <!--will need to add Jinja here in future for due assignments-->
-                        <div class="title">English Essay Writing</div>
-                        <div class="submitbox">2</div>
-                        <div class="duedate">Due by:</div>
-                    </div>
                 </div>
             </div>
+
 
 {% if current_user.is_tutor == 1 %}
             <form class="tabcontent" method="post" id="set" enctype=multipart/form-data>
@@ -618,26 +612,37 @@ div li a {
 </script>
 <script>
 
-
+    {% if current_user.is_tutor == 0 %}
     const dueAssignmentsEl = document.getElementById('dueAssignments');
     const completedAssignmentsEl = document.getElementById('completedAssignments');
+    {% endif %}
+
+
+    {% if current_user.is_tutor == 1 %}
     const unmarkedAssignmentsEl = document.getElementById('unmarkedAssignments');
-    const markedAssignmentsEl = document.getElementById('markedAssignments');
     const assignedAssignmentsEl = document.getElementById('assignedAssignments');
-    const assignmentDict = {{ assignments | tojson }}; //List of all assignments
+    {% endif %}
+    const markedAssignmentsEl = document.getElementById('markedAssignments');
     
-    console.log(assignmentDict); //for debugging purposes
+    const assignmentDict = {{ assignments | tojson }}; //List of all assignments
 
     message = `<p class="msg">No assignments</p>`;
 
+    {% if current_user.is_tutor == 0 %}
     dueAssignmentsEl.innerHTML = message;
     completedAssignmentsEl.innerHTML = message;
+    {% endif %}
+
+    {% if current_user.is_tutor == 1 %}
     unmarkedAssignmentsEl.innerHTML = message;
-    markedAssignmentsEl.innerHTML = message;
     assignedAssignmentsEl.innerHTML = message;
+    {% endif %}
+
+    markedAssignmentsEl.innerHTML = message;
 
     function displayAssignments() {
     for (const assignmentID in assignmentDict) {
+        {% if current_user.is_tutor == 0 %}
         //for due assignments [tutee]
         if (assignmentDict[assignmentID][0].is_completed == String(0)) {
             dueAssignmentsEl.innerHTML = '';
@@ -679,8 +684,11 @@ div li a {
                         <div class="duedate">Due by: ${assignmentDict[assignmentID][0].duedate}</div>
                     </div>` ;    
         }
+        {% endif %}
+
+        {% if current_user.is_tutor == 0 %}
         // for submitted assignments [tutee]
-        if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade === null) {
+            if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade === null) {
             completedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
@@ -739,8 +747,11 @@ div li a {
                         <div class="duedate">${lateMessage}</div>
                     </div>` ;    
         }      
+        {% endif %}
+        
+        {% if current_user.is_tutor == 1 %}
         // for viewing assigned & unmarked assignments [tutor]
-        if (assignmentDict[assignmentID][0].is_completed == String(0) && assignmentDict[assignmentID][0].grade === null) {
+            if (assignmentDict[assignmentID][0].is_completed == String(0) && assignmentDict[assignmentID][0].grade === null) {
             assignedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
@@ -780,9 +791,11 @@ div li a {
                         <div class="duedate">Due by: ${assignmentDict[assignmentID][0].duedate}</div>
                     </div>` ;    
         }
-            
+        {% endif %}
+       
         // put one here for marked assignments [tutee + tutor]
         if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade != null) {
+            console.log('runnin"');
             markedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
@@ -855,6 +868,8 @@ div li a {
                         <div class="duedate">Grade (%): ${assignmentDict[assignmentID][0].grade}</div>
                     </div>` ;    
         }// NOTE: the onkeypress function in the input here still allows copy and pasting! Please validate the grade in the backend or otherwise.
+        
+        {% if current_user.is_tutor == 1 %}
         // for assignments awaiting marking [tutor]
         if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade == null) {
             unmarkedAssignmentsEl.innerHTML = '';
@@ -925,6 +940,7 @@ div li a {
                         <div class="duedate">${lateMessage}</div>
                     </div>` ;  
         }// NOTE: the onkeypress function in the input here still allows copy and pasting! Please validate the grade in the backend or otherwise. 
+        {% endif %}
     }      
 }
 displayAssignments()
