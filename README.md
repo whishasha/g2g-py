@@ -1,5 +1,8 @@
 # g2g-py
-To start for dummies:
+In order to run the website locally and/or on a webserver,
+
+
+## For running locally
 
 We need to work in a virtual environment to ensure all our downloaded modules are in the same spot so we can keep track of them (rather than downloading them onto your PC).
 
@@ -7,32 +10,28 @@ We need to work in a virtual environment to ensure all our downloaded modules ar
 .venv\Scripts\activate
 `
 
-Once the virtual environment has been activated,
+Once the virtual environment has been activated, the packages need to be installed.
 
 `
 pip install -r requirements.txt
 `
 
-and because my app likes to act up, please run this from the command line using
+In the event that the modules do not load on the computer and the IDE cannot identify the modules, please run this in the terminal.
 
 `
 python main.py
 `
 
+## For running on a webserver
 
-helpful links:
+The webserver needs to install the packages in the requirements.txt file using 
 
-https://stackoverflow.com/questions/14510899/white-space-after-the-footer-only-in-firefox-and-ie/68367701#68367701
-<!-- Helped fix a Firefox-only issue -->
+`
+pip install -r requirements.txt
+`
 
+To host the webserver, the webserver needs to run
+`
+python main.py
+`
 
-https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp 
-<!-- This one taught me how to move content to the right! -->
-
-because VSCode is hallucinating into thinking I don't have these modules downloaded.
-
-
-
-https://fonts.google.com/icons
-
-nice icons

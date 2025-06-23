@@ -1,18 +1,14 @@
 <!-- some pages have page-specific styling to prevent stylesheet bloat -->
 
-
-
-
-
 - screen-specific dimensions using @media
 https://www.w3schools.com/cssref/atrule_media.php
 
 
-- add nice looking button to close sidenav in user directory [done]
+- add nice looking button to close sidenav in user directory
 credit: https://stackoverflow.com/questions/17702419/change-margin-top-with-pure-javascript
 
 
-- calendar js code + CSS variables for easy website colour changes [done]
+- calendar js code + CSS variables for easy website colour changes
 https://www.youtube.com/watch?v=ZBJ44LrmwDI
 
 
@@ -51,4 +47,21 @@ https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filen
 -- on deleting files that you accidentally uploaded and submitting things
 https://stackoverflow.com/questions/379610/can-you-nest-html-forms => bad method
 
-https://www.geeksforgeeks.org/html-clearing-the-input-field/ => pog method
+https://www.geeksforgeeks.org/html-clearing-the-input-field/ => good method
+
+helpful links:
+
+https://stackoverflow.com/questions/14510899/white-space-after-the-footer-only-in-firefox-and-ie/68367701#68367701
+<!-- Helped fix a Firefox-only issue -->
+
+
+https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp 
+<!-- This one taught me how to move content to the right! -->
+
+because VSCode is hallucinating into thinking I don't have these modules downloaded.
+
+
+
+https://fonts.google.com/icons
+
+nice icons
