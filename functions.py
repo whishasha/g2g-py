@@ -1,4 +1,5 @@
 #Includes all functions used in the backend which do not contribute directly to linking pages via the decorator
+from flask import flash
 import sqlite3
 from collections import defaultdict #this function is altered to fit the testData database structure
 from json import dumps
@@ -90,15 +91,13 @@ def set_assignment_details(assignmentID: int, tuteeID: int, tutorID: int, title:
             cur.close()
             con.close()
 
-def get_assignment_details(ID):
+def get_assignment_details(ID: int):
     assignments = defaultdict(list)
 
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    assignmentDetails = cur.execute('''SELECT * FROM Assignments WHERE tuteeID=? OR tutorID=?''', (ID, ID)).fetchall()
-
-    assignmentIDList = []
+    assignmentDetails = cur.execute('''SELECT * FROM Assignments WHERE tuteeID=? OR tutorID=?''', (int(ID), int(ID))).fetchall()
 
     for assignment in assignmentDetails:
         assignmentID = assignment[0]
@@ -186,8 +185,7 @@ def get_tutees():
     con = sqlite3.connect('database.db')
     cur = con.cursor()
 
-    tutees = cur.execute('''SELECT ID, firstname, lastname, name FROM users WHERE is_tutor=0''').fetchall()
-
+    tutees = cur.execute('''SELECT users.ID, users.firstname, users.lastname, users.name FROM users WHERE is_tutor=0''').fetchall()
     cur.close()
     con.close()
 
@@ -217,12 +215,16 @@ def validate_file_access(unique_filename, userID):
     assignmentName = cur.execute('''SELECT name from Files WHERE filepath=?''', (fr'static/files\{unique_filename}',)).fetchone()
     
     if assignmentID is not None and assignmentName is not None:
-        row = cur.execute('''SELECT tuteeID FROM Assignments WHERE assignmentID=?''', (assignmentID)).fetchone()[0]
-        row1 = cur.execute('''SELECT tutorID FROM Assignments WHERE assignmentID=?''', (assignmentID)).fetchone()[0]
+        row = cur.execute('''SELECT tuteeID FROM Assignments WHERE assignmentID=?''', (assignmentID,)).fetchone()
+        row1 = cur.execute('''SELECT tutorID FROM Assignments WHERE assignmentID=?''', (assignmentID,)).fetchone()
         
-        
-        if row == userID or row1 == userID:
-            return assignmentName[0]
+        if row is not None:
+            if row == userID:
+                return assignmentName[0]
+        elif row1 is not None:
+            if row1 == userID:
+                return assignmentName[0]
+            
     
 
 
@@ -233,7 +235,7 @@ def validate_file_access(unique_filename, userID):
     return False
 
 
-def get_home_details(tuteeID):
+def get_home_details(tuteeID: int):
 
     # show # of due assignments
     # show duedate, title of due assignment, subject in scrollable div
@@ -271,24 +273,24 @@ def unenroll_tutee(tuteeID):
     cur = con.cursor()
 
     #Validate that the tuteeID refers to an actual tutee
-    validateTutee = cur.execute('''SELECT ID FROM users WHERE ID=?''', (tuteeID)).fetchone()
+    validateTutee = cur.execute('''SELECT ID FROM users WHERE ID=?''', (tuteeID,)).fetchone()
 
     if validateTutee is not None:
         validateTutee = validateTutee[0]
         try:
-            cur.execute('''DELETE FROM users WHERE ID=?''', (tuteeID))
+            cur.execute('''DELETE FROM users WHERE ID=?''', (tuteeID,))
             
-            assignmentIDs = cur.execute('''SELECT assignmentID FROM Assignments WHERE tuteeID=?''', (tuteeID)).fetchall()
+            assignmentIDs = cur.execute('''SELECT assignmentID FROM Assignments WHERE tuteeID=?''', (tuteeID,)).fetchall()
             for assignmentID in assignmentIDs:
-                cur.execute('''DELETE FROM Files WHERE assignmentID=?''', (assignmentID))
+                cur.execute('''DELETE FROM Files WHERE assignmentID=?''', (assignmentID,))
 
-            cur.execute('''DELETE FROM Assignments WHERE tuteeID=?''', (tuteeID))
-            cur.execute('''DELETE FROM Classes WHERE userID=?''', (tuteeID))
+            cur.execute('''DELETE FROM Assignments WHERE tuteeID=?''', (tuteeID,))
+            cur.execute('''DELETE FROM Classes WHERE userID=?''', (tuteeID,))
             con.commit()
-            print('Successful deletion!')
+            flash('Successful deletion!')
             return True
         except:
-            print('An error has occurred')
+            flash('An error has occurred')
 
     cur.close()
     con.close()
@@ -297,3 +299,4 @@ def unenroll_tutee(tuteeID):
 
 if __name__ == '__main__':
     print('Running functions.py on main thread!')
+    print(get_assignment_details(1))

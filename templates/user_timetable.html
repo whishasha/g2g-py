@@ -447,6 +447,7 @@ textarea {
 
 #overview .container #scroll {
     overflow-y: scroll;    
+    height:450px;
 }
 
 #overview .container #scroll p{
@@ -491,10 +492,11 @@ textarea {
     }
 
     #main {
-        height: fit-content;
+        height: 100%;
     }
 
     #overview {
+        height: 100vh;
         flex-direction: column;
         justify-content: center;
     }
@@ -584,7 +586,7 @@ textarea {
                     <input type="time" name="classtimebegin" id="classtimebegin" required>
                 </div>
                 <div class="form-details">
-                    <label>New Title</label>
+                    <label>New Title (100 char. max)</label>
                     <input type="text" name="title" id="title" required>                    
                 </div>
                 <div class="form-details">
@@ -631,7 +633,7 @@ textarea {
             
             
             <div class="form-details">
-                <label>Title</label>
+                <label>Title (100 char. max)</label>
                 <input type="text" name="title" required>
             </div>
 
@@ -1120,7 +1122,7 @@ function populateForm(event) {
 
             if (event[i]['id'] == classID) {
                 changeClassSelect.value = `${event[i]['id']}`
-                changeClassDate.value=`${month}-${day}`;
+                changeClassDate.value=`${month}-${String(day).padStart(2, '0')}`;
                 changeClassTime.value=`${event[i]['time']}`;
                 changeClassTitle.value = `${event[i]['title']}`;
                 changeClassSubject.value = `${event[i]['subject']}`;

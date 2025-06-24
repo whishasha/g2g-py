@@ -16,8 +16,7 @@ from html import escape
 import shutil
 #chat tutorial:
 # https://www.youtube.com/watch%3Fv%3Do5vDco6OVTs&ved=2ahUKEwjswL677tiNAxUMT2wGHalHCcEQz40FegQIFxAr&usg=AOvVaw3gLy0_lglbLC22aR5czqpp
-from collections import defaultdict
-from json import dumps
+
 #----------------------------------------MISCELLANEOUS SECTION---------------------------------------------#
 load_dotenv(find_dotenv())
 encoded_secret_key = os.getenv("SECRET_KEY") or os.urandom(24)
@@ -41,7 +40,6 @@ class User(UserMixin):
         row = cur.fetchone()
         con.close()
         if row:
-            print(User(*row).username) #unpacks user tuple and returns a USER OBJECT
             return User(*row)
         return None
 
@@ -68,8 +66,7 @@ def assign_int_boolean(var):
         var = 0 #False
     return var
 def init_test_data(): #replace with dbedit2.py version
-    from collections import defaultdict
-    from json import dumps
+
 
     events = [
         ("Maths", "2025-04-01 15:00", "Meeting with John at 3 PM", "Pretty chill"),
@@ -106,7 +103,8 @@ def init_real_data(ID): #fetches all events relevant to a user
     con.close()
 
 
-
+    from collections import defaultdict #this function is altered to fit the testData database structure
+    from json import dumps
     events_data = defaultdict(lambda: defaultdict(list))
     for event in real_data:
         if all(value is not None for value in event):
@@ -130,7 +128,7 @@ def init_real_data(ID): #fetches all events relevant to a user
                 "id": id
             })
 
-    # print(dumps(events_data, indent=3))    #Hierarchy of events / debugging
+
     return events_data
 
 allowed_subjects = ['english', 'maths']
@@ -141,8 +139,6 @@ allowed_subjects = ['english', 'maths']
 
 
 login_manager = LoginManager()
-# John, B@nan1abB => example tutor
-# Alex, B@nan1aba => example tutee
 
 #Initialising the application
 app = Flask(__name__)
@@ -189,13 +185,11 @@ def login():
             return redirect(request.url)
         if userRecord:
             passwordValidated = bcrypt.check_password_hash(userRecord[2], password)
-            print(passwordValidated)
             if passwordValidated:
                 #userRecord[0] = ID, [1] = username, [2] = encrypted password, [3] = is_tutor as a 1(TRUE) or 0 (FALSE)
                 userID = str(userRecord[0])
                 user = User(userID, userRecord[1], userRecord[2], userRecord[3])
                 login_user(user) #from Flask_Login
-                print('Successfully logged in')
                 return redirect(url_for('user_home')) #add username as a parameter
             else: 
                 flash('Invalid password')
@@ -228,7 +222,7 @@ def user_home():
 @app.route("/user/timetable", methods=["GET","POST"])
 @login_required
 def user_timetable():
-    if request.method == "POST":
+    if request.method == "POST": # for changing classdates => add verification for setting classes and changing classes
 
         if current_user.is_tutor == 1:
             if 'set' in request.form:  
@@ -243,9 +237,7 @@ def user_timetable():
                         classtime = str(request.form['classtimebegin'])
                         title = str(request.form['title'])
                         classnotes = str(request.form['classnotes'])
-                        subject = str(request.form['subject'])    
-                        escape(title)
-                        escape(classnotes)             
+                        subject = str(request.form['subject'])                 
                     except:
                         flash('Invalid request')
                         return redirect(request.url)
@@ -258,7 +250,7 @@ def user_timetable():
 
                     # check for length of title, then restrict length
                     if len(title) > 100:
-                        flash('Title too long. Restricted to 50 characters')
+                        flash('Title too long. Restricted to 100 characters')
                         return redirect(request.url)
 
                     if len(classnotes) > 250:
@@ -277,6 +269,7 @@ def user_timetable():
                         flash('Invalid date and time')
                         return redirect(request.url)
 
+                    # details = cur.execute('''SELECT classdate, classtime FROM Dates WHERE tutorID=?''', (str(current_user.id))).fetchall()
                     details = cur.execute('''SELECT classdate, classtime FROM Dates WHERE tutorID=? AND classdate=? AND classtime=?''', (current_user.id, classdate, classtime)).fetchall()
                     if details:
                         flash('Date and time already in use. Please choose another.')
@@ -292,11 +285,11 @@ def user_timetable():
 
                     cur.close()
                     con.close()
-                    print('Assignment successfully set!')
+                    flash('Class successfully set!')
             if 'change' in request.form:    #tutor-only function
 
                 if 'class' not in request.form or 'classdate' not in request.form or 'classtimebegin' not in request.form or 'title' not in request.form or 'subject' not in request.form or 'classnotes' not in request.form:
-                    print('Invalid information in form')
+                    flash('Invalid information in form')
                     return redirect(request.url)
                 else:
                     try:
@@ -305,11 +298,9 @@ def user_timetable():
                         classtime = str(request.form['classtimebegin'])
                         title = str(request.form['title'])
                         classnotes = str(request.form['classnotes'])
-                        subject = str(request.form['subject'])                 
-                        escape(title)
-                        escape(classnotes) 
+                        subject = str(request.form['subject'])                  
                     except:
-                        flash('Invalid request')
+                        print('Invalid request')
                         return redirect(request.url)
                                     
 
@@ -325,7 +316,7 @@ def user_timetable():
                 con = sqlite3.connect('database.db')
                 cur = con.cursor()
                 # verify that class date exists for updating
-                details = cur.execute('''SELECT classdate, classtime, tuteeID FROM Dates WHERE classdate=? AND classtime=? AND tutorID=? AND classID=?''',(classdate, classtime, current_user.id, classID)).fetchone()
+                details = cur.execute('''SELECT classdate, classtime, tuteeID FROM Dates WHERE classdate=? AND classtime=? AND tutorID=? AND classID !=?''',(classdate, classtime, current_user.id, classID)).fetchone()
 
                 if details:
                     flash('Invalid date to change. Class does not exist')
@@ -347,7 +338,7 @@ def user_timetable():
                     try:
                         classID = request.form.get('classID')
                         classID = int(classID)
-                    except:
+                    except TypeError as e:
                         flash('Invalid request.')
                         return redirect(request.url)
 
@@ -358,7 +349,7 @@ def user_timetable():
                         cur.execute('''DELETE FROM Dates WHERE classID=?''', (classID,))
                         con.commit()
                     except:
-                        print(f'Invalid SQL statement caused by {current_user.id}')
+                        print('Invalid SQL statement')
                         flash('An unexpected error has occurred.')
                         return redirect(request.url)
                     cur.close()
@@ -374,37 +365,11 @@ def user_timetable():
 
     return render_template('user_timetable.html', class_dates=init_real_data(current_user.id), tutees=tutees, overview=overview)
 
-# -------------------------------------------------------MISC. FUNCTION THAT I DON'T KNOW WHAT IT IS -------------------------------------------------------
-def format_calendar_data(subject, tutee, daymonthyear, time, notes): #due for deletion
-    #store daymonthyear in 2 separate variables:
-    # DATE (YYYY-MM-DD)
-    # TIME (HH:MM:SS)
-    if current_user.is_tutor == 1:
-        print('User is a tutor!')
-        if User.find_by_username(tutee):
-            tuteeID = User.find_by_username(tutee).id
-
-            tutorID = current_user.id
-
-            hours = str(time[0:2])
-            minutes = str(time[3:5])
-            seconds = '00'
-
-            classTime = ":".join([hours, minutes, seconds]) #in form HH:MM:SS
-            
-            #will return a valid tuple which can be uploaded to the database
-            return (tuteeID, tutorID, subject, daymonthyear, classTime, notes)
-        else:
-            print('User cannot be found.')
-    print('Invalid request.')
-    return None
-
 
 @app.route("/user/assignments", methods=['GET', 'POST'])
 @login_required
 def user_assignments():
     if request.method == "POST":
-        print(request.form)
         if 'setassignment' in request.form:
             print('Setting assignment!')
             if not request.form['subject']:
@@ -426,7 +391,7 @@ def user_assignments():
 
             tuteeID = request.form['tutee']
             if User.get(tuteeID) is None:
-                flash('Invalid tutee!')
+                flash('Invalid tutee ID!')
                 return redirect(request.url)
             
             if User.get(tuteeID).is_tutor != 0:
@@ -442,7 +407,6 @@ def user_assignments():
                 flash('Title is too long.')
                 return redirect(request.url)
 
-            escape(title)
             # If no file is uploaded, cancel request
             if 'file' not in request.files:
                 flash('No file part(s) selected')
@@ -503,9 +467,7 @@ def user_assignments():
         if 'unsubmitassignment' in request.form:
             assignmentID = request.form['unsubmitassignment']
             functions.update_assignment_status(assignmentID=assignmentID, is_completed=0, grade=None)
-            flash('Assignment unsubmitted!')
         if 'markassignment' in request.form:
-
             if 'file' not in request.files:
                 flash('No file part(s) selected')
                 return redirect(request.url)
@@ -516,7 +478,7 @@ def user_assignments():
             try:
                 grade = int(request.form['grade'])
                 if grade < 0 or grade > 100:
-                    flash('Invalid grade entered! Must be between 0 and 100')
+                    flash('Invalid grade entered!')
                     return redirect(request.url)
             except:
                 flash('Invalid grade entered! Must be between 0 and 100')
@@ -539,37 +501,25 @@ def user_assignments():
             functions.update_assignment_status(assignmentID=assignmentID, is_completed=1, grade=grade)
             # update Assignment, turning is_completed = 1
             
-            flash('Assignment marked & uploaded')
+            flash('Assignment marked & uploaded!!')
         if 'deleteassignment' in request.form:
             try:
                 assignmentID = request.form['deleteassignment']
-
             except ValueError:
-                flash('Invalid assignment!')
+                flash('Invalid ID')
                 return redirect(request.url)
             con = sqlite3.connect('database.db')
             cur = con.cursor()
 
             cur.execute('''DELETE FROM Assignments WHERE assignmentID=?''', (assignmentID,))
-
-            files = cur.execute('''SELECT filepath FROM Files WHERE assignmentID=?''', (assignmentID,)).fetchall()
-            for filepath in files:
-                try: 
-                    os.remove(filepath)
-                    print(f"File '{filepath}' deleted successfully.")
-
-                except FileNotFoundError: 
-                    print(f"File '{filepath}' not found.")
             cur.execute('''DELETE FROM Files WHERE assignmentID=?''', (assignmentID,))
             con.commit()
             
             cur.close()
             con.close()
-            print(f'Assignment with ID {assignmentID} successfully deleted!')
-            flash('Assignment has been deleted!')
+            flash(f'Assignment with ID {assignmentID} successfully deleted!')
     assignments = functions.get_assignment_details(current_user.id) # returns all assignments associated with the user's ID
     tutees = functions.get_tutees()
-    
     return render_template('user_assignments.html', assignments=assignments, tutees=tutees)
 
 
@@ -578,15 +528,11 @@ def user_assignments():
 def user_account(): #A lot of the forms in here should be in their own "tutees" tab
     tutees=functions.get_tutees()
     if request.method == "POST":
-        print(request.form) #debug tool
         if 'register' in request.form:
-            print('Processing tutee registration')
             register()
         if 'registertutor' in request.form:
-            print('Processing tutor registration...')
             register_tutor()
         if 'unenrolltutee' in request.form:
-            print('Unenrolling...')
             if 'tutee' in request.form:
                 try:
                     int(request.form['tutee'])
@@ -601,20 +547,17 @@ def user_account(): #A lot of the forms in here should be in their own "tutees" 
             if 'unenrollCheck' in request.form:
                 if request.form['unenrollCheck'] == 'on':
                     if functions.unenroll_tutee(tuteeID):
-                        print('Succcess!')
+                        flash('Succcess!')
                     else:
-                        print('Unsuccessful unenrolment')
+                        flash('Unsuccessful unenrolment')
             else:
-                print('Request denied')
+                flash('Request denied')
                 return redirect(request.url)
         if 'changepassword' in request.form:
-            print('Changing password...')
             if 'password' in request.form:
                 password = request.form['password']
-                print(password)
                 if 'confirmpassword' in request.form:
                     confirmpassword = request.form['confirmpassword']
-                    print(confirmpassword)
                     if password == confirmpassword:
                         passwordcheck = bcrypt.check_password_hash(current_user.password, password)
                         if not passwordcheck:
@@ -628,7 +571,7 @@ def user_account(): #A lot of the forms in here should be in their own "tutees" 
                                 con.commit()
                                 cur.close()
                                 con.close()
-                                print('Success!')
+                                flash('Success!')
                                 return redirect(request.url)
                             else:
                                 flash(strengthcheck[1])
@@ -661,7 +604,7 @@ def user_account(): #A lot of the forms in here should be in their own "tutees" 
 
                                     cur.close()
                                     con.close()
-                                    print('Success!')
+                                    flash('Success!')
                                 else:
                                     flash('Invalid submission')
                                     return redirect(request.url)
@@ -669,7 +612,7 @@ def user_account(): #A lot of the forms in here should be in their own "tutees" 
                                 flash('Invalid request')
                                 return redirect(request.url)
                         except:
-                            print('Invalid ID!')
+                            flash('Invalid ID!')
                             return redirect(request.url)
                     else:
                         flash('Request cancelled')
@@ -700,16 +643,20 @@ def register():
             return redirect(request.url)
 
         if not firstname: #input validation
-            print('Empty first name field!')
+            flash('Empty first name field!')
             return redirect(request.url)
         elif not lastname:
-            print('Empty last name field!')
+            flash('Empty last name field!')
             return redirect(request.url)
         elif not username:
-            print('Empty username')
+            flash('Empty username')
             return redirect(request.url)
         elif not password:
-            print('Invalid password')
+            flash('Invalid password')
+            return redirect(request.url)
+
+        if len(firstname) > 250 or len(lastname) > 250 or len(username) > 250:
+            flash('Fields cannot exceed 250 characters.')
             return redirect(request.url)
 
         #checking password strength
@@ -719,17 +666,15 @@ def register():
         # [1] = error message
 
         if not passwordCheck[0]:
-            print(passwordCheck[1])
             return redirect(request.url)
 
         encryptedpassword = bcrypt.generate_password_hash(password).decode('utf-8')
         
         con = sqlite3.connect('database.db')
         cur = con.cursor()
-
         usernameCheck = cur.execute('''SELECT name FROM users WHERE name=? AND firstname=? AND lastname=?''', (username, firstname, lastname)).fetchone()
 
-        if cur.execute('''SELECT name FROM users WHERE name=?''', (username)).fetchone():
+        if cur.execute('''SELECT name FROM users WHERE name=?''', (username,)).fetchone():
             flash(f'Error: Account with username: {username} already exists.')
 
         if usernameCheck:
@@ -739,13 +684,13 @@ def register():
                         VALUES(?, ?, ?, ?, ?)''', 
                         (username, firstname, lastname, encryptedpassword, 0))
             con.commit()
-            print("Account registered!")
+            flash("Account registered!")
 
-        registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck)).fetchone()
+        registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (username,)).fetchone()
         if registereduserID: #checking if this has type None
             registereduserID = registereduserID[0]
         else:
-            print('An unexpected error has occurred') #user doesn't exist
+            flash('An unexpected error has occurred') #user doesn't exist
             return redirect(request.url)
         
         cur.execute('''INSERT INTO Classes(userID, tutorID, is_english, is_maths) 
@@ -766,16 +711,16 @@ def register_tutor():
     password = request.form.get('password')
 
     if not firstname: #input validation
-        print('Empty first name field!')
+        flash('Empty first name field!')
         return redirect(request.url)
     elif not lastname:
-        print('Empty last name field!')
+        flash('Empty last name field!')
         return redirect(request.url)
     elif not username:
-        print('Empty username')
+        flash('Empty username')
         return redirect(request.url)
     elif not password:
-        print('Invalid password')
+        flash('Invalid password')
         return redirect(request.url)
 
     #checking password strength
@@ -785,7 +730,6 @@ def register_tutor():
     # [1] = error message
 
     if not passwordCheck[0]:
-        print(passwordCheck[1])
         return redirect(request.url)
 
     encryptedpassword = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -794,7 +738,6 @@ def register_tutor():
     cur = con.cursor()
 
     usernameCheck = cur.execute('''SELECT name FROM users WHERE name=?''', (username,)).fetchone()
-    print(usernameCheck)
 
 
     if usernameCheck:
@@ -802,16 +745,16 @@ def register_tutor():
     else:
         cur.execute('''INSERT INTO users(name, firstname, lastname, password, is_tutor) 
                     VALUES(?, ?, ?, ?, ?)''', 
-                    (username, firstname, lastname, encryptedpassword, 0))
+                    (username, firstname, lastname, encryptedpassword, 1))
         con.commit()
-        print("Account registered!")
+        flash("Account registered!")
 
-    registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (usernameCheck)).fetchone()
+    registereduserID = cur.execute('''SELECT ID FROM users WHERE name=?''', (username,)).fetchone()
 
     if registereduserID: #checking if this has type None
         registereduserID = registereduserID[0]
     else:
-        print('An unexpected error has occurred') #user doesn't exist????!?!?!?!?!?
+        flash('An unexpected error has occurred') #user doesn't exist????!?!?!?!?!?
         return redirect(request.url)
     
     cur.close()
@@ -826,16 +769,14 @@ def user_notices():
                 # NON-FILE INPUT VALIDATION
                 if 'title' not in request.form or 'text' not in request.form or 'tag' not in request.form:
                     flash('Invalid request')
-                    return redirect(request.url)
                 try:
                     title = str(request.form.get('title'))
                     text = str(request.form.get('text'))
                     tag = int(request.form.get('tag'))
                 except TypeError as e:
                     flash('Invalid fields submitted')
-                    return redirect(request.url)
                 if len(title) > 250:
-                    flash('Title too long, please keep it under 250 characters')
+                    flash('Title too long, please keep it below 250 characters')
                     return redirect(request.url)
                 if not 0 <= tag <= 3:
                     flash('Invalid tag selected.')
@@ -866,7 +807,6 @@ def user_notices():
 
                 #FILE-BASED INPUT VALIDATION
                 if 'file' in request.files:
-                    print(request.files.getlist('file'))
                     for file in request.files.getlist('file'):
                         if file:
                             fileroot = f'{app.config['UPLOAD_NOTICES']}/{noticeID}'
@@ -877,6 +817,7 @@ def user_notices():
                                 filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
                                 unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
                                 filepath = os.path.join(fileroot, unique_filename) 
+                                flash('Uploading!')
                                 print(f'Uploading a PDF with filepath: {filepath} and \n filename: {filename}')
                                 file.save(filepath)
                                 cur.execute('''INSERT INTO NoticesFiles(noticeID, name, filepath) VALUES(?, ?, ?)''',
@@ -885,9 +826,10 @@ def user_notices():
 
 
                             if allowed_file_image(file.filename):
-                                filename = secure_filename(file.filename) 
-                                unique_filename = make_unique(filename) 
+                                filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
+                                unique_filename = make_unique(filename) # https://stackoverflow.com/questions/61534027/how-should-i-handle-duplicate-filenames-when-uploading-a-file-with-flask
                                 filepath = os.path.join(fileroot, unique_filename) 
+                                flash('Uploading image!')
                                 print(f'Uploading an image with filepath: {filepath} and \n filename: {filename}')
                                 file.save(filepath)
                                 cur.execute('''UPDATE Notices SET imgfilepath=? WHERE noticeID=?''',
@@ -913,7 +855,7 @@ def user_notices():
                     filedirectory = f'{app.config['UPLOAD_NOTICES']}/{noticeID}'
                     if os.path.exists(filedirectory):
                         shutil.rmtree(filedirectory)
-                        print(f"The directory {filedirectory} has been deleted.") #untested
+                        print(f"The directory {filedirectory} has been deleted.")
                     else:
                         print(f"The directory {filedirectory} does not exist.")
                     try:
@@ -935,7 +877,8 @@ def user_notices():
 
     notices = cur.execute('''SELECT * FROM Notices ORDER BY noticeID DESC''').fetchall()
     noticesfiles = cur.execute('''SELECT noticeID, name, filepath FROM NoticesFiles''').fetchall()
-
+    from collections import defaultdict #this function is altered to fit the testData database structure
+    from json import dumps
     notices_dict = defaultdict(list)
     for notice in notices:
         noticeID = str(notice[0])
@@ -1004,21 +947,20 @@ def allowed_file_image(filename: str):
 def file_upload():
     if request.method == "POST":
                 # check if the post request has the file part
-        print('POST received!')
         if 'file' not in request.files:
-            print('No file part')
+            flash('No file part')
             return redirect(request.url)
         file = request.files['file']
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
-            print('No selected file')
+            flash('No selected file')
             return redirect(request.url)
         if file and allowed_file_pdf(file.filename):
             filename = secure_filename(file.filename) #prevents malicious file changes by validating the filename
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename) 
             file.save(filepath)
-            print('Saved!')
+            flash('Saved!')
             con = sqlite3.connect('database.db')
             cur = con.cursor()
             cur.execute('''INSERT INTO files(name, filepath) VALUES(?, ?)''', (filename, filepath))
@@ -1028,7 +970,7 @@ def file_upload():
             cur.close()
             con.close()
 
-            return redirect(url_for('download_file', name=filename)) #
+            return redirect(url_for('download_file', name=filename))
         
     return render_template('FileUpload.html')
 
@@ -1056,6 +998,7 @@ if mode == "prod":
         print(f'Error: {e}')
 elif mode == "dev":
     print('Development server running!')
+    print('Please access the website on: http://127.0.0.1:10000/')
     app.run(host="127.0.0.1", port=10000, debug=True) 
 # host="0.0.0.0"
 # host="127.0.0.1"

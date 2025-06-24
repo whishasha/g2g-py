@@ -96,30 +96,34 @@
                 margin-bottom: 20px;
 
                 height: 80%;
-                overflow: auto;
+                overflow-y: auto;
             }
 
             #completedAssignments{
                 width: 100%;
                 height: 80%;
+                overflow-y: auto;
                 margin-bottom: 20px;
             }
 
             #unmarkedAssignments{
                 width: 100%;
                 height: 80%;
+                overflow-y: auto;
                 margin-bottom: 20px;
             }
 
             #markedAssignments{
                 width: 100%;
                 height: 80%;
+                overflow-y: auto;
                 margin-bottom: 20px;             
             }
 
             #assignedAssignments{
                 width: 100%;
                 height: 80%;
+                overflow-y: auto;
                 margin-bottom: 20px;             
             }
             .assignment {
@@ -155,7 +159,7 @@
 
                 border-top-left-radius: 10px;
 
-                overflow-y: auto;
+                overflow: visible;
                 height: 100%;
 
                 display: flex;
@@ -216,8 +220,7 @@
                 grid-area: files;
                 height: 100%;
 
-                overflow-x: visible;
-                overflow-y: auto;
+                overflow: visible;
                 border: 1px solid var(--border);
 
                 border-top-left-radius: 10px;
@@ -232,13 +235,13 @@
                 min-width: 60%;
                 max-width: 80%;
 
-                height: 30%;
+                height: fit-content;
 
                 display: grid;
                 grid: 
                 'title files submitfiles submitbox'
                 'duedate files submitfiles submitbox';
-                border: 1px solid black;
+                border: 1px solid var(--border);
                 gap: 10px;
                 background-color: var(--bgbar);
                 border-radius: 10px;
@@ -247,7 +250,7 @@
 
             .markAssignment > div.submitfiles {
                 grid-area: submitfiles;
-                border: 1px solid black;
+                border: 1px solid var(--border);
 
 
                 overflow:visible;
@@ -269,7 +272,7 @@
             }
             .markAssignment > div.submitbox {
                 grid-area: submitbox;
-                border: 1px solid black;
+                border: 1px solid var(--border);
 
                 /* overflow-y: auto; */
                 height: 100%;
@@ -284,7 +287,7 @@
                 grid-area: files;
                 height: 100%;
                 overflow:visible;
-                border: 1px solid black;
+                border: 1px solid var(--border);
             }
 
 
@@ -410,6 +413,7 @@ form#set #submit{
   position: relative;
   display: inline-block;
   width: 80%;
+  margin-top: .2rem;
   z-index: 99;
 }
 div li a {
@@ -637,7 +641,8 @@ div li a {
     
     const assignmentDict = {{ assignments | tojson }}; //List of all assignments
 
-    message = `<p class="msg">No assignments</p>`;
+
+    message = ``;
 
     {% if current_user.is_tutor == 0 %}
     dueAssignmentsEl.innerHTML = message;
@@ -651,12 +656,13 @@ div li a {
 
     markedAssignmentsEl.innerHTML = message;
 
+    let banana = '';
     function displayAssignments() {
     for (const assignmentID in assignmentDict) {
         {% if current_user.is_tutor == 0 %}
+        
         //for due assignments [tutee]
         if (assignmentDict[assignmentID][0].is_completed == String(0)) {
-            dueAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
             let fileList = ``;
@@ -666,7 +672,7 @@ div li a {
                 // console.log(assignmentFilesNames[index]); //name of file for filepath
                 fileList += `<li><div class="tooltip"><a href="/${assignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${assignmentFilesNames[index]}</span></div></li>`
             }
-
+            banana += 1;
             dueAssignmentsEl.innerHTML +=
                     `<div class="assignment" id="${assignmentID}" data-due-date="${assignmentDict[assignmentID][0].duedate}" data-subject="${assignmentDict[assignmentID][0].subject}">
                         <div class="title">
@@ -695,12 +701,12 @@ div li a {
                         <div class="duedate">Due by: ${assignmentDict[assignmentID][0].duedate}</div>
                     </div>` ;    
         }
+        console.log(banana);
         {% endif %}
 
         {% if current_user.is_tutor == 0 %}
         // for submitted assignments [tutee]
-            if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade === null) {
-            completedAssignmentsEl.innerHTML = '';
+            if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade == null) {
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
 
@@ -762,12 +768,10 @@ div li a {
         
         {% if current_user.is_tutor == 1 %}
         // for viewing assigned & unmarked assignments [tutor]
-            if (assignmentDict[assignmentID][0].is_completed == String(0) && assignmentDict[assignmentID][0].grade === null) {
-            assignedAssignmentsEl.innerHTML = '';
+            if (assignmentDict[assignmentID][0].is_completed == String(0) && assignmentDict[assignmentID][0].grade == null) {
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
             let fileList = ``;
-            
             for (index in assignmentFiles) {
                 // console.log(assignmentFiles[index]); //filepath
                 // console.log(assignmentFilesNames[index]); //name of file for filepath
@@ -806,7 +810,6 @@ div li a {
        
         // put one here for marked assignments [tutee + tutor]
         if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade != null) {
-            markedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
             
@@ -851,6 +854,8 @@ div li a {
                             <ul>
                                 <li><h2>${assignmentDict[assignmentID][0].title}</h2></li>
                                 <li>${assignmentDict[assignmentID][0].subject}</li>
+                                <br>
+                                <li>${assignmentDict[assignmentID][0].tutee}</li>
                             </ul> 
                         </div>
                         <div class="submitfiles">
@@ -884,7 +889,6 @@ div li a {
         {% if current_user.is_tutor == 1 %}
         // for assignments awaiting marking [tutor]
         if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade == null) {
-            unmarkedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
             
