@@ -24,7 +24,6 @@ encoded_secret_key = os.getenv("SECRET_KEY") or os.urandom(24)
 # see Documentation for Flask_Login here:
 # https://flask-login.readthedocs.io/en/latest/
 
-# + Help from my friend ChatGPT!
 class User(UserMixin):
     def __init__(self, id, username, password, is_tutor):
         self.id = id
@@ -852,12 +851,15 @@ def user_notices():
                     con = sqlite3.connect('database.db')
                     cur = con.cursor()
                     
+
+                    # Creates and delete notice directories for storing files as needed
+
                     filedirectory = f'{app.config['UPLOAD_NOTICES']}/{noticeID}'
                     if os.path.exists(filedirectory):
                         shutil.rmtree(filedirectory)
-                        print(f"The directory {filedirectory} has been deleted.")
+                        # directory {filedirectory} has been deleted
                     else:
-                        print(f"The directory {filedirectory} does not exist.")
+                        # directory {filedirectory} does not exist
                     try:
                         cur.execute('''DELETE FROM Notices WHERE noticeID=?''', (noticeID,))
                         cur.execute('''DELETE FROM NoticesFiles WHERE noticeID=?''', (noticeID,))
@@ -989,16 +991,16 @@ def get_link(filename):
     redirect("/")
 
 
-mode = "dev"
+mode = "prod"
 if mode == "prod":
     try: 
      print('WGSI server running!')
+     print('Please access the website on: http://127.0.0.1:10000/')
      serve(app, port=10000)
     except RuntimeError as e: 
         print(f'Error: {e}')
 elif mode == "dev":
     print('Development server running!')
-    print('Please access the website on: http://127.0.0.1:10000/')
     app.run(host="127.0.0.1", port=10000, debug=True) 
 # host="0.0.0.0"
 # host="127.0.0.1"
