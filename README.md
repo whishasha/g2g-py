@@ -1,6 +1,8 @@
 # g2g-py
 *note: Please run all commands listed below in the directory where main.py can be seen.*
 
+Account details for testing can be found on the portfolio.
+
 In order to run the website locally and/or on a webserver,
 
 
