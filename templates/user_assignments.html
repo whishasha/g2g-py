@@ -215,6 +215,8 @@
             .assignment > div.files {
                 grid-area: files;
                 height: 100%;
+
+                overflow-x: visible;
                 overflow-y: auto;
                 border: 1px solid var(--border);
 
@@ -247,9 +249,12 @@
                 grid-area: submitfiles;
                 border: 1px solid black;
 
-                overflow-y: auto;
+
+                overflow:visible;
+                /* overflow-y: auto; */
                 height: 100%;
 
+                max-width: 100%;
                 display: flex;
                 justify-content: flex-start;
                 flex-direction: column;
@@ -266,9 +271,9 @@
                 grid-area: submitbox;
                 border: 1px solid black;
 
-                overflow-y: auto;
+                /* overflow-y: auto; */
                 height: 100%;
-
+                overflow:visible;
                 display: flex;
                 justify-content: flex-start;
                 flex-direction: column;
@@ -278,7 +283,7 @@
             .markAssignment > div.files {
                 grid-area: files;
                 height: 100%;
-                overflow-y: auto;
+                overflow:visible;
                 border: 1px solid black;
             }
 
@@ -405,6 +410,7 @@ form#set #submit{
   position: relative;
   display: inline-block;
   width: 80%;
+  z-index: 99;
 }
 div li a {
     text-decoration-style: none;
@@ -413,21 +419,26 @@ div li a {
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 100%;
+  min-width: 200px;
+  max-width: 300px;
   height: fit-content;
   bottom: 100%;
-  left: 50%;
-  margin-left: -50%; /* Use half of the width (120/2 = 60), to center the tooltip */
+  /* margin-left: -250px;  */
+  /* Use half of the width (120/2 = 60), to center the tooltip */
   color: #fff;
   background-color: var(--border);
   text-align: center;
   padding: 5px 0;
   border-radius: 6px;
  
-  /* Position the tooltip text - see examples below! */
   position: absolute;
-  z-index: 9999;
+  z-index: 99999;
 }
+.tooltip .tooltiptext.left {
+    top: -5px;
+    right: 105%;
+}
+
 
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
@@ -714,7 +725,7 @@ div li a {
             }
 
             for (index in submittedAssignmentFiles) {
-                submittedFileList += `<li><div class="tooltip"><a href="/${submittedAssignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${submittedAssignmentFilesNames[index]}</span></div></li>`
+                submittedFileList += `<li><div class="tooltip"><a href="/${submittedAssignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext left">${submittedAssignmentFilesNames[index]}</span></div></li>`
             }
 
             completedAssignmentsEl.innerHTML +=
@@ -795,7 +806,6 @@ div li a {
        
         // put one here for marked assignments [tutee + tutor]
         if (assignmentDict[assignmentID][0].is_completed == String(1) && assignmentDict[assignmentID][0].grade != null) {
-            console.log('runnin"');
             markedAssignmentsEl.innerHTML = '';
             const assignmentFiles = assignmentDict[assignmentID][0].set_files;
             const assignmentFilesNames = assignmentDict[assignmentID][0].set_files_names; 
@@ -831,7 +841,7 @@ div li a {
             }
 
             for (index in markedAssignmentFiles) {
-                markedFilelist += `<li><div class="tooltip"><a href="/${markedAssignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${markedAssignmentFiles[index]}</span></div></li>`
+                markedFilelist += `<li><div class="tooltip"><a href="/${markedAssignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext left">${markedAssignmentFiles[index]}</span></div></li>`
 
             }
 
@@ -861,6 +871,8 @@ div li a {
                         </div>
                         <div class="submitbox">
                             <h1>Marked Files</h1>
+                            Click to view
+                            <br><br>
                             <ul>
                                 ${markedFilelist}
                             </ul>
@@ -899,7 +911,7 @@ div li a {
 
 
             for (index in submittedAssignmentFiles) {
-                submittedFileList += `<li><div class="tooltip"><a href="/${submittedAssignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext">${submittedAssignmentFilesNames[index]}</span></div></li>`
+                submittedFileList += `<li><div class="tooltip"><a href="/${submittedAssignmentFiles[index]}"><i class="fa-solid fa-file"></i></a><span class="tooltiptext left">${submittedAssignmentFilesNames[index]}</span></div></li>`
             }
 
             unmarkedAssignmentsEl.innerHTML +=
