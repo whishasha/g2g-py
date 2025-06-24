@@ -1,4 +1,6 @@
 # g2g-py
+*note: Please run all commands listed below in the directory where main.py can be seen.*
+
 In order to run the website locally and/or on a webserver,
 
 
