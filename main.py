@@ -808,7 +808,7 @@ def user_notices():
                 if 'file' in request.files:
                     for file in request.files.getlist('file'):
                         if file:
-                            fileroot = f'files/notices/{noticeID}'
+                            fileroot = f'notices/{noticeID}'
                             if not os.path.exists(fileroot):
                                 os.makedirs(fileroot)
 
