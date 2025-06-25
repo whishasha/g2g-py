@@ -236,7 +236,9 @@ def user_timetable():
                         classtime = str(request.form['classtimebegin'])
                         title = str(request.form['title'])
                         classnotes = str(request.form['classnotes'])
-                        subject = str(request.form['subject'])                 
+                        subject = str(request.form['subject'])     
+                        escape(title)
+                        escape(classnotes)
                     except:
                         flash('Invalid request')
                         return redirect(request.url)
@@ -401,7 +403,7 @@ def user_assignments():
                 flash('Title not set')
                 return redirect(request.url)
             title = str(request.form['title'])
-
+            escape(title)
             if len(title) > 250:
                 flash('Title is too long.')
                 return redirect(request.url)
@@ -632,6 +634,10 @@ def register():
             username = str(request.form.get('username'))
             password = str(request.form.get('password'))
 
+            escape(firstname)
+            escape(lastname)
+            escape(username)
+            escape(password)
             is_english = str(request.form.get('is_english'))
             is_maths = str(request.form.get('is_maths'))
 
@@ -709,6 +715,12 @@ def register_tutor():
     username = request.form.get('username')
     password = request.form.get('password')
 
+    escape(firstname)
+    escape(lastname)
+
+    escape(username)
+    escape(password)
+    
     if not firstname: #input validation
         flash('Empty first name field!')
         return redirect(request.url)
