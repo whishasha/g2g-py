@@ -860,6 +860,7 @@ def user_notices():
                         # directory {filedirectory} has been deleted
                     else:
                         # directory {filedirectory} does not exist
+                        pass
                     try:
                         cur.execute('''DELETE FROM Notices WHERE noticeID=?''', (noticeID,))
                         cur.execute('''DELETE FROM NoticesFiles WHERE noticeID=?''', (noticeID,))
