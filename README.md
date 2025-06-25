@@ -18,6 +18,8 @@ cd myproject
 py -3 -m venv .venv
 `
 
+After  creating the virtual environment, activate it with the line below:
+
 `
 .venv\Scripts\activate
 `
