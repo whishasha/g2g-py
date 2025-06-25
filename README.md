@@ -10,6 +10,14 @@ In order to run the website locally and/or on a webserver,
 
 We need to work in a virtual environment to ensure all our downloaded modules are in the same spot so we can keep track of them (rather than downloading them onto your PC).
 
+First, create the virtual environment after navigating to the project:
+
+`
+mkdir myproject
+cd myproject
+py -3 -m venv .venv
+`
+
 `
 .venv\Scripts\activate
 `
